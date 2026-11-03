@@ -1,0 +1,159 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign finder_collection = collections[section.settings.collection]
+-%}
+<section class="ezy ezy-hero" id="find">
+  <div class="ezy-wrap ezy-hero__grid">
+    <div>
+      <h1>{{ section.settings.heading }}</h1>
+      <p class="ezy-hero__lead">{{ section.settings.lead }}</p>
+      {%- if section.settings.rating_text != blank -%}
+        <div class="ezy-hero__rating"><b aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</b> {{ section.settings.rating_text }}</div>
+      {%- endif -%}
+
+      <form class="ezy-finder" action="{{ routes.search_url }}" method="get" data-ezy-finder>
+        <h3>{{ section.settings.finder_heading }}</h3>
+        <input type="hidden" name="type" value="product">
+        <label class="ezy-finder__search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0135af" stroke-width="3" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+          <input type="search" name="q" list="ezy-cars-list" placeholder="{{ section.settings.search_placeholder }}" autocomplete="off" data-ezy-q>
+          <datalist id="ezy-cars-list"></datalist>
+        </label>
+        <div class="ezy-finder__or">or pick</div>
+        <label class="ezy-finder__sel"><span>Make</span>
+          <select data-ezy-make aria-label="Make"><option value="">Choose</option></select>
+        </label>
+        <label class="ezy-finder__sel"><span>Model</span>
+          <select data-ezy-model aria-label="Model" disabled><option value="">Choose</option></select>
+        </label>
+        <button class="ezy-btn" type="submit">{{ section.settings.button }}</button>
+        <p class="ezy-finder__next">{{ section.settings.next_text }}</p>
+      </form>
+    </div>
+
+    <div>
+      <div class="ezy-pack">
+        <h3>{{ section.settings.pack_heading }}</h3>
+        <ul class="ezy-ticks">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'pack_item' -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+        <p class="ezy-pack__price">{{ section.settings.pack_price }}</p>
+      </div>
+
+      <a class="ezy-video" href="{{ section.settings.video_url | default: '#' }}">
+        {%- if section.settings.video_image != blank -%}
+          {{ section.settings.video_image | image_url: width: 900 | image_tag: loading: 'lazy' }}
+        {%- else -%}
+          <img src="{{ 'ezy-hero-video.png' | asset_url }}" alt="" loading="lazy">
+        {%- endif -%}
+        <span class="ezy-video__play" aria-hidden="true"></span>
+        <span class="ezy-video__label">{{ section.settings.video_label }}</span>
+      </a>
+
+      <div class="ezy-hero__ticks">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tick' -%}<span {{ block.shopify_attributes }}>{{ block.settings.text }}</span>{%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if section.settings.sticky -%}
+  <div class="ezy ezy-sticky" data-ezy-sticky>
+    <div><b>{{ section.settings.sticky_title }}</b><small>{{ section.settings.sticky_sub }}</small></div>
+    <a class="ezy-btn" href="#find">{{ section.settings.button }}</a>
+  </div>
+{%- endif -%}
+
+<script type="application/json" data-ezy-products>
+  [
+  {%- if finder_collection != blank -%}
+    {%- for product in finder_collection.products limit: 250 -%}
+      {"t": {{ product.title | json }}, "u": {{ product.url | json }}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  {%- endif -%}
+  ]
+</script>
+<script>
+  (function () {
+    var form = document.querySelector('[data-ezy-finder]');
+    if (!form) return;
+    var TWO_WORD = ['Mercedes Benz', 'Land Rover', 'Alfa Romeo', 'Aston Martin', 'Great Wall', 'Rolls Royce'];
+    var raw = JSON.parse(document.querySelector('[data-ezy-products]').textContent || '[]');
+    var cars = [];
+    raw.forEach(function (p) {
+      var m = p.t.match(/\bfor\s+(.+)$/i);
+      if (!m) return;
+      var rest = m[1].replace(/\s*->\s*$/, '').replace(/\s+\d{4}(\s*-\s*\d{4})?\s*$/, '').trim();
+      var words = rest.split(/\s+/);
+      var make = words[0];
+      if (TWO_WORD.indexOf((words[0] + ' ' + (words[1] || '')).replace('-', ' ')) > -1) make = words[0] + ' ' + words[1];
+      var model = rest.slice(make.length).trim();
+      if (model) cars.push({ make: make, model: model, url: p.u });
+    });
+    var makeSel = form.querySelector('[data-ezy-make]');
+    var modelSel = form.querySelector('[data-ezy-model]');
+    var q = form.querySelector('[data-ezy-q]');
+    var list = form.querySelector('datalist');
+    var makes = Array.from(new Set(cars.map(function (c) { return c.make; }))).sort();
+    makes.forEach(function (mk) { makeSel.add(new Option(mk, mk)); });
+    Array.from(new Set(cars.map(function (c) { return c.make + ' ' + c.model; }))).sort().forEach(function (s) {
+      var o = document.createElement('option'); o.value = s; list.appendChild(o);
+    });
+    makeSel.addEventListener('change', function () {
+      modelSel.length = 1;
+      var models = Array.from(new Set(cars.filter(function (c) { return c.make === makeSel.value; }).map(function (c) { return c.model; }))).sort();
+      models.forEach(function (md) { modelSel.add(new Option(md, md)); });
+      modelSel.disabled = !models.length;
+    });
+    form.addEventListener('submit', function (e) {
+      var text = q.value.trim();
+      var hits = text
+        ? cars.filter(function (c) { return (c.make + ' ' + c.model).toLowerCase() === text.toLowerCase(); })
+        : cars.filter(function (c) { return c.make === makeSel.value && (!modelSel.value || c.model === modelSel.value); });
+      if (hits.length === 1) { e.preventDefault(); window.location.href = hits[0].url; return; }
+      if (!text) {
+        if (!makeSel.value) { e.preventDefault(); q.focus(); return; }
+        q.value = (makeSel.value + ' ' + modelSel.value).trim();
+      }
+    });
+    var sticky = document.querySelector('[data-ezy-sticky]');
+    if (sticky && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        var e = entries[0];
+        sticky.classList.toggle('is-shown', !e.isIntersecting && e.boundingClientRect.top < 0);
+      }).observe(form);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "EZY hero and finder",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Wiper blades made for your exact car" },
+    { "type": "textarea", "id": "lead", "label": "Lead", "default": "Front pair from $69, was $89. 25% off is already in the price. Search your car, then watch its own 2 minute fitment video." },
+    { "type": "text", "id": "rating_text", "label": "Rating text (fill from Loox)", "default": "[Loox rating] from [n] reviews" },
+    { "type": "collection", "id": "collection", "label": "Wiper collection for the finder" },
+    { "type": "text", "id": "finder_heading", "label": "Finder heading", "default": "Find your wipers" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search make and model, e.g. Ford Ranger" },
+    { "type": "text", "id": "button", "label": "Button", "default": "Find my wipers" },
+    { "type": "text", "id": "next_text", "label": "Text under button", "default": "Your car's blades and fitment video comes next." },
+    { "type": "text", "id": "pack_heading", "label": "Pack heading", "default": "Your Exact Fit Pack" },
+    { "type": "text", "id": "pack_price", "label": "Pack price line", "default": "From $69 a front pair. 25% off already in." },
+    { "type": "image_picker", "id": "video_image", "label": "Video image" },
+    { "type": "url", "id": "video_url", "label": "Video link" },
+    { "type": "text", "id": "video_label", "label": "Video label", "default": "Ford Ranger fitment, 1:52" },
+    { "type": "checkbox", "id": "sticky", "label": "Sticky find bar on phones", "default": true },
+    { "type": "text", "id": "sticky_title", "label": "Sticky bar title", "default": "From $69 a front pair" },
+    { "type": "text", "id": "sticky_sub", "label": "Sticky bar subtext", "default": "Exact fit or free swap" }
+  ],
+  "blocks": [
+    { "type": "pack_item", "name": "Pack item", "settings": [{ "type": "text", "id": "text", "label": "Text" }] },
+    { "type": "tick", "name": "Tick under video", "settings": [{ "type": "text", "id": "text", "label": "Text" }] }
+  ]
+}
+{% endschema %}

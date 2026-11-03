@@ -1,0 +1,20 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<section class="ezy ezy-sec ezy-sec--yellow ezy-sec--rule ezy-final">
+  <div class="ezy-wrap">
+    <h2>{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.text }}</p>
+    <a class="ezy-btn" href="{{ section.settings.link | default: '#find' }}">{{ section.settings.button }}</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EZY final call to action",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Fitted in 2 minutes" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Search your car and get blades made for it. 25% off is already in the price." },
+    { "type": "text", "id": "button", "label": "Button", "default": "Find my wipers" },
+    { "type": "url", "id": "link", "label": "Button link" }
+  ]
+}
+{% endschema %}

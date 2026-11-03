@@ -1,0 +1,32 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<header class="ezy ezy-head">
+  <div class="ezy-wrap ezy-head__in">
+    <button class="ezy-head__menu" type="button" aria-label="Menu" data-ezy-menu><span></span><span></span><span></span></button>
+    <a class="ezy-head__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 480 | image_tag: alt: shop.name, height: 38 }}
+      {%- else -%}
+        <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ shop.name }}" height="38">
+      {%- endif -%}
+    </a>
+    <nav class="ezy-head__nav">
+      {%- for link in linklists[section.settings.menu].links -%}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+    <a class="ezy-head__cart" href="{{ routes.cart_url }}" aria-label="Cart">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 8h12l-1 13H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span data-cart-count>{{ cart.item_count }}</span>
+    </a>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "EZY header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+  ]
+}
+{% endschema %}

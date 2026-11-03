@@ -1,0 +1,42 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<section class="ezy ezy-sec">
+  <div class="ezy-wrap">
+    <h2 class="ezy-h2">{{ section.settings.heading }}</h2>
+    <p class="ezy-sub">{{ section.settings.sub }}</p>
+    <div class="ezy-cars">
+      {%- for block in section.blocks -%}
+        <a class="ezy-card ezy-car" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', alt: block.settings.title }}
+          {%- elsif block.settings.fallback_asset != blank -%}
+            <img src="{{ block.settings.fallback_asset | asset_url }}" alt="{{ block.settings.title }}" loading="lazy">
+          {%- endif -%}
+          <div><b>{{ block.settings.title }}</b><small>{{ block.settings.price }}</small></div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EZY popular cars",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Popular cars" },
+    { "type": "text", "id": "sub", "label": "Subheading", "default": "Each car has its own fitment video and photos." }
+  ],
+  "blocks": [
+    {
+      "type": "car",
+      "name": "Car",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Car", "default": "Ford Ranger" },
+        { "type": "text", "id": "price", "label": "Price line", "default": "From $69" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "fallback_asset", "label": "Placeholder image file (theme assets)" }
+      ]
+    }
+  ]
+}
+{% endschema %}

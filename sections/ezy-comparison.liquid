@@ -1,0 +1,47 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<section class="ezy ezy-sec ezy-sec--yellow ezy-sec--rule">
+  <div class="ezy-wrap">
+    <h2 class="ezy-h2">{{ section.settings.heading }}</h2>
+    <p class="ezy-sub" style="color: var(--ezy-dark)">{{ section.settings.sub }}</p>
+    <table class="ezy-compare">
+      <thead>
+        <tr><th></th><th class="is-us">{{ section.settings.col_us }}</th><th>{{ section.settings.col_2 }}</th><th>{{ section.settings.col_3 }}</th></tr>
+      </thead>
+      <tbody>
+        {%- for block in section.blocks -%}
+          <tr {{ block.shopify_attributes }}>
+            <td>{{ block.settings.label }}</td>
+            <td class="is-us">{{ block.settings.us }}</td>
+            <td>{{ block.settings.v2 }}</td>
+            <td>{{ block.settings.v3 }}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EZY comparison",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Why not cheap blades?" },
+    { "type": "text", "id": "sub", "label": "Subheading", "default": "Universal blades need adaptors to fit. Ours are made for your car." },
+    { "type": "text", "id": "col_us", "label": "Our column", "default": "EZYFIT" },
+    { "type": "text", "id": "col_2", "label": "Column 2", "default": "Cheap" },
+    { "type": "text", "id": "col_3", "label": "Column 3", "default": "Dealer" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Row" },
+        { "type": "text", "id": "us", "label": "Us", "default": "Yes" },
+        { "type": "text", "id": "v2", "label": "Column 2" },
+        { "type": "text", "id": "v3", "label": "Column 3" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,24 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<section class="ezy ezy-sec ezy-sec--yellow ezy-sec--rule" style="border-bottom: 3px solid var(--ezy-blue)">
+  <div class="ezy-wrap">
+    <div class="ezy-guarantee">
+      <p class="ezy-guarantee__kicker">{{ section.settings.kicker }}</p>
+      <h2>{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.text }}</p>
+      <a class="ezy-btn" href="{{ section.settings.link | default: '#find' }}">{{ section.settings.button }}</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EZY guarantee",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "Perfect fit promise" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Fits your car, or we swap it free" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Pick your car and we send blades made for it. If they don't fit, tell us within 30 days and we send the right ones free." },
+    { "type": "text", "id": "button", "label": "Button", "default": "Find my wipers" },
+    { "type": "url", "id": "link", "label": "Button link" }
+  ]
+}
+{% endschema %}

@@ -1,347 +1,348 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "hero": {
-      "type": "hero-product-image",
+      "type": "ezy-hero",
       "settings": {
-        "enable_hero": true,
-        "badge_text": "5.0 - Top Rated Car Shades",
-        "hero_title": "Click-Into-Place Car Shades<br>That Never Fall Off",
-        "hero_subtitle": "Guaranteed fit for your specific vehicle",
-        "enable_product_image": false,
-        "image_alt": "ClickShades Car Window Shades"
-      }
-    },
-    "car-selector": {
-      "type": "car-selector",
-      "settings": {
-        "show_deal_banner": false,
-        "button_text": "Find Your Car"
-      }
-    },
-    "product-cards": {
-      "type": "product-cards",
-      "settings": {
-        "collection": "top-picks"
-      }
-    },
-    "video-carousel": {
-      "type": "video-carousel",
+        "collection": "wiper-blades"
+      },
       "blocks": {
-        "vid-1": {
-          "type": "video",
+        "p0": {
+          "type": "pack_item",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/183b9ee200c44eda82e1f183a8769fb7.mp4"
+            "text": "Blades made for your car, with the right clip"
           }
         },
-        "vid-2": {
-          "type": "video",
+        "p1": {
+          "type": "pack_item",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/4ccd53caab924fdc91cc45551ac36575.mp4"
+            "text": "Your car's own fitment video"
           }
         },
-        "vid-3": {
-          "type": "video",
+        "p2": {
+          "type": "pack_item",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/4bf4c5ebfac24156b7b3d2722fbfe78b.mp4"
+            "text": "2 minute fit, no tools"
           }
         },
-        "vid-4": {
-          "type": "video",
+        "p3": {
+          "type": "pack_item",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/5a01da799ed745ee98405a7764cdfc41.mp4"
+            "text": "Free shipping, ships today if you order by 2pm"
           }
         },
-        "vid-5": {
-          "type": "video",
+        "p4": {
+          "type": "pack_item",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/943eee0290f64c4da712e5477f541fc6.mp4"
+            "text": "Exact fit, or we swap it free within 30 days"
+          }
+        },
+        "t0": {
+          "type": "tick",
+          "settings": {
+            "text": "Exact fit or free swap"
+          }
+        },
+        "t1": {
+          "type": "tick",
+          "settings": {
+            "text": "2 minute fit, no tools"
+          }
+        },
+        "t2": {
+          "type": "tick",
+          "settings": {
+            "text": "Ships same day before 2pm"
+          }
+        },
+        "t3": {
+          "type": "tick",
+          "settings": {
+            "text": "30 day returns"
           }
         }
       },
       "block_order": [
-        "vid-1",
-        "vid-2",
-        "vid-3",
-        "vid-4",
-        "vid-5"
-      ],
-      "settings": {}
+        "p0",
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "t0",
+        "t1",
+        "t2",
+        "t3"
+      ]
     },
-    "popular-models": {
-      "type": "popular-models",
-      "settings": {}
-    },
-    "why-clickshades": {
-      "type": "why-clickshades",
-      "settings": {
-        "heading": "Why Click Shades?",
-        "image_alt": "ClickShades Car Window Shades"
-      }
-    },
-    "loox-reviews": {
-      "type": "reviews",
-      "settings": {
-        "heading": "What Our Customers Say",
-        "show_rating_summary": false,
-        "rating_text": "5.0 out of 5 based on 11 reviews",
-        "show_all_reviews_link": true,
-        "reviews_page_url": "/pages/happy-customers",
-        "cta_text": "Read All Reviews"
-      }
-    },
-    "comparison-table": {
-      "type": "comparison-table",
+    "popular": {
+      "type": "ezy-popular-cars",
       "blocks": {
-        "feature-1": {
-          "type": "feature",
+        "c1": {
+          "type": "car",
           "settings": {
-            "feature_name": "Heat Control",
-            "brand_has_feature": true,
-            "competitor_has_feature": true,
-            "universal_has_feature": true,
-            "curtains_has_feature": true
+            "title": "Ford Ranger",
+            "price": "From $69",
+            "fallback_asset": "ezy-car-ranger.png"
           }
         },
-        "feature-2": {
-          "type": "feature",
+        "c2": {
+          "type": "car",
           "settings": {
-            "feature_name": "UV Protection",
-            "brand_has_feature": true,
-            "competitor_has_feature": true,
-            "universal_has_feature": true,
-            "curtains_has_feature": true
+            "title": "Toyota Hilux",
+            "price": "From $69",
+            "fallback_asset": "ezy-car-hilux.png"
           }
         },
-        "feature-3": {
-          "type": "feature",
+        "c3": {
+          "type": "car",
           "settings": {
-            "feature_name": "Custom Fit",
-            "brand_has_feature": true,
-            "competitor_has_feature": true,
-            "universal_has_feature": false,
-            "curtains_has_feature": false
+            "title": "Toyota RAV4",
+            "price": "From $69",
+            "fallback_asset": "ezy-car-rav4.png"
           }
         },
-        "feature-4": {
-          "type": "feature",
+        "c4": {
+          "type": "car",
           "settings": {
-            "feature_name": "Easy Install and Remove",
-            "brand_has_feature": true,
-            "competitor_has_feature": false,
-            "universal_has_feature": true,
-            "curtains_has_feature": false
-          }
-        },
-        "feature-5": {
-          "type": "feature",
-          "settings": {
-            "feature_name": "Full Privacy",
-            "brand_has_feature": true,
-            "competitor_has_feature": true,
-            "universal_has_feature": false,
-            "curtains_has_feature": true
-          }
-        },
-        "feature-6": {
-          "type": "feature",
-          "settings": {
-            "feature_name": "Allow Air Flow",
-            "brand_has_feature": true,
-            "competitor_has_feature": false,
-            "universal_has_feature": true,
-            "curtains_has_feature": false
+            "title": "Toyota Corolla",
+            "price": "From $69",
+            "fallback_asset": "ezy-car-corolla.png"
           }
         }
       },
       "block_order": [
-        "feature-1",
-        "feature-2",
-        "feature-3",
-        "feature-4",
-        "feature-5",
-        "feature-6"
+        "c1",
+        "c2",
+        "c3",
+        "c4"
       ],
+      "settings": {}
+    },
+    "lead": {
+      "type": "ezy-lead-capture",
+      "settings": {}
+    },
+    "types": {
+      "type": "ezy-blade-types",
+      "blocks": {
+        "spray": {
+          "type": "type",
+          "settings": {
+            "badge": "Best for long trips",
+            "name": "Spray",
+            "for": "For dust, bugs and long trips",
+            "level": 3,
+            "desc": "Water comes out of the blade, straight onto the glass as it wipes.",
+            "price": "$99",
+            "was": "$129",
+            "pay": "Front pair, 25% off already in. Or 4 payments of $24.75 with Afterpay.",
+            "rear": "+ Add a Standard rear: front pair + rear $124",
+            "ticks": "Exact fit for your car\n2 minute fit, no tools\nRear blade available (Standard)\nWater sprays from the blade",
+            "button": "Choose Spray",
+            "fallback_asset": "ezy-blade-spray.png"
+          }
+        },
+        "standard": {
+          "type": "type",
+          "settings": {
+            "badge": "",
+            "name": "Standard",
+            "for": "For everyday driving",
+            "level": 2,
+            "desc": "Exact-fit blade. Clear, quiet wipe. Washer jets stay on the bonnet.",
+            "price": "$69",
+            "was": "$89",
+            "pay": "Front pair, 25% off already in. Or 4 payments of $17.25 with Afterpay.",
+            "rear": "+ Add a rear blade: front pair + rear $89",
+            "ticks": "Exact fit for your car\n2 minute fit, no tools\nRear blade available\nno: Water sprays from the blade",
+            "button": "Choose Standard",
+            "fallback_asset": "ezy-blade-standard.png"
+          }
+        }
+      },
+      "block_order": [
+        "spray",
+        "standard"
+      ],
+      "settings": {}
+    },
+    "shades": {
+      "type": "ezy-car-shades",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "ezy-reviews",
       "settings": {
-        "title": "Block Out the Sun & Keep Your Car Cool",
-        "subtitle": "Our custom car window shades will effectively protect you and your passengers from the sun, offering the following features:",
-        "column_feature_label": "Comparison",
-        "column_brand_label": "Click Shades",
-        "column_competitor_label": "Tints",
-        "column_universal_label": "Universal",
-        "column_curtains_label": "Curtains"
+        "style": "cards"
       }
     },
-    "instagram-feed": {
-      "type": "apps",
+    "photos": {
+      "type": "ezy-reviews",
       "settings": {
-        "include_margins": true
+        "style": "photos",
+        "heading": "Fitted by drivers like you",
+        "sub": "Real photos from Loox reviews, from cars like yours.",
+        "rule": true
       }
     },
-    "trust-badges": {
-      "type": "trust-badges",
-      "settings": {
-        "badge_1_title": "Perfect Fit",
-        "badge_1_desc": "Custom designed for your exact vehicle",
-        "badge_2_title": "87% UV Block",
-        "badge_2_desc": "Advanced mesh technology",
-        "badge_3_title": "Easy Install",
-        "badge_3_desc": "Snap-on in under 2 minutes",
-        "badge_4_title": "30-Day Returns",
-        "badge_4_desc": "Hassle-free Returns"
-      }
+    "compare": {
+      "type": "ezy-comparison",
+      "blocks": {
+        "r0": {
+          "type": "row",
+          "settings": {
+            "label": "Made for your exact car",
+            "us": "Yes",
+            "v2": "No",
+            "v3": "Yes"
+          }
+        },
+        "r1": {
+          "type": "row",
+          "settings": {
+            "label": "Fitment video for your car",
+            "us": "Yes",
+            "v2": "No",
+            "v3": "No"
+          }
+        },
+        "r2": {
+          "type": "row",
+          "settings": {
+            "label": "Fit at home in 2 minutes",
+            "us": "Yes",
+            "v2": "Adaptors",
+            "v3": "Book a visit"
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "label": "Free swap within 30 days",
+            "us": "Yes",
+            "v2": "Varies",
+            "v3": "Varies"
+          }
+        },
+        "r4": {
+          "type": "row",
+          "settings": {
+            "label": "Front pair",
+            "us": "From $69",
+            "v2": "Varies",
+            "v3": "Varies"
+          }
+        }
+      },
+      "block_order": [
+        "r0",
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "settings": {}
+    },
+    "fit": {
+      "type": "ezy-how-to-fit",
+      "blocks": {
+        "s0": {
+          "type": "step",
+          "settings": {
+            "title": "Lift the arm",
+            "text": "Pull the wiper arm off the glass."
+          }
+        },
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Press and slide",
+            "text": "Press the tab and slide the old blade off."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Click it on",
+            "text": "Push the new blade on until it clicks."
+          }
+        }
+      },
+      "block_order": [
+        "s0",
+        "s1",
+        "s2"
+      ],
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "ezy-guarantee",
+      "settings": {}
     },
     "faq": {
-      "type": "faq",
+      "type": "ezy-faq",
       "blocks": {
-        "faq-1": {
-          "type": "faq_item",
+        "q0": {
+          "type": "question",
           "settings": {
-            "question": "How do Click Shades stay in place?",
-            "answer": "<p>Our shades feature a magnetic clip system that securely attaches to your car's window frame.</p>"
+            "q": "Which wipers fit my car?",
+            "a": "Search your make and model above. We only show blades made for your car, with its own fitment video."
           }
         },
-        "faq-2": {
-          "type": "faq_item",
+        "q1": {
+          "type": "question",
           "settings": {
-            "question": "Will these fit my exact car model?",
-            "answer": "<p>Absolutely! Each Click Shades set is precision-cut for your specific year, make and model.</p>"
+            "q": "Standard or Spray, which one?",
+            "a": "Standard suits most drivers. Spray suits dust, bugs and long trips. Both fit your car exactly."
           }
         },
-        "faq-3": {
-          "type": "faq_item",
+        "q2": {
+          "type": "question",
           "settings": {
-            "question": "How quickly can I install them?",
-            "answer": "<p>Installation takes under 2 minutes - no tools required.</p>"
+            "q": "How fast is shipping?",
+            "a": "Order before 2pm and it ships the same day. Shipping is free."
           }
         },
-        "faq-4": {
-          "type": "faq_item",
+        "q3": {
+          "type": "question",
           "settings": {
-            "question": "What's your return policy?",
-            "answer": "<p>We offer 30-day <a href=\"/policies/refund-policy\" target=\"_blank\" title=\"Refund Policy\">Return Policy</a>.</p><ul><li><strong>Defective or Wrong Products:</strong> If the return is due to our error (defective, damaged, or wrong item), there are <strong>no costs</strong> to the customer.</li><li><strong>Customer Remorse:</strong> If you purchased the wrong product, it does not fit, or you no longer want the item, the customer is responsible for the <strong>actual cost of return shipping</strong>.</li></ul>"
+            "q": "How do I fit them?",
+            "a": "Lift the arm, press the tab and slide the old blade off, then click the new one on. About 2 minutes, no tools. Your car's video shows each step."
           }
         },
-        "faq-5": {
-          "type": "faq_item",
+        "q4": {
+          "type": "question",
           "settings": {
-            "question": "Where is Click Shades located?",
-            "answer": "<p>We are a 100% Australian-owned and operated business. All orders are dispatched from our warehouse in Bibra Lake, Western Australia (6163).</p>"
-          }
-        },
-        "faq-6": {
-          "type": "faq_item",
-          "settings": {
-            "question": "How much does shipping cost?",
-            "answer": "<p>Free standard shipping on all orders. Express shipping is available at checkout for an extra $10.</p>"
-          }
-        },
-        "faq-7": {
-          "type": "faq_item",
-          "settings": {
-            "question": "When will my order be dispatched?",
-            "answer": "<p>We offer Same-Day Despatch for all orders placed before 2:00 PM (AWST), Monday to Friday. Orders placed after 2:00 PM or on weekends will be dispatched the following business day.</p>"
-          }
-        },
-        "faq_item_VfycnG": {
-          "type": "faq_item",
-          "settings": {
-            "question": "How do I know what size shades I need?",
-            "answer": "<p>Enter your vehicle's year, make, and model in our car selector and we'll recommend the perfect fit for your specific vehicle.</p>"
-          }
-        },
-        "faq-8": {
-          "type": "faq_item",
-          "settings": {
-            "question": "How long will delivery take?",
-            "answer": "<p>Free standard delivery: 1 to 4 business days with Australia Post. Express upgrade available at checkout for an extra $10.</p>"
-          }
-        },
-        "faq-9": {
-          "type": "faq_item",
-          "settings": {
-            "question": "What payment methods do you accept?",
-            "answer": "<p>We accept Visa, Mastercard, American Express, UnionPay, Apple Pay, Google Pay, ,Shop Pay and After Pay.</p>"
-          }
-        },
-        "faq-10": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Is my payment secure?",
-            "answer": "<p>Yes. Our store is powered by Shopify and is Level 1 PCI DSS compliant. We use 256-bit SSL encryption to ensure your data is safe. We do not store your credit card details.</p>"
-          }
-        },
-        "faq-11": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Can I cancel or change my order?",
-            "answer": "<p>Because we despatch orders rapidly, the cancellation window is very small. If you need to change or cancel, please email sales@clickshades.com.au before 2:00 PM (AWST).</p>"
-          }
-        },
-        "faq-12": {
-          "type": "faq_item",
-          "settings": {
-            "question": "What is your return policy?",
-            "answer": "<p>We offer a 30-day return policy. </p><ul><li><strong>Defective or Wrong Products:</strong> If the return is due to our error (defective, damaged, or wrong item), there are <strong>no costs</strong> to the customer.</li><li><strong>Customer Remorse:</strong> If you purchased the wrong product, it does not fit, or you no longer want the item, the customer is responsible for the <strong>actual cost of return shipping</strong>.</li></ul>"
-          }
-        },
-        "faq-13": {
-          "type": "faq_item",
-          "settings": {
-            "question": "How do I start a return?",
-            "answer": "<p>Simply email us at sales@clickshades.com.au with your order number. We will provide you with the return instructions and address.</p>"
-          }
-        },
-        "faq-14": {
-          "type": "faq_item",
-          "settings": {
-            "question": "What if my item arrives damaged?",
-            "answer": "<p>Please inspect your order upon arrival. If the product is defective or damaged, contact us immediately so we can evaluate the issue and make it right.</p>"
+            "q": "What if they don't fit?",
+            "a": "Tell us within 30 days and we send the right ones free."
           }
         }
       },
       "block_order": [
-        "faq-1",
-        "faq-2",
-        "faq-3",
-        "faq-4",
-        "faq-5",
-        "faq-6",
-        "faq-7",
-        "faq_item_VfycnG",
-        "faq-8",
-        "faq-9",
-        "faq-10",
-        "faq-11",
-        "faq-12",
-        "faq-13",
-        "faq-14"
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4"
       ],
-      "settings": {
-        "heading": "Frequently Asked Questions",
-        "subtitle": "Got questions? We've got answers."
-      }
+      "settings": {}
+    },
+    "final": {
+      "type": "ezy-final-cta",
+      "settings": {}
     }
   },
   "order": [
     "hero",
-    "car-selector",
-    "product-cards",
-    "video-carousel",
-    "popular-models",
-    "why-clickshades",
-    "loox-reviews",
-    "comparison-table",
-    "instagram-feed",
-    "trust-badges",
-    "faq"
+    "popular",
+    "lead",
+    "types",
+    "shades",
+    "reviews",
+    "photos",
+    "compare",
+    "fit",
+    "guarantee",
+    "faq",
+    "final"
   ]
 }

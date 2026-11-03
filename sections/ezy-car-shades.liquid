@@ -1,0 +1,28 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<section class="ezy ezy-sec ezy-sec--blue ezy-shades">
+  <div class="ezy-wrap ezy-shades__grid">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'lazy' }}
+    {%- else -%}
+      <img src="{{ 'ezy-shade-ranger.png' | asset_url }}" alt="" loading="lazy">
+    {%- endif -%}
+    <div>
+      <h2>{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.text }}</p>
+      <a class="ezy-btn ezy-btn--yellow" href="{{ section.settings.link | default: '#' }}">{{ section.settings.button }}</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EZY car shades",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Keep the sun out too" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Click-in car shades made for the same cars as our wipers, with a magnetic fit instead of suction cups, from $149." },
+    { "type": "text", "id": "button", "label": "Button", "default": "Shop car shades" },
+    { "type": "url", "id": "link", "label": "Button link" }
+  ]
+}
+{% endschema %}

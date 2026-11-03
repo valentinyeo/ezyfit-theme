@@ -1,0 +1,33 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<section class="ezy ezy-sec">
+  <div class="ezy-wrap">
+    <h2 class="ezy-h2" style="margin-bottom: 20px !important">{{ section.settings.heading }}</h2>
+    <div class="ezy-faq">
+      {%- for block in section.blocks -%}
+        <details {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.q }}</summary>
+          <p>{{ block.settings.a }}</p>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- if section.blocks.size > 0 -%}
+<script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+    {%- for block in section.blocks -%}
+      {"@type": "Question", "name": {{ block.settings.q | json }}, "acceptedAnswer": {"@type": "Answer", "text": {{ block.settings.a | json }}}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]}
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "EZY FAQ",
+  "settings": [{ "type": "text", "id": "heading", "label": "Heading", "default": "Questions drivers ask" }],
+  "blocks": [
+    { "type": "question", "name": "Question", "settings": [{ "type": "text", "id": "q", "label": "Question" }, { "type": "textarea", "id": "a", "label": "Answer" }] }
+  ]
+}
+{% endschema %}
