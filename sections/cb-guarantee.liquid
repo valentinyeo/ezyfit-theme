@@ -1,0 +1,239 @@
+<style>
+  .cb-guarantee-section {
+    padding: 50px 16px;
+    background: linear-gradient(135deg, #eef4fb 0%, #f0f7ff 100%);
+  }
+
+  .cb-guarantee-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .cb-guarantee-badge {
+    width: 80px;
+    height: 80px;
+    background: var(--blue, #2463af);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    box-shadow: 0 4px 16px rgba(36, 99, 175, 0.3);
+  }
+
+  .cb-guarantee-badge svg {
+    width: 40px;
+    height: 40px;
+    stroke: #ffffff;
+    fill: none;
+  }
+
+  .cb-guarantee-title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 16px;
+  }
+
+  .cb-guarantee-desc {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    color: #555555;
+    line-height: 1.7;
+    margin: 0 0 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cb-guarantee-points {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .cb-guarantee-point {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: left;
+  }
+
+  .cb-guarantee-point svg {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    stroke: var(--blue, #2463af);
+    fill: none;
+  }
+
+  .cb-guarantee-point span {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+
+  .cb-guarantee-cta {
+    margin-top: 32px;
+  }
+
+  .cb-guarantee-cta a {
+    display: inline-block;
+    background: var(--blue, #2463af);
+    color: #ffffff;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px 36px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .cb-guarantee-cta a:hover {
+    background: #1b4f8f;
+  }
+
+  @media (min-width: 768px) {
+    .cb-guarantee-section {
+      padding: 80px 40px;
+    }
+
+    .cb-guarantee-badge {
+      width: 100px;
+      height: 100px;
+    }
+
+    .cb-guarantee-badge svg {
+      width: 50px;
+      height: 50px;
+    }
+
+    .cb-guarantee-title {
+      font-size: 34px;
+    }
+
+    .cb-guarantee-desc {
+      font-size: 17px;
+    }
+
+    .cb-guarantee-points {
+      flex-direction: row;
+      flex-wrap: wrap;
+      max-width: 700px;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .cb-guarantee-point {
+      padding: 16px 24px;
+    }
+
+    .cb-guarantee-point span {
+      font-size: 15px;
+    }
+  }
+</style>
+
+<section class="cb-guarantee-section">
+  <div class="cb-guarantee-inner">
+    {% if template.suffix == 'clickblades-v3' or template.suffix == 'clickblades' or template.suffix == 'wiper-v3' %}
+    <div style="max-width:260px;margin:0 auto 18px;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.12);">
+      <img src="{{ 'cb-real-3.jpg' | asset_url }}" alt="Fitting a Click Blade in under two minutes" width="1000" height="1000" loading="lazy" style="width:100%;height:auto;display:block;">
+    </div>
+    {% endif %}
+    <div class="cb-guarantee-badge">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <polyline points="9 12 11 14 15 10"/>
+      </svg>
+    </div>
+
+    <h2 class="cb-guarantee-title">{{ section.settings.title | default: 'Perfect Fit Guarantee' }}</h2>
+    <p class="cb-guarantee-desc">{{ section.settings.description | default: "Order risk-free. If your Click Blades don't fit your vehicle perfectly, we'll send you the right ones or give you a full refund — no questions asked. We're that confident in our fitment data." }}</p>
+
+    <div class="cb-guarantee-points">
+      <div class="cb-guarantee-point">
+        <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>{{ section.settings.point_1 | default: '30-day money-back guarantee' }}</span>
+      </div>
+      <div class="cb-guarantee-point">
+        <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>{{ section.settings.point_2 | default: 'Free replacement if wrong fit' }}</span>
+      </div>
+      <div class="cb-guarantee-point">
+        <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>{{ section.settings.point_3 | default: '12-month warranty included' }}</span>
+      </div>
+    </div>
+
+    {%- if section.settings.cta_text != blank -%}
+    <div class="cb-guarantee-cta">
+      <a href="{{ section.settings.cta_link | default: '#cb-vehicle-picker' }}">{{ section.settings.cta_text }}</a>
+    </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CB Guarantee",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Perfect Fit Guarantee"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Order risk-free. If your Click Blades don't fit your vehicle perfectly, we'll send you the right ones or give you a full refund — no questions asked. We're that confident in our fitment data."
+    },
+    {
+      "type": "text",
+      "id": "point_1",
+      "label": "Point 1",
+      "default": "30-day money-back guarantee"
+    },
+    {
+      "type": "text",
+      "id": "point_2",
+      "label": "Point 2",
+      "default": "Free replacement if wrong fit"
+    },
+    {
+      "type": "text",
+      "id": "point_3",
+      "label": "Point 3",
+      "default": "12-month warranty included"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Text (leave blank to hide)",
+      "default": "Find Your Blades"
+    },
+    {
+      "type": "text",
+      "id": "cta_link",
+      "label": "CTA Link",
+      "default": "#cb-vehicle-picker"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CB Guarantee"
+    }
+  ]
+}
+{% endschema %}

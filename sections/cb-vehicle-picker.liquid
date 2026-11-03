@@ -1,0 +1,787 @@
+<style>
+  /* ========== CB VEHICLE PICKER SECTION ========== */
+  .cb-picker-section {
+    padding: 0 16px 8px;
+    margin-top: -16px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .cb-picker-card {
+    background: var(--white, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.18);
+    overflow: visible;
+  }
+
+  .cb-picker-body {
+    padding: 12px;
+  }
+
+  /* ========== YMM FORM ========== */
+  .cb-ymm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* ========== CUSTOM DROPDOWN ========== */
+  .cb-ymm-dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  .cb-ymm-dropdown-trigger {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted, #333333);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--white, #ffffff);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .cb-ymm-dropdown-trigger:hover:not(.cb-disabled) {
+    border-color: var(--blue, #2463af);
+  }
+
+  .cb-ymm-dropdown.cb-active-step .cb-ymm-dropdown-trigger:not(.cb-disabled) {
+    border: 2px solid var(--blue, #2463af);
+    background: #f8fafc;
+    box-shadow: 0 0 0 3px rgba(36, 99, 175, 0.2);
+  }
+
+  .cb-ymm-dropdown.cb-active-step .cb-ymm-dropdown-value:not(.cb-selected) {
+    color: var(--blue, #2463af);
+    font-weight: 600;
+  }
+
+  .cb-ymm-dropdown-trigger.cb-disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    background: #f5f5f5;
+    color: #666666;
+  }
+
+  .cb-ymm-dropdown.cb-open .cb-ymm-dropdown-trigger {
+    border-color: var(--blue, #2463af);
+    box-shadow: 0 0 0 2px rgba(36, 99, 175, 0.2);
+  }
+
+  .cb-ymm-dropdown-value {
+    flex: 1;
+    text-align: left;
+  }
+
+  .cb-ymm-dropdown-value.cb-selected {
+    color: var(--text, #333333);
+  }
+
+  .cb-ymm-dropdown-arrow {
+    width: 20px;
+    height: 20px;
+    stroke: #333333;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .cb-ymm-dropdown.cb-open .cb-ymm-dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* ========== DROPDOWN MENU ========== */
+  .cb-ymm-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--white, #ffffff);
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+    max-height: 280px;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .cb-ymm-dropdown.cb-open .cb-ymm-dropdown-menu {
+    display: flex;
+  }
+
+  /* ========== SEARCH INPUT ========== */
+  .cb-ymm-dropdown-search {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border, #e0e0e0);
+    flex-shrink: 0;
+  }
+
+  .cb-ymm-dropdown-search input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .cb-ymm-dropdown-search input:focus {
+    border-color: var(--blue, #2463af);
+  }
+
+  .cb-ymm-dropdown-search input::placeholder {
+    color: #999999;
+  }
+
+  /* ========== OPTIONS LIST ========== */
+  .cb-ymm-dropdown-options {
+    overflow-y: auto;
+    max-height: 200px;
+    padding: 6px 0;
+  }
+
+  .cb-ymm-dropdown-option {
+    padding: 12px 16px;
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .cb-ymm-dropdown-option:hover {
+    background: #e3f0ff;
+    color: #1a1a1a;
+  }
+
+  .cb-ymm-dropdown-option.cb-active {
+    background: var(--blue, #2463af);
+    color: white;
+    font-weight: 700;
+  }
+
+  .cb-ymm-dropdown-loading,
+  .cb-ymm-dropdown-empty {
+    padding: 16px;
+    text-align: center;
+    color: #666;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+  }
+
+  /* ========== SUBMIT BUTTON ========== */
+  .cb-ymm-submit {
+    width: 100%;
+    padding: 12px;
+    background: var(--yellow, #ffd600);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+  }
+
+  .cb-ymm-submit:hover {
+    background: var(--yellow-hover, #e6c100);
+  }
+
+  .cb-ymm-submit.cb-incomplete {
+    opacity: 0.9;
+  }
+
+  /* ========== FRICTION REDUCER ========== */
+  .cb-picker-friction {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-align: center;
+  }
+
+  .cb-picker-friction svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--blue, #2463af);
+    flex-shrink: 0;
+  }
+
+  /* ========== DESKTOP LAYOUT ========== */
+  @media (min-width: 768px) {
+    .cb-picker-section {
+      padding: 0 40px 20px;
+      max-width: 900px;
+      margin: -30px auto 0;
+    }
+
+    .cb-picker-body {
+      padding: 20px 24px;
+    }
+
+    .cb-ymm-form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) auto;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .cb-ymm-dropdown-trigger {
+      height: 48px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .cb-ymm-submit {
+      width: auto;
+      height: 48px;
+      padding: 0 28px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cb-ymm-dropdown-menu {
+      min-width: 200px;
+    }
+  }
+</style>
+
+<section class="cb-picker-section" id="cb-vehicle-picker">
+  <div class="cb-picker-card">
+    <div class="cb-picker-body">
+      <div class="cb-ymm-form" id="cb-ymm-form">
+        <!-- Make Dropdown -->
+        <div class="cb-ymm-dropdown" data-cb-field="make">
+          <div class="cb-ymm-dropdown-trigger" data-placeholder="Select Make">
+            <span class="cb-ymm-dropdown-value">Select Make</span>
+            <svg class="cb-ymm-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="cb-ymm-dropdown-menu">
+            <div class="cb-ymm-dropdown-search">
+              <input type="text" placeholder="Search make..." autocomplete="off">
+            </div>
+            <div class="cb-ymm-dropdown-options"></div>
+          </div>
+        </div>
+
+        <!-- Model Dropdown -->
+        <div class="cb-ymm-dropdown" data-cb-field="model">
+          <div class="cb-ymm-dropdown-trigger cb-disabled" data-placeholder="Select Model">
+            <span class="cb-ymm-dropdown-value">Select Model</span>
+            <svg class="cb-ymm-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="cb-ymm-dropdown-menu">
+            <div class="cb-ymm-dropdown-search">
+              <input type="text" placeholder="Search model..." autocomplete="off">
+            </div>
+            <div class="cb-ymm-dropdown-options"></div>
+          </div>
+        </div>
+
+        <!-- Year Dropdown -->
+        <div class="cb-ymm-dropdown" data-cb-field="year">
+          <div class="cb-ymm-dropdown-trigger cb-disabled" data-placeholder="Select Year">
+            <span class="cb-ymm-dropdown-value">Select Year</span>
+            <svg class="cb-ymm-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="cb-ymm-dropdown-menu">
+            <div class="cb-ymm-dropdown-search">
+              <input type="text" placeholder="Search year..." autocomplete="off">
+            </div>
+            <div class="cb-ymm-dropdown-options"></div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="button" class="cb-ymm-submit" id="cb-ymm-submit">
+          {{ section.settings.button_text | default: 'Find Your Blades' }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="cb-picker-friction">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      <polyline points="9 12 11 14 15 10"></polyline>
+    </svg>
+    <span>{{ section.settings.friction_text | default: "Not sure about your model? Take your best guess — we'll confirm the fit" }}</span>
+  </div>
+</section>
+
+<script>
+  (function () {
+    // All products from the wiper-blades collection
+    let cbAllProducts = [];
+
+    // Parsed data
+    let cbData = {
+      makes: {},       // { makeName: [products] }
+      models: {},      // { makeName: { modelName: [products] } }
+      years: {},       // { makeName_modelName: Set of years }
+    };
+
+    // Current selections
+    let cbSelections = {
+      make: null,
+      model: null,
+      year: null,
+      matchingProducts: [],
+    };
+
+    // Model name synonyms (reuse from car-selector)
+    const cbModelAliases = {
+      'Land Cruiser 250': 'Prado 250',
+      'Land Cruiser Prado 150': 'Prado 150',
+      'Land Cruiser Prado 250': 'Prado 250',
+    };
+
+    // Parse product title to extract make, model, and years
+    function cbParseTitle(title) {
+      // Remove prefix: "Front Windscreen Wipers for "
+      let cleaned = title
+        .replace(/^Front Windscreen (Wipers|Wiper Blades|Wiper) for /i, '')
+        .replace(/^Windscreen (Wipers|Wiper Blades|Wiper) for /i, '');
+
+      // Known makes to try to extract
+      const knownMakes = [
+        'Toyota', 'Ford', 'Mazda', 'Honda', 'Hyundai', 'Nissan',
+        'Mitsubishi', 'Kia', 'BMW', 'Mercedes-Benz', 'Mercedes Benz', 'Mercedes',
+        'Volkswagen', 'Subaru', 'Isuzu', 'Lexus', 'MG', 'Chevrolet',
+        'Geely', 'Infiniti', 'BYD', 'Chery'
+      ];
+
+      let make = null;
+      for (const m of knownMakes) {
+        if (cleaned.toLowerCase().startsWith(m.toLowerCase())) {
+          make = m;
+          // Normalize Mercedes variations
+          if (m.startsWith('Mercedes')) make = 'Mercedes-Benz';
+          cleaned = cleaned.substring(m.length).trim();
+          break;
+        }
+      }
+
+      if (!make) return null;
+
+      // Extract years
+      let years = [];
+      let model = cleaned;
+
+      // Pattern: "2019 ->" means 2019 to current year
+      const openEndMatch = cleaned.match(/(\d{4})\s*->\s*$/);
+      if (openEndMatch) {
+        const startYear = parseInt(openEndMatch[1]);
+        const currentYear = new Date().getFullYear();
+        for (let y = startYear; y <= currentYear; y++) {
+          years.push(y.toString());
+        }
+        model = cleaned.replace(/\s*\d{4}\s*->\s*$/, '').trim();
+      } else {
+        // Pattern: "2019-2024"
+        const rangeMatch = cleaned.match(/(\d{4})\s*[-–]\s*(\d{4})/);
+        if (rangeMatch) {
+          const startYear = parseInt(rangeMatch[1]);
+          const endYear = parseInt(rangeMatch[2]);
+          for (let y = startYear; y <= endYear; y++) {
+            years.push(y.toString());
+          }
+          model = cleaned.replace(/\s*\d{4}\s*[-–]\s*\d{4}\s*$/, '').trim();
+        } else {
+          // Single year
+          const singleMatch = cleaned.match(/(\d{4})\s*$/);
+          if (singleMatch) {
+            years.push(singleMatch[1]);
+            model = cleaned.replace(/\s*\d{4}\s*$/, '').trim();
+          }
+        }
+      }
+
+      model = model.trim();
+      // Apply aliases
+      model = cbModelAliases[model] || model;
+
+      return { make, model, years };
+    }
+
+    // Fetch all products from wiper-blades collection
+    async function cbFetchProducts() {
+      try {
+        const response = await fetch('/collections/wiper-blades/products.json?limit=250');
+        const data = await response.json();
+        return data.products || [];
+      } catch (error) {
+        console.error('Failed to fetch wiper blade products:', error);
+        return [];
+      }
+    }
+
+    // Process all products into makes/models/years
+    function cbProcessProducts(products) {
+      cbAllProducts = products;
+
+      products.forEach(product => {
+        const parsed = cbParseTitle(product.title);
+        if (!parsed || !parsed.make || !parsed.model) return;
+
+        const { make, model, years } = parsed;
+
+        // Track makes
+        if (!cbData.makes[make]) cbData.makes[make] = [];
+        cbData.makes[make].push(product);
+
+        // Track models per make
+        if (!cbData.models[make]) cbData.models[make] = {};
+        if (!cbData.models[make][model]) cbData.models[make][model] = [];
+        cbData.models[make][model].push(product);
+
+        // Track years per make+model
+        const key = `${make}_${model}`;
+        if (!cbData.years[key]) cbData.years[key] = new Set();
+        years.forEach(y => cbData.years[key].add(y));
+      });
+    }
+
+    // Populate makes dropdown
+    function cbPopulateMakes() {
+      const dropdown = document.querySelector('[data-cb-field="make"]');
+      const optionsContainer = dropdown.querySelector('.cb-ymm-dropdown-options');
+
+      const sortedMakes = Object.keys(cbData.makes).sort();
+
+      optionsContainer.innerHTML = sortedMakes
+        .map(name => `<div class="cb-ymm-dropdown-option" data-value="${name}">${name}</div>`)
+        .join('');
+
+      cbAttachOptionListeners(dropdown);
+      cbUpdateActiveStep();
+    }
+
+    // Populate models dropdown
+    function cbPopulateModels(make) {
+      const dropdown = document.querySelector('[data-cb-field="model"]');
+      const optionsContainer = dropdown.querySelector('.cb-ymm-dropdown-options');
+      const trigger = dropdown.querySelector('.cb-ymm-dropdown-trigger');
+
+      if (!make || !cbData.models[make]) {
+        optionsContainer.innerHTML = '';
+        trigger.classList.add('cb-disabled');
+        cbResetDropdown(dropdown);
+        return;
+      }
+
+      const sortedModels = Object.keys(cbData.models[make]).sort();
+
+      if (sortedModels.length === 0) {
+        optionsContainer.innerHTML = '<div class="cb-ymm-dropdown-empty">No models found</div>';
+        trigger.classList.remove('cb-disabled');
+        return;
+      }
+
+      optionsContainer.innerHTML = sortedModels
+        .map(model => `<div class="cb-ymm-dropdown-option" data-value="${model}">${model}</div>`)
+        .join('');
+
+      trigger.classList.remove('cb-disabled');
+      cbAttachOptionListeners(dropdown);
+    }
+
+    // Populate years dropdown
+    function cbPopulateYears(make, model) {
+      const dropdown = document.querySelector('[data-cb-field="year"]');
+      const optionsContainer = dropdown.querySelector('.cb-ymm-dropdown-options');
+      const trigger = dropdown.querySelector('.cb-ymm-dropdown-trigger');
+
+      const key = `${make}_${model}`;
+      if (!make || !model || !cbData.years[key]) {
+        optionsContainer.innerHTML = '';
+        trigger.classList.add('cb-disabled');
+        cbResetDropdown(dropdown);
+        return;
+      }
+
+      const sortedYears = Array.from(cbData.years[key]).sort((a, b) => b - a);
+      optionsContainer.innerHTML = sortedYears
+        .map(year => `<div class="cb-ymm-dropdown-option" data-value="${year}">${year}</div>`)
+        .join('');
+
+      trigger.classList.remove('cb-disabled');
+      cbAttachOptionListeners(dropdown);
+    }
+
+    // Update active step highlight
+    function cbUpdateActiveStep() {
+      document.querySelectorAll('.cb-ymm-dropdown').forEach(d => d.classList.remove('cb-active-step'));
+
+      if (!cbSelections.make) {
+        document.querySelector('[data-cb-field="make"]')?.classList.add('cb-active-step');
+      } else if (!cbSelections.model) {
+        document.querySelector('[data-cb-field="model"]')?.classList.add('cb-active-step');
+      } else if (!cbSelections.year) {
+        document.querySelector('[data-cb-field="year"]')?.classList.add('cb-active-step');
+      }
+    }
+
+    // Reset a dropdown
+    function cbResetDropdown(dropdown) {
+      const trigger = dropdown.querySelector('.cb-ymm-dropdown-trigger');
+      const valueEl = trigger.querySelector('.cb-ymm-dropdown-value');
+      const searchInput = dropdown.querySelector('.cb-ymm-dropdown-search input');
+
+      valueEl.textContent = trigger.dataset.placeholder;
+      valueEl.classList.remove('cb-selected');
+      if (searchInput) searchInput.value = '';
+
+      const field = dropdown.dataset.cbField;
+      cbSelections[field] = null;
+    }
+
+    // Attach listeners to options
+    function cbAttachOptionListeners(dropdown) {
+      const options = dropdown.querySelectorAll('.cb-ymm-dropdown-option');
+      const field = dropdown.dataset.cbField;
+
+      options.forEach(option => {
+        option.addEventListener('click', () => {
+          const value = option.dataset.value;
+          cbSelectOption(dropdown, value);
+
+          if (field === 'make') {
+            cbSelections.make = value;
+            cbSelections.model = null;
+            cbSelections.year = null;
+            cbResetDropdown(document.querySelector('[data-cb-field="model"]'));
+            cbResetDropdown(document.querySelector('[data-cb-field="year"]'));
+            cbPopulateModels(value);
+            document.querySelector('[data-cb-field="year"] .cb-ymm-dropdown-trigger').classList.add('cb-disabled');
+            setTimeout(() => {
+              cbOpenDropdown(document.querySelector('[data-cb-field="model"]'));
+            }, 50);
+          } else if (field === 'model') {
+            cbSelections.model = value;
+            cbSelections.year = null;
+            cbResetDropdown(document.querySelector('[data-cb-field="year"]'));
+            cbPopulateYears(cbSelections.make, value);
+            setTimeout(() => {
+              cbOpenDropdown(document.querySelector('[data-cb-field="year"]'));
+            }, 50);
+          } else if (field === 'year') {
+            cbSelections.year = value;
+            // Find matching products
+            const models = cbData.models[cbSelections.make] || {};
+            cbSelections.matchingProducts = (models[cbSelections.model] || []).filter(p => {
+              const parsed = cbParseTitle(p.title);
+              return parsed && parsed.years.includes(value);
+            });
+          }
+
+          cbUpdateActiveStep();
+          cbUpdateSubmitButton();
+          cbCloseDropdown(dropdown);
+        });
+      });
+    }
+
+    // Select an option
+    function cbSelectOption(dropdown, value) {
+      const trigger = dropdown.querySelector('.cb-ymm-dropdown-trigger');
+      const valueEl = trigger.querySelector('.cb-ymm-dropdown-value');
+
+      valueEl.textContent = value;
+      valueEl.classList.add('cb-selected');
+
+      dropdown.querySelectorAll('.cb-ymm-dropdown-option').forEach(opt => {
+        opt.classList.toggle('cb-active', opt.dataset.value === value);
+      });
+    }
+
+    // Update submit button state
+    function cbUpdateSubmitButton() {
+      const submitBtn = document.getElementById('cb-ymm-submit');
+      const isComplete = cbSelections.make && cbSelections.model && cbSelections.year;
+      submitBtn.classList.toggle('cb-incomplete', !isComplete);
+    }
+
+    // Open dropdown
+    function cbOpenDropdown(dropdown) {
+      const trigger = dropdown.querySelector('.cb-ymm-dropdown-trigger');
+      if (trigger.classList.contains('cb-disabled')) return;
+
+      document.querySelectorAll('.cb-ymm-dropdown.cb-open').forEach(d => {
+        if (d !== dropdown) cbCloseDropdown(d);
+      });
+
+      dropdown.classList.add('cb-open');
+      const searchInput = dropdown.querySelector('.cb-ymm-dropdown-search input');
+      if (searchInput && window.innerWidth >= 768) {
+        setTimeout(() => searchInput.focus(), 10);
+      }
+    }
+
+    // Close dropdown
+    function cbCloseDropdown(dropdown) {
+      dropdown.classList.remove('cb-open');
+      const searchInput = dropdown.querySelector('.cb-ymm-dropdown-search input');
+      if (searchInput) {
+        searchInput.value = '';
+        cbFilterOptions(dropdown, '');
+      }
+    }
+
+    // Filter options
+    function cbFilterOptions(dropdown, query) {
+      const options = dropdown.querySelectorAll('.cb-ymm-dropdown-option');
+      const lowerQuery = query.toLowerCase();
+
+      options.forEach(option => {
+        const text = option.textContent.toLowerCase();
+        option.style.display = text.includes(lowerQuery) ? '' : 'none';
+      });
+    }
+
+    // Handle form submission
+    function cbHandleSubmit() {
+      if (!cbSelections.make) {
+        cbOpenDropdown(document.querySelector('[data-cb-field="make"]'));
+        return;
+      }
+      if (!cbSelections.model) {
+        cbOpenDropdown(document.querySelector('[data-cb-field="model"]'));
+        return;
+      }
+      if (!cbSelections.year) {
+        cbOpenDropdown(document.querySelector('[data-cb-field="year"]'));
+        return;
+      }
+
+      // If exactly 1 matching product, go to its page
+      if (cbSelections.matchingProducts.length === 1) {
+        const product = cbSelections.matchingProducts[0];
+        window.location.href = `/products/${product.handle}`;
+        return;
+      }
+
+      // Otherwise, search for the specific wiper
+      const searchQuery = `Front Windscreen Wipers ${cbSelections.make} ${cbSelections.model} ${cbSelections.year}`;
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}&type=product`;
+    }
+
+    // Initialize
+    async function cbInit() {
+      const submitBtn = document.getElementById('cb-ymm-submit');
+      if (!submitBtn) return;
+
+      submitBtn.classList.add('cb-incomplete');
+
+      // Show loading in make dropdown
+      const makeOptions = document.querySelector('[data-cb-field="make"] .cb-ymm-dropdown-options');
+      makeOptions.innerHTML = '<div class="cb-ymm-dropdown-loading">Loading makes...</div>';
+
+      // Fetch all wiper blade products
+      const products = await cbFetchProducts();
+      cbProcessProducts(products);
+      cbPopulateMakes();
+
+      // Dropdown trigger clicks
+      document.querySelectorAll('.cb-ymm-dropdown-trigger').forEach(trigger => {
+        trigger.addEventListener('click', e => {
+          e.stopPropagation();
+          const dropdown = trigger.closest('.cb-ymm-dropdown');
+          if (dropdown.classList.contains('cb-open')) {
+            cbCloseDropdown(dropdown);
+          } else {
+            cbOpenDropdown(dropdown);
+          }
+        });
+      });
+
+      // Search input handling
+      document.querySelectorAll('#cb-ymm-form .cb-ymm-dropdown-search input').forEach(input => {
+        input.addEventListener('input', e => {
+          const dropdown = input.closest('.cb-ymm-dropdown');
+          cbFilterOptions(dropdown, e.target.value);
+        });
+        input.addEventListener('click', e => {
+          e.stopPropagation();
+        });
+      });
+
+      // Close dropdowns on outside click
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.cb-ymm-dropdown')) {
+          document.querySelectorAll('.cb-ymm-dropdown.cb-open').forEach(cbCloseDropdown);
+        }
+      });
+
+      // Submit button
+      submitBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        cbHandleSubmit();
+      });
+
+      // Keyboard
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.cb-ymm-dropdown.cb-open').forEach(cbCloseDropdown);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', cbInit);
+    } else {
+      cbInit();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "CB Vehicle Picker",
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Find Your Blades"
+    },
+    {
+      "type": "text",
+      "id": "friction_text",
+      "label": "Friction Reducer Text",
+      "default": "Not sure about your model? Take your best guess — we'll confirm the fit"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CB Vehicle Picker"
+    }
+  ]
+}
+{% endschema %}

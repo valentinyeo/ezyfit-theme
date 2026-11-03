@@ -1,0 +1,733 @@
+{% comment %}
+  Professional Footer Section (V7 Design)
+  Matches production footer design with 4-column layout,
+  company information, links, and social media
+{% endcomment %}
+
+<style>
+  /* ========== FOOTER V7 ========== */
+  .footer-v7 {
+    background: linear-gradient(135deg, #2463af 0%, #1a4f8c 100%);
+    color: #ffffff;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .footer-content {
+    padding: 48px 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Payment Trust Section */
+  .footer-payment-trust {
+    margin-bottom: 32px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .payment-trust-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .payment-trust-label {
+    font-size: 18px;
+    font-weight: var(--font-semibold);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .payment-trust-icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0;
+  }
+
+  .payment-trust-icon {
+    height: 28px;
+    width: auto;
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 4px;
+    padding: 4px 8px;
+    transition: all 0.2s ease;
+  }
+
+  .payment-trust-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Afterpay message in footer */
+  .footer-afterpay-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    flex-wrap: wrap;
+  }
+
+  .footer-afterpay-logo {
+    font-weight: 700;
+    color: #fff;
+    font-size: 13px;
+  }
+
+  /* Newsletter Signup Section */
+  .footer-newsletter {
+    margin-bottom: 48px;
+    padding: 32px 24px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .newsletter-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .newsletter-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .newsletter-heading {
+    font-size: 18px;
+    font-weight: var(--font-semibold);
+    margin: 0;
+    color: #ffffff;
+  }
+
+  .newsletter-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+  }
+
+  .newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .newsletter-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .newsletter-input {
+    padding: 12px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .newsletter-input:focus {
+    outline: none;
+    border-color: #ffd600;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.1);
+  }
+
+  .newsletter-button {
+    padding: 12px 32px;
+    background: #ffd600;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 8px;
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    width: 100%;
+  }
+
+  .newsletter-button:hover {
+    background: #ffde33;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 214, 0, 0.3);
+  }
+
+  .newsletter-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 214, 0, 0.2);
+  }
+
+  .newsletter-privacy {
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    text-align: center;
+  }
+
+  .newsletter-success {
+    font-size: 14px;
+    color: #4ade80;
+    margin: 0 0 8px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  /* 4 Column Layout */
+  .footer-columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+
+  .footer-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-heading {
+    font-size: 18px;
+    font-weight: var(--font-semibold);
+    margin: 0 0 16px;
+    color: #ffffff;
+  }
+
+  .footer-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+  }
+
+  /* Contact Links with Icons */
+  .footer-contact-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer-contact-links li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .footer-contact-links svg {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    color: #ffd600;
+    flex-shrink: 0;
+  }
+
+  .footer-contact-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
+
+  .footer-contact-links a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+
+  .footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-info p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+  }
+
+  .footer-info a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .footer-info a:hover {
+    text-decoration: underline;
+  }
+
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: var(--font-normal);
+    transition: color 0.2s;
+    line-height: 1.5;
+  }
+
+  .footer-links a:hover {
+    color: #ffffff;
+  }
+
+  /* Follow Us Section */
+  .footer-follow-us {
+    margin-bottom: 48px;
+    padding: 32px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .follow-us-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .follow-us-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .follow-us-heading {
+    font-size: 18px;
+    font-weight: var(--font-semibold);
+    margin: 0;
+    color: #ffffff;
+  }
+
+  .follow-us-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+
+  /* Social Media */
+  .footer-social {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    transition: all 0.2s ease;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .social-link:hover {
+    background: rgba(255, 214, 0, 0.2);
+    border-color: #ffd600;
+    transform: translateY(-2px);
+  }
+
+  .social-link svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Bottom Bar - Copyright */
+  .footer-bottom {
+    background: rgba(0, 0, 0, 0.15);
+    padding: 20px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer-bottom-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .footer-copyright-text {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  /* Tablet & Desktop */
+  @media (min-width: 768px) {
+    .footer-content {
+      padding: 60px 40px;
+    }
+
+    .footer-payment-trust {
+      padding: 28px 32px;
+      margin-bottom: 40px;
+    }
+
+    .payment-trust-content {
+      flex-direction: row;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .payment-trust-icons {
+      gap: 16px;
+    }
+
+    .payment-trust-icon {
+      height: 32px;
+    }
+
+    .footer-newsletter {
+      padding: 40px 32px;
+      margin-bottom: 56px;
+    }
+
+    .newsletter-heading {
+      font-size: 20px;
+    }
+
+    .newsletter-content {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 48px;
+    }
+
+    .newsletter-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .newsletter-form {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .newsletter-input-group {
+      flex-direction: row;
+      gap: 0;
+    }
+
+    .newsletter-input {
+      border-radius: 8px 0 0 8px;
+      border-right: none;
+    }
+
+    .newsletter-button {
+      width: auto;
+      padding: 12px 32px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .footer-columns {
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    .footer-heading {
+      font-size: 20px;
+    }
+
+    .footer-text {
+      font-size: 15px;
+    }
+
+    .footer-info p {
+      font-size: 14px;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+    }
+
+    .follow-us-container {
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+      text-align: left;
+    }
+
+    .follow-us-text {
+      flex: 1;
+      gap: 6px;
+    }
+
+    .follow-us-heading {
+      font-size: 20px;
+    }
+
+    .follow-us-description {
+      font-size: 14px;
+    }
+
+    .footer-social {
+      justify-content: flex-start;
+      gap: 12px;
+    }
+
+    .social-link {
+      width: 44px;
+      height: 44px;
+    }
+
+    .social-link svg {
+      width: 22px;
+      height: 22px;
+    }
+
+  }
+
+  @media (min-width: 1024px) {
+    .footer-columns {
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 64px;
+    }
+
+    .footer-heading {
+      font-size: 22px;
+      margin-bottom: 24px;
+    }
+
+    .footer-text {
+      font-size: 15px;
+    }
+
+    .footer-info p {
+      font-size: 14px;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+    }
+  }
+</style>
+
+<footer class="footer-v7">
+  <div class="footer-content">
+    <!-- Payment Methods Trust Section -->
+    <div class="footer-payment-trust">
+      <div class="payment-trust-content">
+        <span class="payment-trust-label">Secure Payment Options</span>
+        <div class="payment-trust-icons">
+          {%- if shop.enabled_payment_types.size > 0 -%}
+            {%- for type in shop.enabled_payment_types -%}
+              {{ type | payment_type_svg_tag: class: 'payment-trust-icon' }}
+            {%- endfor -%}
+            {{ 'afterpay' | payment_type_svg_tag: class: 'payment-trust-icon' }}
+          {%- else -%}
+            <!-- Fallback payment icons -->
+            {{ 'visa' | payment_type_svg_tag: class: 'payment-trust-icon' }}
+            {{ 'master' | payment_type_svg_tag: class: 'payment-trust-icon' }}
+            {{ 'american_express' | payment_type_svg_tag: class: 'payment-trust-icon' }}
+            {{ 'paypal' | payment_type_svg_tag: class: 'payment-trust-icon' }}
+            {{ 'apple_pay' | payment_type_svg_tag: class: 'payment-trust-icon' }}
+            {{ 'google_pay' | payment_type_svg_tag: class: 'payment-trust-icon' }}
+          {%- endif -%}
+        </div>
+      </div>
+      <!-- Afterpay message -->
+      <div class="footer-afterpay-message">
+        <span>Buy now, pay later with</span>
+        <span class="footer-afterpay-logo">Afterpay</span>
+        <span>- 4 interest-free payments</span>
+      </div>
+    </div>
+
+    <!-- Newsletter Signup Section -->
+    <div class="footer-newsletter">
+      <div class="newsletter-content">
+        <div class="newsletter-text">
+          <h3 class="newsletter-heading">Subscribe to Our Newsletter</h3>
+          <p class="newsletter-description">Get exclusive offers, new product launches, and car care tips delivered straight to your inbox.</p>
+        </div>
+{% form 'customer', id: 'footer-newsletter-form', class: 'newsletter-form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="newsletter-input-group">
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="Enter your email address"
+              required
+              aria-label="Email address"
+              class="newsletter-input"
+              {% if form.posted_successfully? %}value=""{% endif %}
+            />
+            <button type="submit" class="newsletter-button" aria-label="Subscribe to newsletter">
+              Subscribe
+            </button>
+          </div>
+          {% if form.posted_successfully? %}
+            <p class="newsletter-success">Thanks for subscribing!</p>
+          {% endif %}
+          <p class="newsletter-privacy">We respect your privacy. Unsubscribe at any time.</p>
+        {% endform %}
+      </div>
+    </div>
+
+    <!-- Follow Us Section -->
+    <div class="footer-follow-us">
+      <div class="follow-us-container">
+        <div class="follow-us-text">
+          <h3 class="follow-us-heading">Follow Us</h3>
+          <p class="follow-us-description">Join our community for updates, tips, and exclusive offers</p>
+        </div>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/profile.php?id=61580829655005" class="social-link" title="Follow us on Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/clickshades" class="social-link" title="Follow us on Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.217.63c-.688.297-1.272.703-1.855 1.286-.583.583-.989 1.167-1.287 1.855-.297.688-.498 1.558-.557 2.836C.008 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.837.297.687.702 1.271 1.286 1.855.583.583 1.167.989 1.855 1.286.689.297 1.559.498 2.837.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.261 2.837-.558.687-.297 1.271-.702 1.855-1.286.583-.583.989-1.167 1.286-1.855.297-.689.498-1.559.558-2.837.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.261-2.148-.558-2.837-.297-.687-.702-1.271-1.286-1.855-.583-.583-1.167-.989-1.855-1.286-.689-.297-1.559-.498-2.837-.558C15.667.008 15.26 0 12 0zm0 2.16c3.203 0 3.585.009 4.849.07 1.171.054 1.805.244 2.227.408.56.217.96.477 1.382.896.419.42.679.822.896 1.381.164.422.354 1.057.408 2.227.061 1.264.07 1.645.07 4.849 0 3.203-.009 3.585-.07 4.849-.054 1.171-.244 1.805-.408 2.227-.217.56-.477.96-.896 1.382-.42.419-.822.679-1.381.896-.422.164-1.057.354-2.227.408-1.264.061-1.645.07-4.849.07-3.203 0-3.585-.009-4.849-.07-1.171-.054-1.805-.244-2.227-.408-.56-.217-.96-.477-1.382-.896-.419-.42-.679-.822-.896-1.381-.164-.422-.354-1.057-.408-2.227-.061-1.264-.07-1.645-.07-4.849 0-3.203.009-3.585.07-4.849.054-1.171.244-1.805.408-2.227.217-.56.477-.96.896-1.382.42-.419.822-.679 1.381-.896.422-.164 1.057-.354 2.227-.408 1.264-.061 1.645-.07 4.849-.07zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Column Layout -->
+    <div class="footer-columns">
+      <!-- Column 1: Get in Touch -->
+      <div class="footer-column">
+        <h3 class="footer-heading">Get in Touch</h3>
+        <ul class="footer-contact-links">
+          <li>
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+            </svg>
+            <a href="mailto:sales@clickshades.com.au">sales@clickshades.com.au</a>
+          </li>
+          {% comment %} Phone number removed — uncomment to reactivate
+          <li>
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+            </svg>
+            <a href="tel:1300399348" class="js-open-call-panel">1300 399 348</a>
+          </li>
+          {% endcomment %}
+          <li>
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+            <a href="/pages/contact">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Column 2: Shop -->
+      <div class="footer-column">
+        <h3 class="footer-heading">Shop</h3>
+        <ul class="footer-links">
+          <li><a href="/pages/about-us">About Us</a></li>
+          <li><a href="/pages/contact">Contact Us</a></li>
+          <li><a href="/pages/happy-customers">Reviews</a></li>
+          <li><a href="/pages/become-a-stockist">Become a Stockist</a></li>
+          <li><a href="/pages/find-my-car">Find my car</a></li>
+          <li><a href="/pages/request-your-car">Request Your Car</a></li>
+          <li><a href="/collections/wiper-blades">Wiper Blades</a></li>
+          <li><a href="/collections/windscreen-sun-shade">Windscreen Sun Shade</a></li>
+          <li><a href="/collections/car-window-shades">Car Window Shades</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Policies -->
+      <div class="footer-column">
+        <h3 class="footer-heading">Policies</h3>
+        <ul class="footer-links">
+          <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/policies/terms-of-service">Terms of Service</a></li>
+          <li><a href="/policies/shipping-policy">Shipping Policy</a></li>
+          <li><a href="/policies/refund-policy">Refund Policy</a></li>
+          <li><a href="/pages/payment-policy">Payment Policy</a></li>
+          <li><a href="/pages/order-cancellation-policy">Order Cancellation Policy</a></li>
+          <li><a href="/pages/legal-disclaimer">Legal Disclaimer</a></li>
+          <li><a href="/pages/accessibility-statement">Accessibility Statement</a></li>
+          <li><a href="/pages/cookie-policy">Cookie Policy</a></li>
+          <li><a href="/pages/faqs">FAQs</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Business Information -->
+      <div class="footer-column">
+        <h3 class="footer-heading">Business Information</h3>
+        <div class="footer-info">
+          <p><strong>Business Name:</strong> Click Shades</p>
+          <p><strong>ABN:</strong> 24 127 742 441</p>
+          <p><strong>Business Address:</strong> 21 Discovery Drive, Bibra Lake, Western Australia 6163, Australia</p>
+          {% comment %} Phone number removed — uncomment to reactivate
+          <p><strong>Phone:</strong> 1300 399 348</p>
+          {% endcomment %}
+          <p><strong>Email:</strong> <a href="mailto:sales@clickshades.com.au">sales@clickshades.com.au</a></p>
+          <p><strong>Business Hours:</strong> Monday–Friday, 9:00 AM – 5:00 PM AWST (excluding public holidays).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright Bar -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-content">
+      <p class="footer-copyright-text">&copy; 2026 Click Shades. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Professional Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Footer Content"
+    },
+    {
+      "type": "paragraph",
+      "content": "This section displays company information, links, and policies. Edit content in the theme settings or directly in this section."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Professional Footer"
+    }
+  ]
+}
+{% endschema %}

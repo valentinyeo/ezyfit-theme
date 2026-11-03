@@ -1,0 +1,260 @@
+<style>
+  .cb-trust-section {
+    padding: 32px 16px;
+    background: var(--gray, #f3f3f3);
+  }
+
+  .cb-trust-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .cb-trust-item {
+    text-align: center;
+    padding: 16px;
+    background: var(--white, #ffffff);
+    border-radius: 8px;
+  }
+
+  .cb-trust-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--blue, #2463af);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+  }
+
+  .cb-trust-icon svg {
+    width: 20px;
+    height: 20px;
+    color: var(--white, #ffffff);
+    stroke: var(--white, #ffffff);
+  }
+
+  .cb-trust-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 4px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .cb-trust-desc {
+    font-size: 12px;
+    color: var(--text-muted, #333333);
+    margin: 0;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  @media (min-width: 768px) {
+    .cb-trust-section {
+      padding: 60px 40px;
+    }
+
+    .cb-trust-grid {
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 1168px;
+      margin: 0 auto;
+      gap: 24px;
+    }
+
+    .cb-trust-item {
+      padding: 24px;
+    }
+
+    .cb-trust-icon {
+      width: 56px;
+      height: 56px;
+    }
+
+    .cb-trust-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .cb-trust-title {
+      font-size: 16px;
+    }
+
+    .cb-trust-desc {
+      font-size: 13px;
+    }
+  }
+
+  .cb-trust-afterpay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    background: var(--white, #ffffff);
+    border-radius: 8px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #1a1a1a;
+    flex-wrap: wrap;
+  }
+
+  .cb-trust-afterpay__logo {
+    font-weight: 700;
+    color: #000;
+    font-size: 14px;
+  }
+
+  .cb-trust-afterpay__link {
+    color: #666;
+    font-size: 12px;
+    text-decoration: underline;
+  }
+
+  @media (min-width: 768px) {
+    .cb-trust-afterpay {
+      max-width: 1168px;
+      margin: 24px auto 0;
+      font-size: 15px;
+    }
+  }
+</style>
+
+<section class="cb-trust-section">
+  <div class="cb-trust-grid">
+    <!-- Badge 1: Free Shipping -->
+    <div class="cb-trust-item">
+      <div class="cb-trust-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
+        </svg>
+      </div>
+      <h3 class="cb-trust-title">{{ section.settings.badge_1_title | default: 'Free Shipping' }}</h3>
+      <p class="cb-trust-desc">{{ section.settings.badge_1_desc | default: 'On all wiper blade orders' }}</p>
+    </div>
+
+    <!-- Badge 2: 30-Day Returns -->
+    <div class="cb-trust-item">
+      <div class="cb-trust-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+        </svg>
+      </div>
+      <h3 class="cb-trust-title">{{ section.settings.badge_2_title | default: '30-Day Returns' }}</h3>
+      <p class="cb-trust-desc">{{ section.settings.badge_2_desc | default: 'Full refund, no questions asked' }}</p>
+    </div>
+
+    <!-- Badge 3: 100% Australian Owned -->
+    <div class="cb-trust-item">
+      <div class="cb-trust-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+      </div>
+      <h3 class="cb-trust-title">{{ section.settings.badge_3_title | default: '100% Australian Owned' }}</h3>
+      <p class="cb-trust-desc">{{ section.settings.badge_3_desc | default: 'Shipped from WA' }}</p>
+    </div>
+
+    <!-- Badge 4: Same-Day Despatch -->
+    <div class="cb-trust-item">
+      <div class="cb-trust-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      </div>
+      <h3 class="cb-trust-title">{{ section.settings.badge_4_title | default: 'Same-Day Despatch' }}</h3>
+      <p class="cb-trust-desc">{{ section.settings.badge_4_desc | default: 'Order before 2pm AWST' }}</p>
+    </div>
+  </div>
+
+  <!-- Afterpay Banner -->
+  <div class="cb-trust-afterpay">
+    <span>Buy now, pay later with</span>
+    <span class="cb-trust-afterpay__logo">Afterpay</span>
+    <span>- 4 interest-free payments</span>
+    <a href="https://www.afterpay.com/en-AU/how-it-works" target="_blank" rel="noopener" class="cb-trust-afterpay__link">Learn more</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CB Trust Bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Badge 1"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_title",
+      "label": "Title",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_desc",
+      "label": "Description",
+      "default": "On all wiper blade orders"
+    },
+    {
+      "type": "header",
+      "content": "Badge 2"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_title",
+      "label": "Title",
+      "default": "30-Day Returns"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_desc",
+      "label": "Description",
+      "default": "Full refund, no questions asked"
+    },
+    {
+      "type": "header",
+      "content": "Badge 3"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_title",
+      "label": "Title",
+      "default": "100% Australian Owned"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_desc",
+      "label": "Description",
+      "default": "Shipped from WA"
+    },
+    {
+      "type": "header",
+      "content": "Badge 4"
+    },
+    {
+      "type": "text",
+      "id": "badge_4_title",
+      "label": "Title",
+      "default": "Same-Day Despatch"
+    },
+    {
+      "type": "text",
+      "id": "badge_4_desc",
+      "label": "Description",
+      "default": "Order before 2pm AWST"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CB Trust Bar"
+    }
+  ]
+}
+{% endschema %}

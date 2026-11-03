@@ -1,0 +1,281 @@
+<section class="popular-models-section" id="shop-by-brand">
+  <h2 class="popular-models-heading">Shop by Popular Cars</h2>
+  <div class="popular-models-grid">
+    <a href="/search?q=Toyota+RAV+4" class="model-card">
+      <div class="model-card-image">
+        <img src="https://cdn.shopify.com/s/files/1/0702/1232/1436/files/Toyota_RAV4_e2afb86e-46af-42db-ae69-e721c9cb28aa.png?v=1770041675" alt="Toyota RAV4" loading="lazy">
+      </div>
+      <span class="model-card-name">Toyota RAV4</span>
+    </a>
+
+    <a href="/search?q=Mazda+CX-5" class="model-card">
+      <div class="model-card-image">
+        <img src="https://cdn.shopify.com/s/files/1/0702/1232/1436/files/Mazda_CX-5.png?v=1770041675" alt="Mazda CX-5" loading="lazy">
+      </div>
+      <span class="model-card-name">Mazda CX-5</span>
+    </a>
+
+    <a href="/search?q=Ford+Ranger" class="model-card">
+      <div class="model-card-image">
+        <img src="https://cdn.shopify.com/s/files/1/0702/1232/1436/files/Ford_Ranger_1241128c-6bac-4b7d-815a-607e65bd8878.png?v=1770041675" alt="Ford Ranger" loading="lazy">
+      </div>
+      <span class="model-card-name">Ford Ranger</span>
+    </a>
+
+    <a href="/search?q=Toyota+Hilux" class="model-card">
+      <div class="model-card-image">
+        <img src="https://cdn.shopify.com/s/files/1/0702/1232/1436/files/Toyota_Hilux.png?v=1770041675" alt="Toyota Hilux" loading="lazy">
+      </div>
+      <span class="model-card-name">Toyota Hilux</span>
+    </a>
+
+    <a href="/search?q=Ford+Everest" class="model-card desktop-only">
+      <div class="model-card-image">
+        <img src="https://cdn.shopify.com/s/files/1/0702/1232/1436/files/Ford_Everest.png?v=1770041675" alt="Ford Everest" loading="lazy">
+      </div>
+      <span class="model-card-name">Ford Everest</span>
+    </a>
+
+    <a href="/search?q=Toyota+Corolla" class="model-card desktop-only">
+      <div class="model-card-image">
+        <img src="https://cdn.shopify.com/s/files/1/0702/1232/1436/files/toyota_corlolla.png?v=1770041675" alt="Toyota Corolla" loading="lazy">
+      </div>
+      <span class="model-card-name">Toyota Corolla</span>
+    </a>
+
+    <a href="/search?q=Toyota+Prado" class="model-card desktop-only">
+      <div class="model-card-image">
+        <img src="https://cdn.shopify.com/s/files/1/0702/1232/1436/files/toyota_prado.png?v=1770041675" alt="Toyota Prado" loading="lazy">
+      </div>
+      <span class="model-card-name">Toyota Prado</span>
+    </a>
+
+    <a href="/pages/shop-by-make" class="model-card model-card--view-all desktop-only">
+      <div class="model-card-content">
+        <span class="model-card-name">View All Cars</span>
+        <span class="model-card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M9 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Mobile View All Button -->
+  <a href="/pages/shop-by-make" class="view-all-button mobile-only">
+    View All Cars
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M9 5l7 7-7 7"/>
+    </svg>
+  </a>
+</section>
+
+<style>
+  .popular-models-section {
+    padding: 32px 16px;
+    margin-top: 24px;
+    background: #fef9c3;
+    border-radius: 16px;
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  .popular-models-heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 20px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-align: left;
+  }
+
+  .popular-models-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .model-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 12px;
+    background: var(--white, #ffffff);
+    border: 1px solid var(--border, #e5e5e5);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .model-card:hover {
+    border-color: var(--blue, #2463af);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .model-card-image {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .model-card-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .model-card-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-align: center;
+  }
+
+  .model-card--view-all {
+    background: var(--blue, #2463af);
+    border-color: var(--blue, #2463af);
+    justify-content: center;
+  }
+
+  .model-card--view-all .model-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 8px;
+  }
+
+  .model-card--view-all .model-card-name {
+    color: #fff;
+    font-size: 15px;
+  }
+
+  .model-card--view-all .model-card-arrow svg {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+  }
+
+  .model-card--view-all:hover {
+    background: #1d4f8c;
+    border-color: #1d4f8c;
+  }
+
+  /* Hide desktop-only cards on mobile */
+  .desktop-only {
+    display: none;
+  }
+
+  /* Mobile View All Button */
+  .view-all-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px 24px;
+    background: var(--blue, #2463af);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .view-all-button:hover {
+    background: #1d4f8c;
+  }
+
+  .view-all-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Hide mobile-only on desktop */
+  .mobile-only {
+    display: flex;
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .popular-models-section {
+      padding: 48px 40px;
+      margin: 32px auto 0;
+      max-width: 1120px;
+      border-radius: 20px;
+    }
+
+    .popular-models-heading {
+      font-size: 28px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .popular-models-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .desktop-only {
+      display: flex;
+    }
+
+    .mobile-only {
+      display: none;
+    }
+
+    .model-card {
+      padding: 20px 16px;
+    }
+
+    .model-card-image {
+      height: 100px;
+      margin-bottom: 12px;
+    }
+
+    .model-card-name {
+      font-size: 15px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .popular-models-grid {
+      gap: 20px;
+    }
+
+    .model-card {
+      padding: 24px 20px;
+    }
+
+    .model-card-image {
+      height: 120px;
+    }
+
+    .model-card-name {
+      font-size: 16px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shop by Popular Cars",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Shop by Popular Cars"
+    }
+  ]
+}
+{% endschema %}

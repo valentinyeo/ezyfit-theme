@@ -1,0 +1,2276 @@
+<style>
+  /* ========== PRODUCT PAGE V2 STYLES ========== */
+
+  .product-page-v2 {
+    background: var(--white, #ffffff);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Section Titles */
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 16px;
+    padding: 0;
+  }
+
+  /* ========== PRODUCT MAIN ========== */
+  .product-main {
+    display: grid;
+    gap: 0;
+  }
+
+  /* Discount Badge */
+  .discount-badge {
+    display: inline-block;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #666666;
+  }
+
+  /* Gallery */
+  .product-gallery {
+    position: relative;
+    background: #f8f9fa;
+  }
+
+  .product-gallery-main {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .gallery-swiper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    height: 100%;
+  }
+
+  .gallery-swiper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0;
+    background: #f8f9fa;
+  }
+
+  .gallery-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .gallery-dot.active {
+    background: var(--blue, #2463af);
+  }
+
+  .product-thumbnails {
+    display: none;
+  }
+
+  /* Product Info */
+  .product-info {
+    padding: 20px 16px 16px;
+  }
+
+  /* Vehicle Confirmation */
+  .vehicle-confirmation {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ecfdf5;
+    color: #059669;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .vehicle-confirmation .check-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Title */
+  .product-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 10px;
+    line-height: 1.3;
+  }
+
+  /* Rating */
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .product-rating .stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .product-rating .stars svg {
+    width: 16px;
+    height: 16px;
+    color: #fbbf24;
+  }
+
+  .rating-text {
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    font-size: 14px;
+  }
+
+  /* Price */
+  .product-price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .price-current {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+  }
+
+  .price-compare {
+    font-size: 18px;
+    color: #cc0000;
+    text-decoration: line-through;
+  }
+
+  .price-badge {
+    font-size: 18px;
+    font-weight: 600;
+    color: #666666;
+  }
+
+  /* Afterpay Messaging */
+  .afterpay-message {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .afterpay-message__text {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .afterpay-message__amount {
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+  }
+
+  .afterpay-message__logo {
+    font-weight: 700;
+    color: #000;
+    font-size: 13px;
+  }
+
+  .afterpay-message__info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    color: #6b7280;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: help;
+    text-decoration: none;
+  }
+
+  /* Stock Status */
+  .stock-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .stock-status.in-stock {
+    color: #059669;
+  }
+
+  .stock-status svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Quantity Selector */
+  .quantity-selector {
+    margin-bottom: 12px;
+  }
+
+  .quantity-selector label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    margin-bottom: 8px;
+  }
+
+  .quantity-input {
+    display: flex;
+    align-items: center;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    width: fit-content;
+    overflow: hidden;
+  }
+
+  .qty-btn {
+    width: 44px;
+    height: 44px;
+    background: #f9fafb;
+    border: none;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .qty-btn:hover {
+    background: #e5e7eb;
+  }
+
+  .quantity-input input {
+    width: 60px;
+    height: 44px;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    -moz-appearance: textfield;
+  }
+
+  .quantity-input input::-webkit-outer-spin-button,
+  .quantity-input input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Product Form */
+  .product-form {
+    margin-bottom: 16px;
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(180deg, #ffd814 0%, #f7ca00 100%);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .add-to-cart-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .add-to-cart-btn:active {
+    transform: translateY(0);
+  }
+
+  .add-to-cart-btn:disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .add-to-cart-btn .cart-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Trust Signals */
+  .trust-signals {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 16px;
+  }
+
+  .trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .trust-item svg {
+    width: 24px;
+    height: 24px;
+    color: var(--blue, #2463af);
+  }
+
+  .trust-item span {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+  }
+
+  /* Pickup Availability */
+  .pickup-availability {
+    padding: 16px 0;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 16px;
+  }
+
+  .pickup-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .pickup-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    color: var(--blue, #2463af);
+    margin-top: 2px;
+  }
+
+  .pickup-title {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .pickup-title strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .pickup-title span {
+    font-size: 13px;
+    color: #6b7280;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .pickup-toggle {
+    background: none;
+    border: none;
+    color: var(--blue, #2463af);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 36px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: color 0.2s;
+  }
+
+  .pickup-toggle:hover {
+    color: #1a4f8c;
+  }
+
+  .pickup-details {
+    margin-top: 12px;
+    margin-left: 36px;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 6px;
+  }
+
+  .pickup-address {
+    margin-bottom: 12px;
+  }
+
+  .pickup-address p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--dark, #1a1a1a);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .pickup-contact a {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue, #2463af);
+    text-decoration: none;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .pickup-contact a:hover {
+    text-decoration: underline;
+  }
+
+  /* Payment Methods - matches footer styling */
+  .payment-methods {
+    text-align: center;
+  }
+
+  .payment-methods > span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .payment-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 4px 0;
+  }
+
+  .payment-icons .payment-icon {
+    height: 28px;
+    width: auto;
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 4px;
+    padding: 4px 8px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+  }
+
+  .payment-icons .payment-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* ========== ADD-ONS SECTION ========== */
+  .product-addons {
+    padding: 16px 16px 24px;
+    background: var(--white, #ffffff);
+  }
+
+  .addons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .addon-card {
+    background: var(--white, #ffffff);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .addon-card:hover {
+    border-color: var(--blue, #2463af);
+  }
+
+  .addon-card--featured {
+    border-color: var(--blue, #2463af);
+    position: relative;
+  }
+
+  .addon-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--blue, #2463af);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 1;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .addon-image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: visible;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .addon-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .addon-info {
+    padding: 12px;
+  }
+
+  .addon-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 8px;
+    line-height: 1.3;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .addon-price {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .addon-price-current {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .addon-price-compare {
+    font-size: 14px;
+    color: #cc0000;
+    text-decoration: line-through;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .addon-atc-btn {
+    width: 100%;
+    padding: 10px 12px;
+    background: linear-gradient(180deg, #ffd814 0%, #f7ca00 100%);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .addon-atc-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .addon-atc-btn:active {
+    transform: translateY(0);
+  }
+
+  .addon-plus {
+    width: 16px;
+    height: 16px;
+  }
+
+  .addon-atc-btn--success {
+    background: #059669;
+    color: white;
+  }
+
+  .addon-atc-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .addon-title-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .addon-title-link:hover .addon-title {
+    color: var(--blue, #2463af);
+  }
+
+  a.addon-image {
+    display: block;
+  }
+
+  a.addon-image:hover img {
+    transform: scale(1.05);
+  }
+
+  .addon-image img {
+    transition: transform 0.2s ease;
+  }
+
+  /* Add Complete Set CTA */
+  .addon-set-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 16px;
+    padding: 16px;
+    background: #eff6ff;
+    border: 2px solid var(--blue, #2463af);
+    border-radius: 12px;
+  }
+
+  .addon-set-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .addon-set-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .addon-set-total {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--blue, #2463af);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .addon-set-btn {
+    padding: 14px 24px;
+    background: var(--blue, #2463af);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .addon-set-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .addon-set-btn:hover {
+    background: #1a4f8c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(36, 99, 175, 0.3);
+  }
+
+  .addon-set-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .addon-set-btn--success {
+    background: #059669;
+  }
+
+  @media (max-width: 480px) {
+    .addon-set-cta {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .addon-set-info {
+      align-items: center;
+    }
+
+    .addon-set-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* ========== KEY BENEFITS ========== */
+  .key-benefits {
+    padding: 24px 16px;
+    background: #f8fafc;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0;
+  }
+
+  .benefit-card {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+  }
+
+  .benefit-icon {
+    width: 48px;
+    height: 48px;
+    background: #eff6ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+  }
+
+  .benefit-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--blue, #2463af);
+  }
+
+  .benefit-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 4px;
+  }
+
+  .benefit-card p {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ========== WHAT'S INCLUDED ========== */
+  .whats-included {
+    padding: 24px 16px;
+  }
+
+  .included-list {
+    padding: 0;
+  }
+
+  .included-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .included-item:last-child {
+    border-bottom: none;
+  }
+
+  .included-item svg {
+    width: 20px;
+    height: 20px;
+    color: #059669;
+    flex-shrink: 0;
+  }
+
+  .included-item span {
+    font-size: 15px;
+    color: var(--dark, #1a1a1a);
+  }
+
+  /* ========== PRODUCT DESCRIPTION ========== */
+  .product-description {
+    padding: 24px 16px;
+    background: #f8fafc;
+  }
+
+  .description-content {
+    padding: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #4b5563;
+  }
+
+  .description-content p {
+    margin: 0 0 16px;
+  }
+
+  .description-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ========== STICKY MOBILE ATC ========== */
+  .sticky-atc-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 16px;
+    z-index: 100;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .sticky-atc-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .sticky-price {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sticky-price-current {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+  }
+
+  .sticky-price-compare {
+    font-size: 16px;
+    color: #cc0000;
+    text-decoration: line-through;
+  }
+
+  .sticky-atc-btn {
+    flex: 1;
+    padding: 14px 24px;
+    background: linear-gradient(180deg, #ffd814 0%, #f7ca00 100%);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* ========== DESKTOP STYLES ========== */
+  @media (min-width: 768px) {
+    .product-main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+      max-width: 1168px;
+      margin: 0 auto;
+    }
+
+    .discount-badge {
+      font-size: 18px;
+    }
+
+    /* Hide gallery dots on desktop, use thumbnails instead */
+    .gallery-dots {
+      display: none;
+    }
+
+    .product-gallery {
+      position: sticky;
+      top: 20px;
+      align-self: start;
+    }
+
+    .product-gallery-main {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .product-thumbnails {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .thumbnail {
+      width: 72px;
+      height: 72px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      padding: 0;
+      background: #f8f9fa;
+    }
+
+    .thumbnail.active {
+      border-color: var(--blue, #2463af);
+    }
+
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 0 0 40px;
+    }
+
+    .product-title {
+      font-size: 28px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      padding: 0;
+    }
+
+    /* Apply max-width to all product page sections */
+    .product-addons,
+    .key-benefits,
+    .whats-included,
+    .product-description {
+      max-width: 1168px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+
+    .product-addons {
+      padding: 24px 40px 40px;
+    }
+
+    .addons-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .addon-info {
+      padding: 16px;
+    }
+
+    .addon-title {
+      font-size: 14px;
+    }
+
+    .addon-price-current {
+      font-size: 18px;
+    }
+
+    .addon-atc-btn {
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+
+    .benefits-grid {
+      grid-template-columns: repeat(4, 1fr);
+      padding: 0;
+    }
+
+    .included-list,
+    .description-content {
+      padding: 0;
+    }
+
+    /* Hide sticky ATC on desktop */
+    .sticky-atc-mobile {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .benefit-card {
+      padding: 24px;
+    }
+
+    .benefit-card h3 {
+      font-size: 16px;
+    }
+
+    .benefit-card p {
+      font-size: 14px;
+    }
+
+    /* Match footer payment icon size on desktop */
+    .payment-icons {
+      gap: 16px;
+    }
+
+    .payment-icons .payment-icon {
+      height: 32px;
+    }
+  }
+</style>
+
+<section class="product-page-v2">
+  {% comment %} Use actual product images from Shopify {% endcomment %}
+
+  {% comment %} Calculate discount percentage {% endcomment %}
+  {% if product.compare_at_price > product.price %}
+    {% assign discount_amount = product.compare_at_price | minus: product.price %}
+    {% assign discount_percent = discount_amount | times: 100.0 | divided_by: product.compare_at_price | round %}
+  {% endif %}
+
+  <!-- Product Main Section -->
+  <div class="product-main">
+    <!-- Gallery -->
+    <div class="product-gallery">
+      <div class="product-gallery-main">
+        <div class="gallery-swiper">
+          {% for image in product.images %}
+            <div class="gallery-slide{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
+              <img
+                src="{{ image | img_url: '800x' }}"
+                alt="{{ image.alt | default: product.title | escape }}"
+                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              >
+            </div>
+          {% else %}
+            <!-- Fallback if no images -->
+            <div class="gallery-slide active" data-index="0">
+              <img src="{{ 'product-placeholder.png' | asset_url }}" alt="{{ product.title | escape }}" loading="eager">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="gallery-dots">
+        {% for image in product.images %}
+          <button
+            class="gallery-dot{% if forloop.first %} active{% endif %}"
+            data-index="{{ forloop.index0 }}"
+            aria-label="View image {{ forloop.index }}"
+          ></button>
+        {% endfor %}
+      </div>
+
+      <!-- Thumbnails for desktop -->
+      <div class="product-thumbnails">
+        {% for image in product.images %}
+          <button class="thumbnail{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
+            <img
+              src="{{ image | img_url: '100x100', crop: 'center' }}"
+              alt="{{ image.alt | default: product.title | escape }}"
+              loading="lazy"
+            >
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info">
+      <!-- Vehicle Confirmation Badge -->
+      <div class="vehicle-confirmation">
+        <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>Perfect Fit for Your Vehicle</span>
+      </div>
+
+      <!-- Title -->
+      <h1 class="product-title">{{ product.title }}</h1>
+
+      <!-- Rating -->
+      <div class="product-rating">
+        <div class="stars">
+          {% for i in (1..5) %}
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+          {% endfor %}
+        </div>
+        <span class="rating-text">4.9</span>
+      </div>
+
+      <!-- Price -->
+      <div class="product-price{% if product.compare_at_price > product.price %} has-sale{% endif %}">
+        {% if discount_percent and discount_percent > 0 %}
+          <div class="discount-badge">{{ discount_percent }}% off</div>
+        {% endif %}
+        <span class="price-current">{{ product.price | money }}</span>
+        {% if product.compare_at_price > product.price %}
+          <span class="price-compare">{{ product.compare_at_price | money }}</span>
+          <span class="price-badge">SAVE {{ product.compare_at_price | minus: product.price | money }}</span>
+        {% endif %}
+      </div>
+
+      {% if template.suffix == 'wiper-v3' %}
+      <ul class="cb-fit-points" style="list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px;font-size:13.5px;line-height:1.4;color:#1a1a1a;">
+        {% assign cb_fit_points = '100% Perfect Fitment for your exact car|Premium rubber, streak-free in all conditions|12-month warranty + 30-day money-back guarantee|Including FREE delivery Australia-wide' | split: '|' %}
+        {% for point in cb_fit_points %}
+        <li style="display:flex;align-items:flex-start;gap:8px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="#10894b" style="flex:0 0 auto;margin-top:2px;"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span>{{ point }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <!-- Afterpay Messaging -->
+      {% assign afterpay_installment = product.price | divided_by: 4 %}
+      <div class="afterpay-message">
+        <span class="afterpay-message__text">
+          or 4 interest-free payments of
+          <span class="afterpay-message__amount">{{ afterpay_installment | money }}</span>
+          with
+        </span>
+        <span class="afterpay-message__logo">Afterpay</span>
+        <a
+          href="https://www.afterpay.com/en-AU/how-it-works"
+          target="_blank"
+          rel="noopener"
+          class="afterpay-message__info"
+          title="Learn more about Afterpay"
+          >?</a
+        >
+      </div>
+
+      <!-- Stock Status -->
+      <div class="stock-status in-stock">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>In Stock - Ships Today (Order before 2PM)</span>
+      </div>
+
+      <!-- Add to Cart Form -->
+      <product-form data-section-id="{{ section.id }}">
+        <form action="/cart/add" method="post" class="product-form" id="product-form">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+          <!-- Quantity Selector -->
+          <div class="quantity-selector">
+            <label for="quantity">Quantity</label>
+            <div class="quantity-input">
+              <button type="button" class="qty-btn minus" aria-label="Decrease quantity">-</button>
+              <input type="number" id="quantity" name="quantity" value="1" min="1" max="10">
+              <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="add-to-cart-btn"
+            {% unless product.available %}
+              disabled
+            {% endunless %}
+          >
+            <span>
+              <svg class="cart-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+              </svg>
+              {% if product.available %}
+                Add to Cart - {{ product.price | money }}
+              {% else %}
+                Sold Out
+              {% endif %}
+            </span>
+            <div class="loading__spinner hidden">
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                class="spinner"
+                viewBox="0 0 66 66"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+              </svg>
+            </div>
+          </button>
+        </form>
+      </product-form>
+      <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+      {% if template.suffix == 'wiper-v2' %}
+      <div class="cb-delivery-line" style="display:flex;align-items:center;gap:8px;margin:12px 0 0;padding:10px 12px;background:#eef5ec;border-radius:8px;font-size:13px;line-height:1.35;color:#1a1a1a;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10894b" stroke-width="2" style="flex:0 0 auto;"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span><strong>Free shipping</strong> Australia-wide. Most orders arrive in 1 to 4 business days.</span>
+      </div>
+      {% endif %}
+
+      {% if template.suffix == 'wiper-v3' %}
+      {% assign cb_now = 'now' | date: '%s' %}
+      {% assign cb_free_eta = cb_now | plus: 518400 %}
+      {% assign cb_express_eta = cb_now | plus: 172800 %}
+      <div class="cb-eta-box" style="margin:12px 0 0;padding:12px;background:#f7f9fc;border:1px solid #e3e9f1;border-radius:8px;font-size:13px;line-height:1.4;color:#1a1a1a;display:grid;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10894b" stroke-width="2" style="flex:0 0 auto;"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span><strong>FREE Delivery</strong> | By {{ cb_free_eta | date: '%a %-d %b' }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2463af" stroke-width="2" style="flex:0 0 auto;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span><strong>Express Delivery</strong> | By {{ cb_express_eta | date: '%a %-d %b' }}, $10 at checkout</span>
+        </div>
+        <div style="font-size:11px;color:#777;">*Delivery timeframes are estimates &amp; may vary.</div>
+      </div>
+      <div class="cb-ugc-strip" style="display:flex;align-items:center;gap:12px;margin:14px 0 0;">
+        <div style="display:flex;flex-shrink:0;">
+          {% assign cb_ugc_thumbs = 'cb-real-1.jpg,cb-real-2.jpg,cb-real-4.jpg,cb-real-5.jpg' | split: ',' %}
+          {% for thumb in cb_ugc_thumbs %}
+          <img src="{{ thumb | asset_url }}" alt="Click Blades fitted by a customer" width="44" height="44" loading="lazy" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.25);{% unless forloop.first %}margin-left:-10px;{% endunless %}">
+          {% endfor %}
+        </div>
+        <span style="font-size:13px;line-height:1.35;color:#1a1a1a;"><span style="color:#ffb400;letter-spacing:1px;">★★★★★</span> <strong>4.9</strong> rated, fitted and photographed by 5,000+ Aussie drivers</span>
+      </div>
+      {% endif %}
+
+      <!-- Trust Signals -->
+      <div class="trust-signals">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+          </svg>
+          <span>Free Shipping</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span>30-Day Returns</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          <span>Aussie Quality</span>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="payment-methods">
+        <span>Secure checkout with</span>
+        <div class="payment-icons">
+          {%- if shop.enabled_payment_types.size > 0 -%}
+            {%- for type in shop.enabled_payment_types -%}
+              {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+            {%- endfor -%}
+            {{ 'afterpay' | payment_type_svg_tag: class: 'payment-trust-icon' }}
+          {%- else -%}
+            {{ 'visa' | payment_type_svg_tag: class: 'payment-icon' }}
+            {{ 'master' | payment_type_svg_tag: class: 'payment-icon' }}
+            {{ 'american_express' | payment_type_svg_tag: class: 'payment-icon' }}
+            {{ 'paypal' | payment_type_svg_tag: class: 'payment-icon' }}
+            {{ 'apple_pay' | payment_type_svg_tag: class: 'payment-icon' }}
+            {{ 'google_pay' | payment_type_svg_tag: class: 'payment-icon' }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Pickup Availability -->
+      <div class="pickup-availability">
+        <div class="pickup-header">
+          <svg class="pickup-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <div class="pickup-title">
+            <strong>Pickup available at 21 Discovery Drive</strong>
+            <span>Usually ready in 24 hours</span>
+          </div>
+        </div>
+        <button type="button" class="pickup-toggle" aria-expanded="false">View store information</button>
+        <div class="pickup-details" style="display: none;">
+          <div class="pickup-address">
+            <p><strong>21 Discovery Drive</strong></p>
+            <p>Bibra Lake WA 6163</p>
+            <p>Australia</p>
+          </div>
+          {% comment %} Phone number removed — uncomment to reactivate
+          <div class="pickup-contact">
+            <a href="tel:0433067908">0433 067 908</a>
+          </div>
+          {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add-Ons Section -->
+  {% comment %}
+    Upsell sources (priority order):
+    1. custom.upsell_products metafield (manual mapping - no app needed)
+    2. Shopify complementary products API (if Search & Discovery app installed)
+    3. Vehicle metafield matching (vehicles_make + vehicles_model)
+    Plus permanent upsell: Windscreen Water Repellent
+  {% endcomment %}
+
+  {%- comment -%} Get manual upsell products from metafield {%- endcomment -%}
+  {%- assign manual_upsells = product.metafields.custom.upsell_products.value -%}
+
+  {%- comment -%} Get current product's make and model for fallback matching {%- endcomment -%}
+  {%- assign current_make = product.metafields.custom.vehicles_make.value | first -%}
+  {%- assign current_model = product.metafields.custom.vehicles_model.value | first -%}
+
+  {%- comment -%} Get the permanent upsell product (Water Repellent) {%- endcomment -%}
+  {%- assign water_repellent = all_products['windscreen-water-repellent'] -%}
+
+  {%- comment -%} Build matching products from metafields (fallback) {%- endcomment -%}
+  {%- assign vehicle_matching_products = '' | split: ',' -%}
+  {%- if current_make != blank and current_model != blank -%}
+    {%- for p in collections.all.products limit: 100 -%}
+      {%- if p.id != product.id and p.available -%}
+        {%- assign p_make = p.metafields.custom.vehicles_make.value | first -%}
+        {%- assign p_model = p.metafields.custom.vehicles_model.value | first -%}
+        {%- if p_make == current_make and p_model == current_model -%}
+          {%- assign vehicle_matching_products = vehicle_matching_products | push: p -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- comment -%} Determine which upsell source to use {%- endcomment -%}
+  {%- assign upsell_products = '' | split: ',' -%}
+  {%- assign use_api_fallback = false -%}
+
+  {%- if manual_upsells != blank and manual_upsells.size > 0 -%}
+    {%- comment -%} Use manual metafield mapping {%- endcomment -%}
+    {%- for up in manual_upsells -%}
+      {%- if up.id != product.id and up.available -%}
+        {%- assign upsell_products = upsell_products | push: up -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- elsif vehicle_matching_products.size > 0 -%}
+    {%- comment -%} Use vehicle metafield matching {%- endcomment -%}
+    {%- assign upsell_products = vehicle_matching_products -%}
+  {%- else -%}
+    {%- comment -%} Will try complementary products API via JavaScript {%- endcomment -%}
+    {%- assign use_api_fallback = true -%}
+  {%- endif -%}
+
+  {%- comment -%} If server-side methods found no available products, fall back to API {%- endcomment -%}
+  {%- if upsell_products.size == 0 and use_api_fallback == false -%}
+    {%- assign use_api_fallback = true -%}
+  {%- endif -%}
+
+  {%- comment -%} Always show section - JavaScript will populate if needed {%- endcomment -%}
+  <div
+    class="product-addons"
+    id="product-addons-section"
+    data-product-id="{{ product.id }}"
+    data-product-handle="{{ product.handle }}"
+    data-use-api="{{ use_api_fallback }}"
+    data-main-variant-id="{{ product.selected_or_first_available_variant.id }}"
+    data-main-price="{{ product.price }}"
+    data-product-make="{{ current_make | escape }}"
+    data-product-model="{{ current_model | escape }}"
+  >
+    <h2 class="section-title">Select Add Ons</h2>
+    <div class="addons-grid" id="addons-grid">
+      {%- comment -%} Render server-side upsell products (metafield or vehicle matching) {%- endcomment -%}
+      {%- assign shown_count = 0 -%}
+      {%- for upsell_product in upsell_products -%}
+        {%- if shown_count < 3 -%}
+          <div
+            class="addon-card"
+            data-variant-id="{{ upsell_product.selected_or_first_available_variant.id }}"
+            data-price="{{ upsell_product.price }}"
+          >
+            <a href="{{ upsell_product.url }}" class="addon-image">
+              {%- if upsell_product.featured_image -%}
+                <img
+                  src="{{ upsell_product.featured_image | image_url: width: 400 }}"
+                  alt="{{ upsell_product.title | escape }}"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <img
+                  src="{{ 'product-placeholder.png' | asset_url }}"
+                  alt="{{ upsell_product.title | escape }}"
+                  loading="lazy"
+                >
+              {%- endif -%}
+            </a>
+            <div class="addon-info">
+              <a href="{{ upsell_product.url }}" class="addon-title-link">
+                <h3 class="addon-title">{{ upsell_product.title }}</h3>
+              </a>
+              <div class="addon-price{% if upsell_product.compare_at_price > upsell_product.price %} has-sale{% endif %}">
+                {%- if upsell_product.compare_at_price > upsell_product.price -%}
+                  <span class="addon-price-compare">{{ upsell_product.compare_at_price | money }}</span>
+                {%- endif -%}
+                <span class="addon-price-current">{{ upsell_product.price | money }}</span>
+              </div>
+              <button
+                type="button"
+                class="addon-atc-btn"
+                data-variant-id="{{ upsell_product.selected_or_first_available_variant.id }}"
+              >
+                <span>Add to Cart</span>
+                <svg viewBox="0 0 20 20" fill="currentColor" class="addon-plus">
+                  <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          {%- assign shown_count = shown_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Permanent upsell: Water Repellent (ALWAYS shown) {%- endcomment -%}
+      {%- if water_repellent != blank and water_repellent.available and water_repellent.id != product.id -%}
+        <div
+          class="addon-card addon-card--featured addon-card--permanent"
+          data-variant-id="{{ water_repellent.selected_or_first_available_variant.id }}"
+          data-price="{{ water_repellent.price }}"
+        >
+          <div class="addon-badge">Popular Add-On</div>
+          <a href="{{ water_repellent.url }}" class="addon-image">
+            {%- if water_repellent.featured_image -%}
+              <img
+                src="{{ water_repellent.featured_image | image_url: width: 400 }}"
+                alt="{{ water_repellent.title | escape }}"
+                loading="lazy"
+              >
+            {%- else -%}
+              <img
+                src="{{ 'product-placeholder.png' | asset_url }}"
+                alt="{{ water_repellent.title | escape }}"
+                loading="lazy"
+              >
+            {%- endif -%}
+          </a>
+          <div class="addon-info">
+            <a href="{{ water_repellent.url }}" class="addon-title-link">
+              <h3 class="addon-title">{{ water_repellent.title }}</h3>
+            </a>
+            <div class="addon-price{% if water_repellent.compare_at_price > water_repellent.price %} has-sale{% endif %}">
+              {%- if water_repellent.compare_at_price > water_repellent.price -%}
+                <span class="addon-price-compare">{{ water_repellent.compare_at_price | money }}</span>
+              {%- endif -%}
+              <span class="addon-price-current">{{ water_repellent.price | money }}</span>
+            </div>
+            <button
+              type="button"
+              class="addon-atc-btn"
+              data-variant-id="{{ water_repellent.selected_or_first_available_variant.id }}"
+            >
+              <span>Add to Cart</span>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="addon-plus">
+                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Add All to Cart button {%- endcomment -%}
+    <div class="addon-set-cta" id="addon-set-cta" style="{% if upsell_products.size < 2 %}display: none;{% endif %}">
+      <div class="addon-set-info">
+        <span class="addon-set-label" id="addon-set-label">Add all items</span>
+        <span class="addon-set-total" id="addon-set-total"></span>
+      </div>
+      <button type="button" class="addon-set-btn" id="add-complete-set">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+        </svg>
+        Add All to Cart
+      </button>
+    </div>
+  </div>
+
+  <!-- Load centralized upsell config -->
+  <script src="{{ 'upsell-config.js' | asset_url }}" defer></script>
+
+  <script>
+    // Product page upsells - uses centralized upsell-config.js
+
+    (function () {
+      const section = document.getElementById('product-addons-section');
+      if (!section) return;
+
+      const useApi = section.dataset.useApi === 'true';
+      const productId = section.dataset.productId;
+      const productHandle = section.dataset.productHandle || '';
+      const productMake = section.dataset.productMake || '';
+      const productModel = section.dataset.productModel || '';
+      const grid = document.getElementById('addons-grid');
+
+      const isWiperProduct = productHandle.includes('wiper');
+      const isShadeProduct = productHandle.includes('shade');
+      const setCta = document.getElementById('addon-set-cta');
+
+      // Update "Add All" button totals
+      function updateSetTotal() {
+        const cards = grid.querySelectorAll('.addon-card');
+        if (cards.length < 2) {
+          setCta.style.display = 'none';
+          return;
+        }
+
+        // Get main product data
+        const mainVariantId = section.dataset.mainVariantId;
+        const mainPrice = parseInt(section.dataset.mainPrice || 0);
+
+        // Start with main product
+        let total = mainPrice;
+        const variantIds = [mainVariantId];
+
+        // Add addon products - remove duplicates
+        const seenVariants = new Set([mainVariantId]);
+
+        cards.forEach((card) => {
+          const price = parseInt(card.dataset.price || 0);
+          const variantId = card.dataset.variantId;
+
+          if (variantId && !seenVariants.has(variantId)) {
+            total += price;
+            variantIds.push(variantId);
+            seenVariants.add(variantId);
+          }
+        });
+
+        // Count includes main product + unique addons
+        const totalCount = variantIds.length;
+        document.getElementById('addon-set-label').textContent = `Add all ${totalCount} items`;
+        document.getElementById('addon-set-total').textContent = '$' + (total / 100).toFixed(2);
+        document.getElementById('add-complete-set').dataset.variantIds = variantIds.join(',');
+        setCta.style.display = 'flex';
+      }
+
+      // Fetch complementary products from API
+      async function loadComplementaryProducts() {
+        if (!useApi) {
+          updateSetTotal();
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `/recommendations/products.json?product_id=${productId}&limit=3&intent=complementary`
+          );
+          if (!response.ok) return;
+
+          const data = await response.json();
+          if (!data.products || data.products.length === 0) {
+            // Complementary API returned nothing — try search fallback
+            await loadSearchFallback();
+            return;
+          }
+
+          // Get permanent product variant ID to avoid duplicates
+          const permanentCard = grid.querySelector('[data-permanent="true"]');
+          const permanentVariantId = permanentCard?.dataset.variantId;
+
+          // Render API products
+          data.products.forEach((p) => {
+            if (!p.available) return;
+
+            const variantId = p.variants[0]?.id;
+
+            // Skip if this is the permanent product (already rendered server-side)
+            if (variantId === permanentVariantId) return;
+
+            const hasSale = p.compare_at_price && p.compare_at_price > p.price;
+            const card = document.createElement('div');
+            card.className = 'addon-card';
+            card.dataset.variantId = variantId;
+            card.dataset.price = p.price;
+
+            card.innerHTML = `
+              <a href="${p.url}" class="addon-image">
+                ${p.featured_image ? `<img src="${p.featured_image}" alt="${escapeHtml(p.title)}" loading="lazy">` : ''}
+              </a>
+              <div class="addon-info">
+                <a href="${p.url}" class="addon-title-link"><h3 class="addon-title">${escapeHtml(p.title)}</h3></a>
+                <div class="addon-price${hasSale ? ' has-sale' : ''}">
+                  ${hasSale ? `<span class="addon-price-compare">$${(p.compare_at_price / 100).toFixed(2)}</span>` : ''}
+                  <span class="addon-price-current">$${(p.price / 100).toFixed(2)}</span>
+                </div>
+                <button type="button" class="addon-atc-btn" data-variant-id="${variantId}">
+                  <span>Add to Cart</span>
+                  <svg viewBox="0 0 20 20" fill="currentColor" class="addon-plus">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+              </div>
+            `;
+
+            // Insert before permanent card if it exists, otherwise append
+            if (permanentCard) {
+              grid.insertBefore(card, permanentCard);
+            } else {
+              grid.appendChild(card);
+            }
+
+            // Bind click handler
+            const btn = card.querySelector('.addon-atc-btn');
+            bindAddonButton(btn);
+          });
+
+          updateSetTotal();
+        } catch (e) {
+          console.log('Could not load complementary products:', e);
+        }
+      }
+
+      // Search fallback: find matching products by make+model when complementary API returns nothing
+      async function loadSearchFallback() {
+        if (!productMake || !productModel) {
+          updateSetTotal();
+          return;
+        }
+
+        try {
+          const query = encodeURIComponent(productMake + ' ' + productModel);
+          const resp = await fetch(
+            `/search/suggest.json?q=${query}&resources[type]=product&resources[limit]=10`
+          );
+          if (!resp.ok) { updateSetTotal(); return; }
+
+          const result = await resp.json();
+          const products = result.resources?.results?.products || [];
+          if (products.length === 0) { updateSetTotal(); return; }
+
+          const permanentCard = grid.querySelector('[data-permanent="true"]');
+          const permanentVariantId = permanentCard?.dataset.variantId;
+          let added = 0;
+
+          for (const p of products) {
+            if (added >= 3) break;
+            if (!p.available) continue;
+            if (String(p.id) === productId) continue;
+
+            // Fetch full product data for variant info
+            const pResp = await fetch(p.url + '.json');
+            if (!pResp.ok) continue;
+            const pData = await pResp.json();
+            const variant = pData.product?.variants?.[0];
+            if (!variant) continue;
+
+            const variantId = String(variant.id);
+            if (variantId === permanentVariantId) continue;
+
+            const price = variant.price ? parseFloat(variant.price) * 100 : 0;
+            const comparePrice = pData.product.variants[0]?.compare_at_price ? parseFloat(pData.product.variants[0].compare_at_price) * 100 : 0;
+            const hasSale = comparePrice > price;
+
+            const card = document.createElement('div');
+            card.className = 'addon-card';
+            card.dataset.variantId = variantId;
+            card.dataset.price = price;
+
+            card.innerHTML = `
+              <a href="${p.url}" class="addon-image">
+                ${p.image ? `<img src="${p.image}" alt="${escapeHtml(p.title)}" loading="lazy">` : ''}
+              </a>
+              <div class="addon-info">
+                <a href="${p.url}" class="addon-title-link"><h3 class="addon-title">${escapeHtml(p.title)}</h3></a>
+                <div class="addon-price${hasSale ? ' has-sale' : ''}">
+                  ${hasSale ? `<span class="addon-price-compare">$${(comparePrice / 100).toFixed(2)}</span>` : ''}
+                  <span class="addon-price-current">$${(price / 100).toFixed(2)}</span>
+                </div>
+                <button type="button" class="addon-atc-btn" data-variant-id="${variantId}">
+                  <span>Add to Cart</span>
+                  <svg viewBox="0 0 20 20" fill="currentColor" class="addon-plus">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+              </div>
+            `;
+
+            if (permanentCard) {
+              grid.insertBefore(card, permanentCard);
+            } else {
+              grid.appendChild(card);
+            }
+
+            bindAddonButton(card.querySelector('.addon-atc-btn'));
+            added++;
+          }
+
+          updateSetTotal();
+        } catch (e) {
+          console.log('Could not load search fallback products:', e);
+          updateSetTotal();
+        }
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text || '';
+        return div.innerHTML;
+      }
+
+      function bindAddonButton(btn) {
+        const cleanBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(cleanBtn, btn);
+
+        // Mark as bound
+        cleanBtn.__hasClickListener = true;
+        cleanBtn.setAttribute('data-listener-bound', 'true');
+
+        let isExecuting = false; // Execution lock
+
+        cleanBtn.addEventListener(
+          'click',
+          async function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            // Triple guard against execution
+            if (isExecuting || this.disabled || this.getAttribute('data-executing') === 'true') {
+              console.log('⚠️ Blocked duplicate execution');
+              return;
+            }
+
+            isExecuting = true;
+            this.setAttribute('data-executing', 'true');
+            this.disabled = true;
+
+            const variantId = this.dataset.variantId;
+            const originalText = this.querySelector('span').textContent;
+            this.querySelector('span').textContent = 'Adding...';
+
+            try {
+              const response = await fetch('/cart/add.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  items: [{ id: parseInt(variantId), quantity: 1 }],
+                }),
+              });
+
+              if (!response.ok) throw new Error('Failed');
+
+              this.querySelector('span').textContent = 'Added!';
+              this.classList.add('addon-atc-btn--success');
+
+              localStorage.setItem('justAddedToCart', 'true');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            } catch (err) {
+              isExecuting = false;
+              this.removeAttribute('data-executing');
+              this.querySelector('span').textContent = 'Error';
+              setTimeout(() => {
+                this.querySelector('span').textContent = originalText;
+                this.disabled = false;
+              }, 2000);
+            }
+          },
+          { once: true, capture: true }
+        );
+      }
+
+      // // Bind "Add All" button
+      // document.getElementById('add-complete-set')?.addEventListener('click', async function() {
+      //   const variantIdsStr = this.dataset.variantIds;
+      //   if (!variantIdsStr) return;
+
+      //   const variantIds = variantIdsStr.split(',').filter(Boolean);
+      //   const originalText = this.textContent;
+      //   this.textContent = 'Adding...';
+      //   this.disabled = true;
+
+      //   try {
+      //     // Remove duplicates
+      //     const uniqueVariants = [...new Set(variantIds)];
+
+      //     const response = await fetch('/cart/add.js', {
+      //       method: 'POST',
+      //       headers: { 'Content-Type': 'application/json' },
+      //       body: JSON.stringify({
+      //         items: uniqueVariants.map(id => ({ id: parseInt(id), quantity: 1 }))
+      //       })
+      //     });
+
+      //     if (response.ok) {
+      //       this.textContent = 'Added!';
+      //       setTimeout(() => {
+      //         window.location.reload();
+      //       }, 500);
+      //     } else {
+      //       throw new Error('Failed');
+      //     }
+      //   } catch (err) {
+      //     this.textContent = 'Error';
+      //     setTimeout(() => {
+      //       this.textContent = originalText;
+      //       this.disabled = false;
+      //     }, 2000);
+      //   }
+      // });
+
+      // Initialize
+      loadComplementaryProducts();
+
+      // Bind existing buttons - CHECK FIRST if already bound
+      grid.querySelectorAll('.addon-atc-btn').forEach((btn) => {
+        if (btn.hasAttribute('data-listener-bound')) {
+          console.log('⚠️ Button already has listener, skipping:', btn.dataset.variantId);
+          return;
+        }
+        btn.setAttribute('data-listener-bound', 'true');
+        bindAddonButton(btn);
+      });
+
+      // Bind Add All button
+      const addAllBtn = document.getElementById('add-complete-set');
+
+      if (addAllBtn) {
+        // 1. Clone → kills ALL existing listeners instantly
+        const freshBtn = addAllBtn.cloneNode(true);
+        addAllBtn.parentNode.replaceChild(freshBtn, addAllBtn);
+
+        // 2. Attach ONE listener to the new clean element
+        freshBtn.addEventListener('click', async function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation(); // extra insurance against bubbling weirdness
+
+          if (this.disabled) return;
+
+          const variantIdsStr = this.dataset.variantIds;
+          if (!variantIdsStr) return;
+
+          const originalText = this.textContent;
+          this.textContent = 'Adding...';
+          this.disabled = true;
+
+          try {
+            const variantIds = variantIdsStr.split(',').filter(Boolean);
+            const uniqueVariants = [...new Set(variantIds.map((id) => id.trim()))];
+
+            console.log('Adding these variants ONCE:', uniqueVariants); // ← keep for 1 min to verify
+
+            const response = await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                items: uniqueVariants.map((id) => ({ id: Number(id), quantity: 1 })),
+              }),
+            });
+
+            if (!response.ok) throw new Error(await response.text());
+
+            this.textContent = 'Added!';
+            localStorage.setItem('justAddedToCart', 'true');
+            setTimeout(() => location.reload(), 600);
+          } catch (err) {
+            console.error('Add-all failed:', err);
+            this.textContent = 'Error – try again';
+            setTimeout(() => {
+              this.textContent = originalText;
+              this.disabled = false;
+            }, 2500);
+          }
+        });
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('justAddedToCart') === 'true') {
+          localStorage.removeItem('justAddedToCart');
+
+          const cartTrigger = document.querySelector('.drawer');
+          if (cartTrigger) {
+            cartTrigger.classList.add('active');
+          }
+        }
+      });
+    })();
+  </script>
+
+  <!-- Key Benefits Section -->
+  <div class="key-benefits">
+    <h2 class="section-title">{% if product.title contains 'Wiper' %}Why Choose Click Blades?{% else %}Why Choose Click Shades?{% endif %}</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          {% if product.title contains 'Wiper' %}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
+          </svg>
+          {% else %}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+          {% endif %}
+        </div>
+        <h3>{% if product.title contains 'Wiper' %}Streak-Free Wipe{% else %}87% UV Block{% endif %}</h3>
+        <p>{% if product.title contains 'Wiper' %}Premium rubber wipes clean in a single pass{% else %}Advanced mesh technology blocks harmful rays{% endif %}</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h3>2-Minute Install</h3>
+        <p>Snap-on design, no tools required</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h3>Perfect Fit</h3>
+        <p>{% if product.title contains 'Wiper' %}Made for your exact make, model and year{% else %}3D laser-measured for your exact vehicle{% endif %}</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h3>Aussie Designed</h3>
+        <p>Made for Australian conditions</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- What's Included Section -->
+  <div class="whats-included">
+    <h2 class="section-title">What's Included</h2>
+    <div class="included-list">
+      {% if product.title contains 'Wiper' %}
+      <div class="included-item">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>1x Driver side wiper blade</span>
+      </div>
+      <div class="included-item">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>1x Passenger side wiper blade</span>
+      </div>
+      <div class="included-item">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>Vehicle-specific connector included</span>
+      </div>
+      <div class="included-item">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>30-day satisfaction guarantee</span>
+      </div>
+      {% else %}
+      <div class="included-item">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>{% if product.title contains 'Rear Side Windows' %}1x Custom-fit rear side window shades (pair){% elsif product.title contains 'Full Set' %}1x Complete shade set (front + rear){% else %}1x Custom-fit front windscreen shade{% endif %}</span>
+      </div>
+      <div class="included-item">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>1x Premium storage bag</span>
+      </div>
+      <div class="included-item">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>Installation guide</span>
+      </div>
+      <div class="included-item">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>30-day satisfaction guarantee</span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Product Description -->
+  <div class="product-description">
+    <h2 class="section-title">Product Details</h2>
+    <div class="description-content">
+      {{ product.description }}
+    </div>
+  </div>
+
+  <!-- Sticky Mobile Add to Cart -->
+  <div class="sticky-atc-mobile">
+    <div class="sticky-atc-content">
+      <div class="sticky-price{% if product.compare_at_price > product.price %} has-sale{% endif %}">
+        <span class="sticky-price-current">{{ product.price | money }}</span>
+        {% if product.compare_at_price > product.price %}
+          <span class="sticky-price-compare">{{ product.compare_at_price | money }}</span>
+        {% endif %}
+      </div>
+      <button
+        type="button"
+        class="sticky-atc-btn"
+        onclick="document.getElementById('product-form').querySelector('button[type=submit]').click()"
+      >
+        Add to Cart
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Gallery functionality
+  document.addEventListener('DOMContentLoaded', function () {
+    const swiper = document.querySelector('.gallery-swiper');
+    const dots = document.querySelectorAll('.gallery-dot');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+
+    if (swiper) {
+      // Update dots on scroll
+      swiper.addEventListener('scroll', function () {
+        const index = Math.round(swiper.scrollLeft / swiper.offsetWidth);
+        updateActive(index);
+      });
+
+      // Dot click
+      dots.forEach((dot) => {
+        dot.addEventListener('click', function () {
+          const index = parseInt(this.dataset.index);
+          swiper.scrollTo({ left: index * swiper.offsetWidth, behavior: 'smooth' });
+        });
+      });
+
+      // Thumbnail click
+      thumbnails.forEach((thumb) => {
+        thumb.addEventListener('click', function () {
+          const index = parseInt(this.dataset.index);
+          swiper.scrollTo({ left: index * swiper.offsetWidth, behavior: 'smooth' });
+        });
+      });
+
+      function updateActive(index) {
+        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        thumbnails.forEach((t, i) => t.classList.toggle('active', i === index));
+      }
+    }
+
+    // Quantity selector
+    const qtyMinus = document.querySelector('.qty-btn.minus');
+    const qtyPlus = document.querySelector('.qty-btn.plus');
+    const qtyInput = document.querySelector('.quantity-input input');
+
+    if (qtyMinus && qtyPlus && qtyInput) {
+      qtyMinus.addEventListener('click', () => {
+        const val = parseInt(qtyInput.value);
+        if (val > 1) qtyInput.value = val - 1;
+      });
+
+      qtyPlus.addEventListener('click', () => {
+        const val = parseInt(qtyInput.value);
+        if (val < 10) qtyInput.value = val + 1;
+      });
+    }
+
+    // Pickup availability toggle
+    const pickupToggle = document.querySelector('.pickup-toggle');
+    const pickupDetails = document.querySelector('.pickup-details');
+
+    if (pickupToggle && pickupDetails) {
+      pickupToggle.addEventListener('click', function () {
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !isExpanded);
+        pickupDetails.style.display = isExpanded ? 'none' : 'block';
+      });
+    }
+
+    // Add-on Add to Cart buttons
+    const addonBtns = document.querySelectorAll('.addon-atc-btn');
+    addonBtns.forEach((btn) => {
+      btn.addEventListener('click', async function () {
+        const variantId = this.dataset.variantId;
+        if (!variantId) return;
+
+        const originalText = this.querySelector('span').textContent;
+        this.querySelector('span').textContent = 'Adding...';
+        this.disabled = true;
+
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              items: [
+                {
+                  id: parseInt(variantId),
+                  quantity: 1,
+                },
+              ],
+            }),
+          });
+
+          if (response.ok) {
+            this.querySelector('span').textContent = 'Added!';
+            this.classList.add('addon-atc-btn--success');
+
+            // Update cart count in header
+            const cartResponse = await fetch('/cart.js');
+            const cart = await cartResponse.json();
+            const cartCountBtns = document.querySelectorAll('[data-cart-count], .cart-count-bubble span');
+            cartCountBtns.forEach((el) => {
+              el.textContent = cart.item_count;
+            });
+
+            // On desktop: open cart drawer. On mobile: just show success (don't redirect)
+            const isMobile = window.innerWidth < 768;
+            if (!isMobile) {
+              const cartDrawer = document.querySelector('cart-drawer');
+              if (cartDrawer && typeof cartDrawer.open === 'function') {
+                cartDrawer.open();
+              }
+            }
+
+            // Reset button after 2 seconds
+            setTimeout(() => {
+              this.querySelector('span').textContent = originalText;
+              this.classList.remove('addon-atc-btn--success');
+              this.disabled = false;
+            }, 2000);
+          } else {
+            throw new Error('Failed to add to cart');
+          }
+        } catch (error) {
+          console.error('Error adding to cart:', error);
+          this.querySelector('span').textContent = 'Error';
+          setTimeout(() => {
+            this.querySelector('span').textContent = originalText;
+            this.disabled = false;
+          }, 2000);
+        }
+      });
+    });
+
+    // Add Complete Set button
+    const addSetBtn = document.getElementById('add-complete-set');
+    if (addSetBtn) {
+      addSetBtn.addEventListener('click', async function () {
+        const variantIds = this.dataset.variantIds.split(',').map((id) => parseInt(id.trim()));
+        if (!variantIds.length) return;
+
+        const originalHTML = this.innerHTML;
+        this.innerHTML =
+          '<svg viewBox="0 0 20 20" fill="currentColor" style="width:20px;height:20px;animation:spin 1s linear infinite"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/><path d="M10 2a8 8 0 018 8" stroke="currentColor" stroke-width="2" fill="none"/></svg> Adding...';
+        this.disabled = true;
+
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              items: variantIds.map((id) => ({
+                id: id,
+                quantity: 1,
+              })),
+            }),
+          });
+
+          if (response.ok) {
+            this.innerHTML =
+              '<svg viewBox="0 0 20 20" fill="currentColor" style="width:20px;height:20px"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Added to Cart!';
+            this.classList.add('addon-set-btn--success');
+
+            // Update cart count
+            const cartResponse = await fetch('/cart.js');
+            const cart = await cartResponse.json();
+            const cartCountBtns = document.querySelectorAll('[data-cart-count], .cart-count-bubble span');
+            cartCountBtns.forEach((el) => {
+              el.textContent = cart.item_count;
+            });
+
+            // On desktop: open cart drawer. On mobile: just show success (don't redirect)
+            const isMobile = window.innerWidth < 768;
+            if (!isMobile) {
+              const cartDrawer = document.querySelector('cart-drawer');
+              if (cartDrawer && typeof cartDrawer.open === 'function') {
+                cartDrawer.open();
+              }
+            }
+
+            // Reset after 3 seconds
+            setTimeout(() => {
+              this.innerHTML = originalHTML;
+              this.classList.remove('addon-set-btn--success');
+              this.disabled = false;
+            }, 3000);
+          } else {
+            throw new Error('Failed to add to cart');
+          }
+        } catch (error) {
+          console.error('Error adding set to cart:', error);
+          this.innerHTML = 'Error - Try Again';
+          setTimeout(() => {
+            this.innerHTML = originalHTML;
+            this.disabled = false;
+          }, 2000);
+        }
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Page V2",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "Show quantity selector",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Page V2"
+    }
+  ]
+}
+{% endschema %}

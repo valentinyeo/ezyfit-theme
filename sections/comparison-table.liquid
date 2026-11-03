@@ -1,0 +1,520 @@
+{% comment %}
+  Comparison Table - ClickShades vs Competitors
+  Shows feature comparison in a scrollable table format
+{% endcomment %}
+
+{%- style -%}
+/* ========== COMPARISON SECTION ========== */
+.comparison-section {
+  padding: 50px 20px;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.comparison-section__header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.comparison-section__title {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.3;
+  margin: 0 0 16px;
+}
+
+.comparison-section__subtitle {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #555555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Scroll Container */
+.comparison-table-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Comparison Table */
+.comparison-table {
+  min-width: 600px;
+  background: #ffffff;
+}
+
+/* Table Header Row */
+.comparison-table__header {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.comparison-table__header-cell {
+  padding: 20px 12px;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  color: #6c757d;
+}
+
+.comparison-table__header-cell--feature {
+  text-align: left;
+  color: #1a1a1a;
+}
+
+.comparison-table__header-cell--brand {
+  background: var(--brand-blue, #2463af);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.comparison-table__header-cell--competitor {
+  color: #6c757d;
+  font-weight: 600;
+}
+
+/* Table Rows */
+.comparison-table__row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.comparison-table__row:last-child {
+  border-bottom: none;
+}
+
+.comparison-table__row:hover {
+  background-color: #fafbfc;
+}
+
+.comparison-table__cell {
+  padding: 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comparison-table__cell--feature {
+  justify-content: flex-start;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* Check and X icons */
+.comparison-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comparison-icon--check {
+  background: var(--brand-blue, #2463af);
+}
+
+.comparison-icon--check svg {
+  width: 16px;
+  height: 16px;
+  stroke: #ffffff;
+  stroke-width: 3;
+  fill: none;
+}
+
+.comparison-icon--x {
+  background: #e9ecef;
+}
+
+.comparison-icon--x svg {
+  width: 14px;
+  height: 14px;
+  stroke: #6c757d;
+  stroke-width: 3;
+  fill: none;
+}
+
+/* Competitor columns - outline style checks */
+.comparison-table__cell--competitor .comparison-icon--check {
+  background: transparent;
+  border: 2px solid #6c757d;
+}
+
+.comparison-table__cell--competitor .comparison-icon--check svg {
+  stroke: #6c757d;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .comparison-section {
+    padding: 40px 16px;
+  }
+
+  .comparison-section__title {
+    font-size: 22px;
+  }
+
+  .comparison-section__subtitle {
+    font-size: 14px;
+  }
+
+  .comparison-table__header-cell {
+    padding: 14px 8px;
+    font-size: 10px;
+  }
+
+  .comparison-table__cell {
+    padding: 12px 8px;
+  }
+
+  .comparison-table__cell--feature {
+    font-size: 13px;
+  }
+
+  .comparison-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .comparison-icon--check svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .comparison-icon--x svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .comparison-section {
+    padding: 80px 40px;
+  }
+
+  .comparison-section__title {
+    font-size: 34px;
+  }
+
+  .comparison-section__subtitle {
+    font-size: 18px;
+  }
+
+  .comparison-table__header-cell {
+    padding: 24px 16px;
+    font-size: 13px;
+  }
+
+  .comparison-table__cell {
+    padding: 20px 16px;
+  }
+
+  .comparison-table__cell--feature {
+    font-size: 15px;
+  }
+
+  .comparison-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+{%- endstyle -%}
+
+<section class="comparison-section">
+  <div class="comparison-section__header">
+    <h2 class="comparison-section__title">{{ section.settings.title }}</h2>
+    <p class="comparison-section__subtitle">{{ section.settings.subtitle }}</p>
+  </div>
+
+  <div class="comparison-table-wrapper">
+    <div class="comparison-table">
+      <!-- Header Row -->
+      <div class="comparison-table__header">
+        <div class="comparison-table__header-cell comparison-table__header-cell--feature">
+          {{ section.settings.column_feature_label | default: 'Comparison' }}
+        </div>
+        <div class="comparison-table__header-cell comparison-table__header-cell--brand">
+          {{ section.settings.column_brand_label | default: 'ClickShades' }}
+        </div>
+        <div class="comparison-table__header-cell comparison-table__header-cell--competitor">
+          {{ section.settings.column_competitor_label | default: 'Window Tint' }}
+        </div>
+        <div class="comparison-table__header-cell comparison-table__header-cell--competitor">
+          {{ section.settings.column_universal_label | default: 'Universal' }}
+        </div>
+        <div class="comparison-table__header-cell comparison-table__header-cell--competitor">
+          {{ section.settings.column_curtains_label | default: 'Curtains' }}
+        </div>
+      </div>
+
+      <!-- Feature Rows -->
+      {%- for block in section.blocks -%}
+        <div class="comparison-table__row" {{ block.shopify_attributes }}>
+          <div class="comparison-table__cell comparison-table__cell--feature">
+            {{ block.settings.feature_name }}
+          </div>
+          <div class="comparison-table__cell comparison-table__cell--brand">
+            {%- if block.settings.brand_has_feature -%}
+              <span class="comparison-icon comparison-icon--check">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+            {%- else -%}
+              <span class="comparison-icon comparison-icon--x">
+                <svg viewBox="0 0 24 24">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </span>
+            {%- endif -%}
+          </div>
+          <div class="comparison-table__cell comparison-table__cell--competitor">
+            {%- if block.settings.competitor_has_feature -%}
+              <span class="comparison-icon comparison-icon--check">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+            {%- else -%}
+              <span class="comparison-icon comparison-icon--x">
+                <svg viewBox="0 0 24 24">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </span>
+            {%- endif -%}
+          </div>
+          <div class="comparison-table__cell comparison-table__cell--competitor">
+            {%- if block.settings.universal_has_feature -%}
+              <span class="comparison-icon comparison-icon--check">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+            {%- else -%}
+              <span class="comparison-icon comparison-icon--x">
+                <svg viewBox="0 0 24 24">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </span>
+            {%- endif -%}
+          </div>
+          <div class="comparison-table__cell comparison-table__cell--competitor">
+            {%- if block.settings.curtains_has_feature -%}
+              <span class="comparison-icon comparison-icon--check">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+            {%- else -%}
+              <span class="comparison-icon comparison-icon--x">
+                <svg viewBox="0 0 24 24">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </span>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparison Table",
+  "tag": "section",
+  "class": "section-comparison-table",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Block Out the Sun & Keep Your Car Cool"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Our custom car window shades will effectively protect you and your passengers from the sun, offering the following features:"
+    },
+    {
+      "type": "header",
+      "content": "Column Labels"
+    },
+    {
+      "type": "text",
+      "id": "column_feature_label",
+      "label": "Feature column label",
+      "default": "Comparison"
+    },
+    {
+      "type": "text",
+      "id": "column_brand_label",
+      "label": "Brand column label",
+      "default": "ClickShades"
+    },
+    {
+      "type": "text",
+      "id": "column_competitor_label",
+      "label": "Competitor column label",
+      "default": "Window Tint"
+    },
+    {
+      "type": "text",
+      "id": "column_universal_label",
+      "label": "Universal column label",
+      "default": "Universal"
+    },
+    {
+      "type": "text",
+      "id": "column_curtains_label",
+      "label": "Curtains column label",
+      "default": "Curtains"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_name",
+          "label": "Feature name",
+          "default": "Feature"
+        },
+        {
+          "type": "checkbox",
+          "id": "brand_has_feature",
+          "label": "ClickShades has this feature",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "competitor_has_feature",
+          "label": "Window Tint has this feature",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "universal_has_feature",
+          "label": "Universal has this feature",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "curtains_has_feature",
+          "label": "Curtains has this feature",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison Table",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Heat Control",
+            "brand_has_feature": true,
+            "competitor_has_feature": true,
+            "universal_has_feature": true,
+            "curtains_has_feature": true
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_name": "UV Protection",
+            "brand_has_feature": true,
+            "competitor_has_feature": true,
+            "universal_has_feature": true,
+            "curtains_has_feature": true
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Custom Fit",
+            "brand_has_feature": true,
+            "competitor_has_feature": true,
+            "universal_has_feature": false,
+            "curtains_has_feature": false
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Easy Install & Remove",
+            "brand_has_feature": true,
+            "competitor_has_feature": false,
+            "universal_has_feature": true,
+            "curtains_has_feature": false
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Full Privacy",
+            "brand_has_feature": true,
+            "competitor_has_feature": true,
+            "universal_has_feature": false,
+            "curtains_has_feature": false
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Allow Air Flow",
+            "brand_has_feature": true,
+            "competitor_has_feature": false,
+            "universal_has_feature": true,
+            "curtains_has_feature": true
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_name": "No Legal Restrictions",
+            "brand_has_feature": true,
+            "competitor_has_feature": false,
+            "universal_has_feature": true,
+            "curtains_has_feature": false
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Reversible",
+            "brand_has_feature": true,
+            "competitor_has_feature": false,
+            "universal_has_feature": true,
+            "curtains_has_feature": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,302 @@
+{
+  "sections": {
+    "cb-hero": {
+      "type": "cb-hero",
+      "settings": {
+        "badge_text": "4.9 - Top Rated Wiper Blades",
+        "headline": "Premium Wiper Blades<br>Made for Your Exact Car",
+        "subhead": "Precision-fit wiper blades engineered for your exact vehicle"
+      }
+    },
+    "cb-vehicle-picker": {
+      "type": "cb-vehicle-picker",
+      "settings": {
+        "button_text": "Find Your Blades",
+        "friction_text": "Not sure about your model? Take your best guess — we'll confirm the fit"
+      }
+    },
+    "product-cards": {
+      "type": "product-cards",
+      "settings": {
+        "collection": "wiper-blades"
+      }
+    },
+    "video-carousel": {
+      "type": "video-carousel",
+      "blocks": {
+        "cb-vid-1": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/99b54df20fd4401eac093847ed32b01d.mp4" } },
+        "cb-vid-2": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4" } },
+        "cb-vid-3": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/30bc3aa912464145a5c46d9595f146ea.mp4" } }
+      },
+      "block_order": ["cb-vid-1", "cb-vid-2", "cb-vid-3"],
+      "settings": {}
+    },
+    "cb-differentiators": {
+      "type": "cb-differentiators",
+      "settings": {
+        "heading": "Why Choose Click Blades?"
+      }
+    },
+    "cb-popular-models": {
+      "type": "cb-popular-models",
+      "settings": {
+        "heading": "Popular Models"
+      }
+    },
+    "loox-reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "What Our Customers Say",
+        "show_rating_summary": false,
+        "show_all_reviews_link": true,
+        "reviews_page_url": "/pages/happy-customers",
+        "cta_text": "Read All Reviews"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "faq-1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I know which wiper blades fit my car?",
+            "answer": "<p>Use our vehicle picker above — enter your car's make, model, and year, and we'll show you the exact blades designed for your vehicle.</p>"
+          }
+        },
+        "faq-2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Are Click Blades easy to install?",
+            "answer": "<p>Yes! Click Blades clip on in under 2 minutes with no tools required. Simply remove your old blades and clip the new ones into place.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long do Click Blades last?",
+            "answer": "<p>With proper care, Click Blades typically last 12–18 months depending on usage and conditions. We recommend replacing them if you notice streaking or skipping.</p>"
+          }
+        },
+        "faq-4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What's your return policy?",
+            "answer": "<p>We offer a 30-day satisfaction guarantee with a full refund, no questions asked. If the blades don't fit or you're not happy, contact us at sales@clickshades.com.au.</p>"
+          }
+        },
+        "faq-5": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How much does shipping cost?",
+            "answer": "<p>Free standard shipping on all wiper blade orders across Australia. Express shipping is available at checkout for an extra $10. Orders placed before 2:00 PM (AWST) Monday to Friday are dispatched same day.</p>"
+          }
+        },
+        "faq-6": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long will delivery take?",
+            "answer": "<p>Free standard delivery: 1 to 4 business days with Australia Post. Express upgrade available at checkout for an extra $10.</p>"
+          }
+        },
+        "faq-7": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do you sell rear wiper blades too?",
+            "answer": "<p>Currently we focus on front windscreen wiper blades. Rear wiper blades are coming soon — stay tuned!</p>"
+          }
+        },
+        "faq-8": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What payment methods do you accept?",
+            "answer": "<p>We accept Visa, Mastercard, American Express, UnionPay, Apple Pay, Google Pay, Shop Pay and Afterpay.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4",
+        "faq-5",
+        "faq-6",
+        "faq-7",
+        "faq-8"
+      ],
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "subtitle": "Got questions about Click Blades? We've got answers."
+      }
+    },
+    "cb-social-proof": {
+      "type": "cb-social-proof",
+      "settings": {
+        "stat_1_number": "5,000+",
+        "stat_1_label": "Happy Customers",
+        "stat_2_number": "4.9",
+        "stat_2_label": "Star Rating",
+        "stat_3_number": "2 min",
+        "stat_3_label": "Easy Install",
+        "stat_4_number": "100%",
+        "stat_4_label": "Australian Owned"
+      }
+    },
+    "cb-benefits": {
+      "type": "cb-benefits",
+      "settings": {
+        "heading": "What You'll Notice",
+        "subheading": "Real results from day one — no gimmicks, just better wipers",
+        "benefit_1_title": "Instantly eliminate streaks and smears",
+        "benefit_1_desc": "No more annoying streaky lines across your windscreen. Click Blades wipe clean every single time, giving you a crystal clear view.",
+        "benefit_2_title": "See the road clearly, even in heavy rain",
+        "benefit_2_desc": "Engineered for Australian conditions — from summer storms to winter downpours. Premium rubber maintains contact across the full blade length.",
+        "benefit_3_title": "No more chattering or squeaking",
+        "benefit_3_desc": "Say goodbye to that annoying juddering noise. Our precision-fit blades glide smoothly across your windscreen — quietly, every time.",
+        "benefit_4_title": "Factory-grade quality at your doorstep",
+        "benefit_4_desc": "Same OEM-quality blades the dealership charges $80+ for — delivered to you for a fraction of the price with free shipping."
+      }
+    },
+    "cb-comparison": {
+      "type": "cb-comparison",
+      "blocks": {
+        "row-1": {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Precision fit for your car",
+            "brand_has": true,
+            "cheap_has": false,
+            "dealer_has": true
+          }
+        },
+        "row-2": {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Streak-free performance",
+            "brand_has": true,
+            "cheap_has": false,
+            "dealer_has": true
+          }
+        },
+        "row-3": {
+          "type": "feature",
+          "settings": {
+            "feature_name": "No chattering or squeaking",
+            "brand_has": true,
+            "cheap_has": false,
+            "dealer_has": true
+          }
+        },
+        "row-4": {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Free shipping",
+            "brand_has": true,
+            "cheap_has": false,
+            "dealer_has": false
+          }
+        },
+        "row-5": {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Under $60",
+            "brand_has": true,
+            "cheap_has": true,
+            "dealer_has": false
+          }
+        },
+        "row-6": {
+          "type": "feature",
+          "settings": {
+            "feature_name": "2-minute installation",
+            "brand_has": true,
+            "cheap_has": true,
+            "dealer_has": false
+          }
+        },
+        "row-7": {
+          "type": "feature",
+          "settings": {
+            "feature_name": "30-day guarantee",
+            "brand_has": true,
+            "cheap_has": false,
+            "dealer_has": false
+          }
+        },
+        "row-8": {
+          "type": "feature",
+          "settings": {
+            "feature_name": "Australian owned & operated",
+            "brand_has": true,
+            "cheap_has": false,
+            "dealer_has": false
+          }
+        }
+      },
+      "block_order": [
+        "row-1",
+        "row-2",
+        "row-3",
+        "row-4",
+        "row-5",
+        "row-6",
+        "row-7",
+        "row-8"
+      ],
+      "settings": {
+        "title": "How Click Blades Compare",
+        "subtitle": "See why thousands of Australians choose Click Blades over cheap alternatives and overpriced dealerships",
+        "brand_label": "Click Blades",
+        "cheap_label": "Cheap Blades",
+        "dealer_label": "Dealership"
+      }
+    },
+    "cb-guarantee": {
+      "type": "cb-guarantee",
+      "settings": {
+        "title": "Perfect Fit Guarantee",
+        "description": "Order risk-free. If your Click Blades don't fit your vehicle perfectly, we'll send you the right ones or give you a full refund — no questions asked. We're that confident in our fitment data.",
+        "point_1": "30-day money-back guarantee",
+        "point_2": "Free replacement if wrong fit",
+        "point_3": "12-month warranty included",
+        "cta_text": "Find Your Blades",
+        "cta_link": "#cb-vehicle-picker"
+      }
+    },
+    "cb-trust-bar": {
+      "type": "cb-trust-bar",
+      "settings": {
+        "badge_1_title": "Free Shipping",
+        "badge_1_desc": "On all wiper blade orders",
+        "badge_2_title": "30-Day Returns",
+        "badge_2_desc": "Full refund, no questions asked",
+        "badge_3_title": "100% Australian Owned",
+        "badge_3_desc": "Shipped from WA",
+        "badge_4_title": "Same-Day Despatch",
+        "badge_4_desc": "Order before 2pm AWST"
+      }
+    },
+    "cb-gallery": {
+      "type": "cb-gallery",
+      "settings": {
+        "heading": "Real Click Blades on real Aussie cars",
+        "subheading": "Fitted and photographed by actual customers"
+      }
+    }
+  },
+  "order": [
+    "cb-hero",
+    "cb-vehicle-picker",
+    "cb-social-proof",
+    "product-cards",
+    "video-carousel",
+    "cb-benefits",
+    "cb-comparison",
+    "cb-gallery",
+    "loox-reviews",
+    "cb-guarantee",
+    "cb-differentiators",
+    "cb-popular-models",
+    "faq",
+    "cb-trust-bar"
+  ]
+}

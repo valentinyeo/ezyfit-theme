@@ -1,0 +1,20 @@
+{%- comment -%}
+  Hidden section used by car selector to fetch available metafield filter values
+  via Shopify's section rendering API. Not rendered on any page directly.
+{%- endcomment -%}
+{%- for filter in collection.filters -%}
+  {%- if filter.param_name == 'filter.p.m.custom.vehicles_year_filter' -%}
+    {%- for value in filter.values -%}
+      {%- if value.count > 0 -%}
+        <span data-year="{{ value.value }}"></span>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{% schema %}
+{
+  "name": "Filter Data",
+  "settings": []
+}
+{% endschema %}

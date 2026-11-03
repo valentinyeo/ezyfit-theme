@@ -1,0 +1,292 @@
+{% comment %}
+  Shop by Make - Brand grid content snippet
+  Rendered when page handle is 'shop-by-make'
+{% endcomment %}
+
+<style>
+  /* ========== ROOT VARIABLES ========== */
+  :root {
+    --blue: #2463af;
+    --blue-dark: #1a4f8c;
+    --blue-light: #e8f1fb;
+    --yellow: #ffd600;
+    --dark: #1a1a1a;
+    --text: #333333;
+    --text-muted: #666666;
+    --border: #e0e0e0;
+    --white: #ffffff;
+  }
+
+  /* ========== SHOP BY MAKE SECTION ========== */
+  .shop-by-make-section {
+    background: var(--white);
+    padding: 40px 16px;
+    min-height: 60vh;
+  }
+
+  .shop-by-make-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ========== PAGE HEADER ========== */
+  .shop-by-make-section .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .shop-by-make-section .page-title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0 0 12px;
+    line-height: 1.2;
+  }
+
+  .shop-by-make-section .page-subtitle {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ========== BRANDS GRID ========== */
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .brand-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 24px;
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .brand-card:hover {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(36, 99, 175, 0.15);
+  }
+
+  .brand-name {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0;
+    transition: color 0.2s ease;
+    text-align: center;
+  }
+
+  .brand-card:hover .brand-name {
+    color: var(--blue);
+  }
+
+  /* ========== HELP TEXT ========== */
+  .help-text {
+    text-align: center;
+    padding: 32px 20px;
+    background: var(--blue-light);
+    border-radius: 12px;
+  }
+
+  .help-text p {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .help-text a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .help-text a:hover {
+    color: var(--blue-dark);
+    text-decoration: underline;
+  }
+
+  /* ========== TABLET (768px+) ========== */
+  @media (min-width: 768px) {
+    .shop-by-make-section {
+      padding: 60px 40px;
+    }
+
+    .shop-by-make-section .page-header {
+      margin-bottom: 50px;
+    }
+
+    .shop-by-make-section .page-title {
+      font-size: 40px;
+    }
+
+    .shop-by-make-section .page-subtitle {
+      font-size: 17px;
+    }
+
+    .brands-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .brand-card {
+      padding: 24px 28px;
+    }
+
+    .brand-name {
+      font-size: 20px;
+    }
+
+    .help-text {
+      padding: 36px 24px;
+    }
+
+    .help-text p {
+      font-size: 16px;
+    }
+  }
+
+  /* ========== DESKTOP (1024px+) ========== */
+  @media (min-width: 1024px) {
+    .shop-by-make-section {
+      padding: 80px 40px;
+    }
+
+    .shop-by-make-section .page-header {
+      margin-bottom: 60px;
+    }
+
+    .shop-by-make-section .page-title {
+      font-size: 44px;
+    }
+
+    .shop-by-make-section .page-subtitle {
+      font-size: 18px;
+    }
+
+    .brands-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .brand-card {
+      padding: 28px 32px;
+    }
+
+    .brand-name {
+      font-size: 22px;
+    }
+  }
+
+  /* ========== LARGE DESKTOP (1280px+) ========== */
+  @media (min-width: 1280px) {
+    .brands-grid {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+    }
+  }
+</style>
+
+
+<section class="shop-by-make-section">
+  <div class="shop-by-make-container">
+    <!-- Header -->
+    <div class="page-header">
+      <h1 class="page-title">Shop by Make</h1>
+      <p class="page-subtitle">Find the perfect shade for your vehicle. Select your car's make below to see all compatible products.</p>
+    </div>
+
+    <!-- Brand Grid - Text Only -->
+    <!-- Links use actual collection handles from the store (verified via sitemap) -->
+    <div class="brands-grid">
+      <a href="/collections/car-window-sun-shades-wiper-blade-for-bmw" class="brand-card">
+        <h3 class="brand-name">BMW</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-ford" class="brand-card">
+        <h3 class="brand-name">Ford</h3>
+      </a>
+
+      <a href="/collections/car-windscreen-shade-windscreen-wiper-blades-for-honda" class="brand-card">
+        <h3 class="brand-name">Honda</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-hyundai" class="brand-card">
+        <h3 class="brand-name">Hyundai</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-infiniti" class="brand-card">
+        <h3 class="brand-name">Infiniti</h3>
+      </a>
+
+      <a href="/collections/car-windscreen-shade-windscreen-wiper-blades-for-isuzu" class="brand-card">
+        <h3 class="brand-name">Isuzu</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-kia" class="brand-card">
+        <h3 class="brand-name">Kia</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-lexus" class="brand-card">
+        <h3 class="brand-name">Lexus</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-mazda" class="brand-card">
+        <h3 class="brand-name">Mazda</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-mercedes" class="brand-card">
+        <h3 class="brand-name">Mercedes-Benz</h3>
+      </a>
+
+      <a href="/collections/sunshades-for-car-windows-wiper-blade-for-mg" class="brand-card">
+        <h3 class="brand-name">MG</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-mitsubishi" class="brand-card">
+        <h3 class="brand-name">Mitsubishi</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-nissan" class="brand-card">
+        <h3 class="brand-name">Nissan</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-good-wiper-blades-for-subaru" class="brand-card">
+        <h3 class="brand-name">Subaru</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-toyota" class="brand-card">
+        <h3 class="brand-name">Toyota</h3>
+      </a>
+
+      <a href="/collections/sun-shade-for-car-wiper-bladess-for-volkswagen" class="brand-card">
+        <h3 class="brand-name">Volkswagen</h3>
+      </a>
+    </div>
+
+    <!-- Help Text -->
+    <div class="help-text">
+      <p>Can't find your vehicle make? <a href="/pages/contact">Contact us</a> and we'll help you find the perfect shade.</p>
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,179 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product-v2",
+      "settings": {
+        "show_quantity": false
+      }
+    },
+    "video-carousel": {
+      "type": "video-carousel",
+      "settings": {}
+    },
+    "loox-reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "What Our Customers Say",
+        "show_rating_summary": false,
+        "rating_text": "5.0 out of 5 based on 11 reviews",
+        "show_all_reviews_link": true,
+        "reviews_page_url": "/pages/happy-customers",
+        "cta_text": "Read All Reviews"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "faq-1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do ClickShades stay in place?",
+            "answer": "<p>Our shades feature a magnetic clip system that securely attaches to your car's window frame.</p>"
+          }
+        },
+        "faq-2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Will these fit my exact car model?",
+            "answer": "<p>Absolutely! Each ClickShades set is precision-cut for your specific year, make and model.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How quickly can I install them?",
+            "answer": "<p>Installation takes under 2 minutes - no tools required.</p>"
+          }
+        },
+        "faq-4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What's your return policy?",
+            "answer": "<p>30-day satisfaction guarantee with full refund, no questions asked.</p>"
+          }
+        },
+        "faq-5": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Where is Click Shades located?",
+            "answer": "<p>We are a 100% Australian-owned and operated business. All orders are dispatched from our warehouse in Bibra Lake, Western Australia (6163).</p>"
+          }
+        },
+        "faq-6": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How much does shipping cost?",
+            "answer": "<p>Free standard shipping on all orders. Express shipping is available at checkout for an extra $10.</p>"
+          }
+        },
+        "faq-7": {
+          "type": "faq_item",
+          "settings": {
+            "question": "When will my order be dispatched?",
+            "answer": "<p>We offer Same-Day Despatch for all orders placed before 2:00 PM (AWST), Monday to Friday. Orders placed after 2:00 PM or on weekends will be dispatched the following business day.</p>"
+          }
+        },
+        "faq-8": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long will delivery take?",
+            "answer": "<p>Free standard delivery: 1 to 4 business days with Australia Post. Express upgrade available at checkout for an extra $10.</p>"
+          }
+        },
+        "faq-9": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What payment methods do you accept?",
+            "answer": "<p>We accept Visa, Mastercard, American Express, UnionPay, Apple Pay, Google Pay, and Shop Pay.</p>"
+          }
+        },
+        "faq-10": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is my payment secure?",
+            "answer": "<p>Yes. Our store is powered by Shopify and is Level 1 PCI DSS compliant. We use 256-bit SSL encryption to ensure your data is safe. We do not store your credit card details.</p>"
+          }
+        },
+        "faq-11": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I cancel or change my order?",
+            "answer": "<p>Because we despatch orders rapidly, the cancellation window is very small. If you need to change or cancel, please email sales@clickshades.com.au before 2:00 PM (AWST).</p>"
+          }
+        },
+        "faq-12": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day return policy. If you are not satisfied with your shades, you can return them within 30 days of delivery, provided they are in original, unworn condition with all packaging.</p>"
+          }
+        },
+        "faq-13": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I start a return?",
+            "answer": "<p>Simply email us at sales@clickshades.com.au with your order number. We will provide you with the return instructions and address.</p>"
+          }
+        },
+        "faq-14": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What if my item arrives damaged?",
+            "answer": "<p>Please inspect your order upon arrival. If the product is defective or damaged, contact us immediately so we can evaluate the issue and make it right.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4",
+        "faq-5",
+        "faq-6",
+        "faq-7",
+        "faq-8",
+        "faq-9",
+        "faq-10",
+        "faq-11",
+        "faq-12",
+        "faq-13",
+        "faq-14"
+      ],
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "subtitle": "Got questions? We've got answers."
+      }
+    },
+    "177303894803bfa24f": {
+      "type": "apps",
+      "blocks": {
+        "avada_seo_suite_avada_faqs_PHw9gL": {
+          "type": "shopify://apps/avada-seo-suite/blocks/avada-faqs/15507c6e-1aa3-45d3-b698-7e175e033440",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "avada_seo_suite_avada_faqs_PHw9gL"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "177303894803bfa24f",
+    "video-carousel",
+    "loox-reviews",
+    "faq"
+  ]
+}

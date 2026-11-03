@@ -1,0 +1,649 @@
+{% comment %}
+  Popup Surveys Section
+  1. Attribution Survey - "How did you hear about us?" (shows first)
+  2. Newsletter Signup - 10% off for email (shows after survey dismissed)
+{% endcomment %}
+
+{% if section.settings.enable_popups %}
+<style>
+  /* ========== POPUP OVERLAY ========== */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ========== POPUP MODAL ========== */
+  .popup-modal {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px 24px;
+    max-width: 380px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(20px) scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .popup-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 1;
+    color: #333333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .popup-close:hover {
+    background: #e0e0e0;
+    color: #333333;
+  }
+
+  /* ========== CONTENT ========== */
+  .popup-step {
+    text-align: center;
+  }
+
+  .popup-headline {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 12px;
+    line-height: 1.3;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .popup-highlight {
+    color: #2463af;
+  }
+
+  .popup-subtitle {
+    font-size: 15px;
+    color: #333333;
+    margin: 0 0 24px;
+    line-height: 1.5;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* ========== BENEFITS LIST ========== */
+  .popup-benefits {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .popup-benefit {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  .popup-benefit:not(:last-child) {
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .popup-benefit-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  .popup-benefit span {
+    font-size: 14px;
+    color: #333333;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* ========== FORM ========== */
+  .popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .popup-input {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  .popup-input:focus {
+    border-color: #2463af;
+  }
+
+  .popup-input::placeholder {
+    color: #999999;
+  }
+
+  /* ========== BUTTONS ========== */
+  .popup-btn {
+    width: 100%;
+    padding: 16px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .popup-btn:active {
+    transform: scale(0.98);
+  }
+
+  .popup-btn-primary {
+    background: #2463af;
+    color: #ffffff;
+  }
+
+  .popup-btn-primary:hover {
+    background: #1a4f8c;
+  }
+
+  .popup-btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .popup-btn-disabled:hover {
+    background: #2463af;
+  }
+
+  /* ========== SELECT ========== */
+  .popup-select-wrapper {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .popup-select {
+    width: 100%;
+    padding: 16px 44px 16px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #333333;
+    background: #ffffff;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .popup-select:focus {
+    border-color: #2463af;
+  }
+
+  .popup-select-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    stroke: #333333;
+    pointer-events: none;
+  }
+
+  /* ========== SUCCESS STATE ========== */
+  .popup-success-icon {
+    width: 60px;
+    height: 60px;
+    background: #2463af;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .popup-success-icon svg {
+    width: 32px;
+    height: 32px;
+    stroke: #ffffff;
+  }
+
+  .popup-discount-code {
+    background: #f0f6ff;
+    border: 2px dashed #2463af;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #2463af;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .popup-code-note {
+    font-size: 13px;
+    color: #888888;
+    margin: 0 0 20px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .popup-privacy {
+    font-size: 12px;
+    color: #999999;
+    margin: 16px 0 0;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* ========== DESKTOP ========== */
+  @media (min-width: 768px) {
+    .popup-modal {
+      padding: 40px 32px;
+      max-width: 420px;
+    }
+
+    .popup-headline {
+      font-size: 28px;
+    }
+
+    .popup-subtitle {
+      font-size: 16px;
+    }
+  }
+</style>
+
+<!-- Attribution Survey Popup -->
+<div class="popup-overlay" id="attribution-popup" style="display: none;">
+  <div class="popup-modal">
+    <button class="popup-close" aria-label="Close">&times;</button>
+
+    <!-- Step 1: Intro -->
+    <div class="popup-step" data-step="1">
+      <h2 class="popup-headline">
+        Get <span class="popup-highlight">$10 Off</span> Your First Order!
+      </h2>
+      <p class="popup-subtitle">Just answer one quick question to unlock your discount.</p>
+      <button class="popup-btn popup-btn-primary" data-next-step="2">LET'S GO</button>
+    </div>
+
+    <!-- Step 2: Question -->
+    <div class="popup-step" data-step="2" style="display: none;">
+      <h2 class="popup-headline">{{ section.settings.survey_question | default: 'How did you hear about us?' }}</h2>
+      <div class="popup-select-wrapper">
+        <select class="popup-select" id="attribution-select">
+          <option value="">Select an option...</option>
+          <option value="google">Google Search</option>
+          <option value="facebook">Facebook</option>
+          <option value="instagram">Instagram</option>
+          <option value="tiktok">TikTok</option>
+          <option value="youtube">YouTube</option>
+          <option value="friends">Friends / Family</option>
+          <option value="car-forum">Car Forum / Community</option>
+          <option value="other">Other</option>
+        </select>
+        <svg class="popup-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+      <button class="popup-btn popup-btn-primary popup-btn-disabled" id="attribution-submit" disabled>SUBMIT</button>
+    </div>
+
+    <!-- Step 3: Thank You -->
+    <div class="popup-step" data-step="3" style="display: none;">
+      <div class="popup-success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2 class="popup-headline">Thanks!</h2>
+      <p class="popup-subtitle">Your discount code:</p>
+      <div class="popup-discount-code">{{ section.settings.survey_discount_code | default: 'WELCOME10' }}</div>
+      <p class="popup-code-note">Use at checkout for 10% off</p>
+      <button class="popup-btn popup-btn-primary" id="attribution-close">START SHOPPING</button>
+    </div>
+  </div>
+</div>
+
+<!-- Newsletter Popup -->
+<div class="popup-overlay" id="newsletter-popup" style="display: none;">
+  <div class="popup-modal popup-modal-newsletter">
+    <button class="popup-close" aria-label="Close">&times;</button>
+
+    <!-- Step 1: Email Form -->
+    <div class="popup-step" data-step="1">
+      <h2 class="popup-headline">
+        Get <span class="popup-highlight">$10 Off</span> Your First Order!
+      </h2>
+      <p class="popup-subtitle">Join our mailing list and get exclusive access to deals and updates.</p>
+
+      <div class="popup-benefits">
+        <div class="popup-benefit">
+          <svg class="popup-benefit-icon" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10" fill="#2463af"/>
+            <polyline points="8 12 11 15 16 9" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>$10 Welcome Discount</span>
+        </div>
+        <div class="popup-benefit">
+          <svg class="popup-benefit-icon" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10" fill="#2463af"/>
+            <polyline points="8 12 11 15 16 9" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Exclusive Deals & New Arrivals</span>
+        </div>
+        <div class="popup-benefit">
+          <svg class="popup-benefit-icon" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10" fill="#2463af"/>
+            <polyline points="8 12 11 15 16 9" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Car Care Tips & Updates</span>
+        </div>
+      </div>
+
+      <div class="popup-form" id="newsletter-form">
+        <input type="email" class="popup-input" id="newsletter-email" placeholder="Enter your email address" required>
+        <button type="button" class="popup-btn popup-btn-primary" id="newsletter-submit-btn">GET MY $10 OFF</button>
+      </div>
+      <p class="popup-privacy">Your data is safe with us. Unsubscribe anytime.</p>
+    </div>
+
+    <!-- Step 2: Thank You -->
+    <div class="popup-step" data-step="2" style="display: none;">
+      <div class="popup-success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2 class="popup-headline">You're In!</h2>
+      <p class="popup-subtitle">Your exclusive discount code:</p>
+      <div class="popup-discount-code">{{ section.settings.newsletter_discount_code | default: 'NEWSLETTER10' }}</div>
+      <p class="popup-code-note">Use at checkout for $10 off your order</p>
+      <button class="popup-btn popup-btn-primary" id="newsletter-close">START SHOPPING</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Configuration
+  const SURVEY_DELAY = {{ section.settings.survey_delay | default: 5 }}000;
+  const NEWSLETTER_DELAY = {{ section.settings.newsletter_delay | default: 30 }}000;
+  const STORAGE_KEY_SURVEY = 'clickshades_survey_completed';
+  const STORAGE_KEY_NEWSLETTER = 'clickshades_newsletter_shown';
+  const STORAGE_KEY_NEWSLETTER_SUBSCRIBED = 'clickshades_newsletter_subscribed';
+
+  // Elements
+  const attributionPopup = document.getElementById('attribution-popup');
+  const newsletterPopup = document.getElementById('newsletter-popup');
+
+  if (!attributionPopup || !newsletterPopup) return;
+
+  // Check storage
+  const surveyCompleted = localStorage.getItem(STORAGE_KEY_SURVEY);
+  const newsletterSubscribed = localStorage.getItem(STORAGE_KEY_NEWSLETTER_SUBSCRIBED);
+  const newsletterShownThisSession = sessionStorage.getItem(STORAGE_KEY_NEWSLETTER);
+
+  // ========== HELPER FUNCTIONS ==========
+  function showPopup(popup) {
+    popup.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    if (popup === newsletterPopup) {
+      sessionStorage.setItem(STORAGE_KEY_NEWSLETTER, 'true');
+    }
+  }
+
+  function hidePopup(popup) {
+    popup.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function goToStep(popup, stepNumber) {
+    const steps = popup.querySelectorAll('.popup-step');
+    steps.forEach(step => {
+      step.style.display = step.dataset.step === String(stepNumber) ? 'block' : 'none';
+    });
+  }
+
+  // Close on overlay click
+  [attributionPopup, newsletterPopup].forEach(popup => {
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) {
+        hidePopup(popup);
+        if (popup === attributionPopup) {
+          localStorage.setItem(STORAGE_KEY_SURVEY, 'true');
+          if (!newsletterSubscribed && !newsletterShownThisSession) {
+            setTimeout(() => showPopup(newsletterPopup), NEWSLETTER_DELAY);
+          }
+        }
+      }
+    });
+  });
+
+  // ========== ATTRIBUTION SURVEY ==========
+  function hideAttributionPopup() {
+    hidePopup(attributionPopup);
+    localStorage.setItem(STORAGE_KEY_SURVEY, 'true');
+    if (!newsletterSubscribed && !newsletterShownThisSession) {
+      setTimeout(() => showPopup(newsletterPopup), NEWSLETTER_DELAY);
+    }
+  }
+
+  // Step navigation
+  attributionPopup.querySelectorAll('[data-next-step]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      goToStep(attributionPopup, btn.dataset.nextStep);
+    });
+  });
+
+  // Select enable submit
+  const attributionSelect = document.getElementById('attribution-select');
+  const attributionSubmit = document.getElementById('attribution-submit');
+
+  if (attributionSelect && attributionSubmit) {
+    attributionSelect.addEventListener('change', () => {
+      if (attributionSelect.value) {
+        attributionSubmit.disabled = false;
+        attributionSubmit.classList.remove('popup-btn-disabled');
+      } else {
+        attributionSubmit.disabled = true;
+        attributionSubmit.classList.add('popup-btn-disabled');
+      }
+    });
+
+    attributionSubmit.addEventListener('click', () => {
+      localStorage.setItem('clickshades_attribution', attributionSelect.value);
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'attribution_survey', {
+          'event_category': 'survey',
+          'event_label': attributionSelect.value
+        });
+      }
+      goToStep(attributionPopup, 3);
+    });
+  }
+
+  // Close buttons
+  document.getElementById('attribution-close')?.addEventListener('click', hideAttributionPopup);
+  attributionPopup.querySelector('.popup-close')?.addEventListener('click', hideAttributionPopup);
+
+  // ========== NEWSLETTER POPUP ==========
+  function hideNewsletterPopup() {
+    hidePopup(newsletterPopup);
+  }
+
+  // Newsletter signup via button click (no form submission)
+  const newsletterSubmitBtn = document.getElementById('newsletter-submit-btn');
+  const newsletterEmail = document.getElementById('newsletter-email');
+
+  if (newsletterSubmitBtn && newsletterEmail) {
+    newsletterSubmitBtn.addEventListener('click', () => {
+      const email = newsletterEmail.value;
+      if (email && email.includes('@')) {
+        // Store immediately to prevent re-showing
+        localStorage.setItem(STORAGE_KEY_NEWSLETTER_SUBSCRIBED, 'true');
+        localStorage.setItem('clickshades_newsletter_email', email);
+
+        // Submit to Shopify customer API (fire and forget)
+        const formData = new FormData();
+        formData.append('form_type', 'customer');
+        formData.append('utf8', '✓');
+        formData.append('contact[email]', email);
+        formData.append('contact[tags]', 'newsletter,popup');
+
+        fetch('/contact#contact_form', {
+          method: 'POST',
+          body: formData
+        }).catch(() => {});
+
+        // Track event
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'newsletter_signup', {
+            'event_category': 'newsletter',
+            'event_label': 'popup'
+          });
+        }
+
+        // Show discount code step (stays open until user closes)
+        goToStep(newsletterPopup, 2);
+      }
+    });
+  }
+
+  // Close buttons
+  document.getElementById('newsletter-close')?.addEventListener('click', hideNewsletterPopup);
+  newsletterPopup.querySelector('.popup-close')?.addEventListener('click', hideNewsletterPopup);
+
+  // ========== INITIALIZATION ==========
+  const enableSurvey = {{ section.settings.enable_survey | default: false }};
+  const enableNewsletter = {{ section.settings.enable_newsletter | default: true }};
+
+  if (enableSurvey && !surveyCompleted) {
+    setTimeout(() => showPopup(attributionPopup), SURVEY_DELAY);
+  } else if (enableNewsletter && !newsletterSubscribed && !newsletterShownThisSession) {
+    // If survey is disabled, use survey delay (5s) instead of newsletter delay (30s)
+    const delay = enableSurvey ? NEWSLETTER_DELAY : SURVEY_DELAY;
+    setTimeout(() => showPopup(newsletterPopup), delay);
+  }
+
+})();
+</script>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Popup Surveys",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_popups",
+      "label": "Enable popups",
+      "default": true,
+      "info": "Master toggle - turns all popups on/off"
+    },
+    {
+      "type": "header",
+      "content": "Attribution Survey"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_survey",
+      "label": "Enable attribution survey",
+      "default": false,
+      "info": "Show 'How did you hear about us?' survey"
+    },
+    {
+      "type": "text",
+      "id": "survey_question",
+      "label": "Survey Question",
+      "default": "How did you hear about ClickShades?"
+    },
+    {
+      "type": "text",
+      "id": "survey_discount_code",
+      "label": "Survey Discount Code",
+      "default": "WELCOME10"
+    },
+    {
+      "type": "range",
+      "id": "survey_delay",
+      "label": "Survey Delay (seconds)",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Newsletter Popup"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_newsletter",
+      "label": "Enable newsletter popup",
+      "default": true,
+      "info": "Show email signup popup with discount code"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_discount_code",
+      "label": "Newsletter Discount Code",
+      "default": "NL10"
+    },
+    {
+      "type": "range",
+      "id": "newsletter_delay",
+      "label": "Newsletter Delay After Survey (seconds)",
+      "min": 5,
+      "max": 120,
+      "step": 5,
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Popup Surveys"
+    }
+  ]
+}
+{% endschema %}

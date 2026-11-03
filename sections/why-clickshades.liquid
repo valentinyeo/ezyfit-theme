@@ -1,0 +1,268 @@
+<style>
+  .why-section {
+    padding: 40px 16px;
+    background: var(--white, #ffffff);
+  }
+
+  .why-heading {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 32px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .why-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .why-points {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .why-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .why-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    background: var(--blue-light, #e8f1fb);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .why-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--blue, #2463af);
+  }
+
+  .why-text h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 4px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .why-text p {
+    font-size: 13px;
+    color: var(--text-muted, #333333);
+    margin: 0;
+    line-height: 1.4;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .why-image {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .why-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Desktop Layout */
+  @media (min-width: 768px) {
+    .why-section {
+      padding: 60px 24px;
+      max-width: 1168px;
+      margin: 0 auto;
+    }
+
+    .why-heading {
+      font-size: 32px;
+      margin-bottom: 48px;
+    }
+
+    .why-content {
+      flex-direction: row;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .why-points {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .why-image {
+      flex: 1;
+      max-width: 450px;
+    }
+
+    .why-icon {
+      width: 52px;
+      height: 52px;
+      min-width: 52px;
+    }
+
+    .why-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .why-text h3 {
+      font-size: 16px;
+    }
+
+    .why-text p {
+      font-size: 14px;
+    }
+  }
+</style>
+
+<section class="why-section">
+  <h2 class="why-heading">{{ section.settings.heading | default: 'Why Click Shades?' }}</h2>
+
+  <div class="why-content">
+    <div class="why-points">
+      <!-- Point 1: Thicker Material -->
+      <div class="why-point">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="3" y1="15" x2="21" y2="15"/>
+          </svg>
+        </div>
+        <div class="why-text">
+          <h3>Triple Laminate Technology</h3>
+          <p>Thicker than traditional shades for superior heat protection</p>
+        </div>
+      </div>
+
+      <!-- Point 2: Precision Fit -->
+      <div class="why-point">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="6"/>
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
+        </div>
+        <div class="why-text">
+          <h3>3D Laser-Scanned Fit</h3>
+          <p>Made-to-measure for your exact vehicle model</p>
+        </div>
+      </div>
+
+      <!-- Point 3: UV Protection -->
+      <div class="why-point">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </div>
+        <div class="why-text">
+          <h3>Blocks Harmful UV Rays</h3>
+          <p>Keeps interior cool and protects from sun damage</p>
+        </div>
+      </div>
+
+      <!-- Point 4: Protects Interior -->
+      <div class="why-point">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="why-text">
+          <h3>Protects Your Interior</h3>
+          <p>Prevents cracking, warping and fading of surfaces</p>
+        </div>
+      </div>
+
+      <!-- Point 5: Easy Install -->
+      <div class="why-point">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="why-text">
+          <h3>Install in Seconds</h3>
+          <p>No tools needed - just unfold and place</p>
+        </div>
+      </div>
+
+      <!-- Point 6: Aussie Designed -->
+      <div class="why-point">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="why-text">
+          <h3>Aussie Designed</h3>
+          <p>Built for Australian conditions with quality guarantee</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-image">
+      {% if section.settings.product_image %}
+        {{ section.settings.product_image | img_url: '800x' | img_tag: section.settings.image_alt }}
+      {% else %}
+        <img src="https://clickshades.com.au/cdn/shop/files/SideShade2.png?v=1762038252&width=800" alt="{{ section.settings.image_alt | default: 'ClickShades Product' }}">
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Why Click Shades",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Click Shades?"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text",
+      "default": "ClickShades Car Window Shades"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Click Shades"
+    }
+  ]
+}
+{% endschema %}

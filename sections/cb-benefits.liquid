@@ -1,0 +1,266 @@
+<style>
+  .cb-benefits-section {
+    padding: 50px 16px;
+    background: var(--white, #ffffff);
+  }
+
+  .cb-benefits-heading {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 12px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .cb-benefits-subheading {
+    text-align: center;
+    font-size: 14px;
+    color: #555555;
+    margin: 0 0 36px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .cb-benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .cb-benefit-card {
+    background: #f8f9fa;
+    border-radius: 16px;
+    padding: 28px 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cb-benefit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .cb-benefit-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--blue, #2463af);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .cb-benefit-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: #ffffff;
+    fill: none;
+  }
+
+  .cb-benefit-card h3 {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 8px;
+  }
+
+  .cb-benefit-card p {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #555555;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    .cb-benefits-section {
+      padding: 70px 40px;
+      max-width: 1168px;
+      margin: 0 auto;
+    }
+
+    .cb-benefits-heading {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .cb-benefits-subheading {
+      font-size: 16px;
+      margin-bottom: 48px;
+    }
+
+    .cb-benefits-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .cb-benefit-card {
+      padding: 36px 32px;
+    }
+
+    .cb-benefit-icon {
+      width: 56px;
+      height: 56px;
+    }
+
+    .cb-benefit-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .cb-benefit-card h3 {
+      font-size: 18px;
+    }
+
+    .cb-benefit-card p {
+      font-size: 15px;
+    }
+  }
+</style>
+
+<section class="cb-benefits-section">
+  <h2 class="cb-benefits-heading">{{ section.settings.heading | default: 'What You Will Notice' }}</h2>
+  <p class="cb-benefits-subheading">{{ section.settings.subheading | default: 'Real results from day one — no gimmicks, just better wipers' }}</p>
+
+  <div class="cb-benefits-grid">
+    <!-- Benefit 1: Clear Visibility -->
+    <div class="cb-benefit-card">
+      <div class="cb-benefit-icon">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <h3>{{ section.settings.benefit_1_title | default: 'Instantly eliminate streaks and smears' }}</h3>
+      <p>{{ section.settings.benefit_1_desc | default: 'No more annoying streaky lines across your windscreen. Click Blades wipe clean every single time, giving you a crystal clear view.' }}</p>
+    </div>
+
+    <!-- Benefit 2: Storm Performance -->
+    <div class="cb-benefit-card">
+      <div class="cb-benefit-icon">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="16" y1="13" x2="16" y2="21"/>
+          <line x1="8" y1="13" x2="8" y2="21"/>
+          <line x1="12" y1="15" x2="12" y2="23"/>
+          <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/>
+        </svg>
+      </div>
+      <h3>{{ section.settings.benefit_2_title | default: 'See the road clearly, even in heavy rain' }}</h3>
+      <p>{{ section.settings.benefit_2_desc | default: 'Engineered for Australian conditions — from summer storms to winter downpours. Premium rubber maintains contact across the full blade length.' }}</p>
+    </div>
+
+    <!-- Benefit 3: Quiet Operation -->
+    <div class="cb-benefit-card">
+      <div class="cb-benefit-icon">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <line x1="23" y1="9" x2="17" y2="15"/>
+          <line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>
+      </div>
+      <h3>{{ section.settings.benefit_3_title | default: 'No more chattering or squeaking' }}</h3>
+      <p>{{ section.settings.benefit_3_desc | default: 'Say goodbye to that annoying juddering noise. Our precision-fit blades glide smoothly across your windscreen — quietly, every time.' }}</p>
+    </div>
+
+    <!-- Benefit 4: Perfect Fit -->
+    <div class="cb-benefit-card">
+      <div class="cb-benefit-icon">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h3>{{ section.settings.benefit_4_title | default: 'Factory-grade quality at your doorstep' }}</h3>
+      <p>{{ section.settings.benefit_4_desc | default: 'Same OEM-quality blades the dealership charges $80+ for — delivered to you for a fraction of the price with free shipping.' }}</p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CB Benefits",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What You'll Notice"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Real results from day one — no gimmicks, just better wipers"
+    },
+    {
+      "type": "header",
+      "content": "Benefit 1"
+    },
+    {
+      "type": "text",
+      "id": "benefit_1_title",
+      "label": "Title",
+      "default": "Instantly eliminate streaks and smears"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_1_desc",
+      "label": "Description",
+      "default": "No more annoying streaky lines across your windscreen. Click Blades wipe clean every single time, giving you a crystal clear view."
+    },
+    {
+      "type": "header",
+      "content": "Benefit 2"
+    },
+    {
+      "type": "text",
+      "id": "benefit_2_title",
+      "label": "Title",
+      "default": "See the road clearly, even in heavy rain"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_2_desc",
+      "label": "Description",
+      "default": "Engineered for Australian conditions — from summer storms to winter downpours. Premium rubber maintains contact across the full blade length."
+    },
+    {
+      "type": "header",
+      "content": "Benefit 3"
+    },
+    {
+      "type": "text",
+      "id": "benefit_3_title",
+      "label": "Title",
+      "default": "No more chattering or squeaking"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_3_desc",
+      "label": "Description",
+      "default": "Say goodbye to that annoying juddering noise. Our precision-fit blades glide smoothly across your windscreen — quietly, every time."
+    },
+    {
+      "type": "header",
+      "content": "Benefit 4"
+    },
+    {
+      "type": "text",
+      "id": "benefit_4_title",
+      "label": "Title",
+      "default": "Factory-grade quality at your doorstep"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_4_desc",
+      "label": "Description",
+      "default": "Same OEM-quality blades the dealership charges $80+ for — delivered to you for a fraction of the price with free shipping."
+    }
+  ],
+  "presets": [
+    {
+      "name": "CB Benefits"
+    }
+  ]
+}
+{% endschema %}

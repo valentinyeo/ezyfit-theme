@@ -1,0 +1,1070 @@
+{% comment %}
+  Collection Filters - Vehicle Finder + Smart Filtering
+  AJAX-powered filtering with YMM selector and sidebar filters
+{% endcomment %}
+
+<style>
+  /* ========== FILTER TOGGLE BUTTON (Mobile) ========== */
+  .filter-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 12px 18px;
+    background: var(--white, #ffffff);
+    border: 1.5px solid #d0d0d0;
+    border-radius: 10px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .filter-toggle-btn:hover {
+    border-color: var(--blue, #2463af);
+    background: #f8fafc;
+  }
+
+  .filter-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    background: var(--blue, #2463af);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 11px;
+  }
+
+  /* ========== FILTER SIDEBAR ========== */
+  .filter-sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white, #ffffff);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    max-height: 85vh;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-sidebar.open {
+    transform: translateY(0);
+  }
+
+  .filter-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid #e8e8e8;
+    flex-shrink: 0;
+  }
+
+  .filter-sidebar-header h3 {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .filter-close-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+
+  .filter-close-btn:hover {
+    background: #f0f0f0;
+  }
+
+  .filter-close-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--dark, #1a1a1a);
+    stroke-width: 2.5;
+  }
+
+  .filter-sidebar-body {
+    overflow-y: auto;
+    padding: 20px 20px 24px;
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ========== FILTER GROUPS ========== */
+  .filter-group {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .filter-group:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .filter-group-title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    letter-spacing: -0.01em;
+  }
+
+  .filter-group-title .chevron {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+    display: none; /* Hidden on mobile, shown on desktop */
+  }
+
+  .filter-group.collapsed .chevron {
+    transform: rotate(-90deg);
+  }
+
+  .filter-group-content {
+    overflow: visible;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+  }
+
+  .filter-group.collapsed .filter-group-content {
+    max-height: 0 !important;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  /* ========== YMM FILTER FORM ========== */
+  .ymm-filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .filter-dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  .filter-dropdown.open {
+    z-index: 1002;
+  }
+
+  .filter-dropdown-trigger {
+    width: 100%;
+    min-height: 48px;
+    padding: 14px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-muted, #666666);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--white, #ffffff);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .filter-dropdown-trigger:hover:not(.disabled) {
+    border-color: var(--blue, #2463af);
+  }
+
+  .filter-dropdown-trigger.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #f5f5f5;
+  }
+
+  .filter-dropdown.open .filter-dropdown-trigger {
+    border-color: var(--blue, #2463af);
+    box-shadow: 0 0 0 2px rgba(36, 99, 175, 0.2);
+  }
+
+  .filter-dropdown-value {
+    flex: 1;
+    text-align: left;
+  }
+
+  .filter-dropdown-value.selected {
+    color: var(--dark, #1a1a1a);
+    font-weight: 600;
+  }
+
+  .filter-dropdown-arrow {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .filter-dropdown.open .filter-dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* ========== DROPDOWN MENU ========== */
+  .filter-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--white, #ffffff);
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1003;
+    display: none;
+    max-height: 240px;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .filter-dropdown.open .filter-dropdown-menu {
+    display: flex;
+  }
+
+  .filter-dropdown-search {
+    padding: 12px;
+    border-bottom: 1px solid #e8e8e8;
+    flex-shrink: 0;
+  }
+
+  .filter-dropdown-search input {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .filter-dropdown-search input:focus {
+    border-color: var(--blue, #2463af);
+  }
+
+  .filter-dropdown-options {
+    overflow-y: auto;
+    max-height: 220px;
+    padding: 8px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-dropdown-option {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 15px;
+    color: var(--dark, #1a1a1a);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+  }
+
+  .filter-dropdown-option:hover {
+    background: #e8f1fb;
+  }
+
+  .filter-dropdown-option.active {
+    background: var(--blue, #2463af);
+    color: white;
+    font-weight: 600;
+  }
+
+  .ymm-apply-btn {
+    width: 100%;
+    min-height: 48px;
+    padding: 14px 16px;
+    background: var(--yellow, #ffd600);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 4px;
+  }
+
+  .ymm-apply-btn:hover {
+    background: #e6c100;
+  }
+
+  /* ========== FILTER ACTIONS ========== */
+  .filter-actions {
+    margin-top: 20px;
+  }
+
+  .clear-all-btn {
+    width: 100%;
+    min-height: 48px;
+    padding: 14px 16px;
+    background: transparent;
+    color: #888888;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .clear-all-btn:hover {
+    border-color: #cc0000;
+    color: #cc0000;
+  }
+
+  /* ========== ACTIVE FILTERS CHIPS ========== */
+  .active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .active-filters-label {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #e8f1fb;
+    border: 1px solid #bae6fd;
+    border-radius: 20px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue, #2463af);
+  }
+
+  .filter-chip button {
+    width: 18px;
+    height: 18px;
+    border: none;
+    background: rgba(36, 99, 175, 0.2);
+    color: var(--blue, #2463af);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+    transition: background 0.2s;
+  }
+
+  .filter-chip button:hover {
+    background: rgba(36, 99, 175, 0.3);
+  }
+
+  /* ========== OVERLAY ========== */
+  .filter-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .filter-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ========== DESKTOP (1024px+) ========== */
+  @media (min-width: 1024px) {
+    /* Hide mobile toggle button */
+    .filter-toggle-btn {
+      display: none;
+    }
+
+    /* Container for filters section */
+    .collection-filters {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px 24px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* Sidebar becomes sticky left column */
+    .filter-sidebar {
+      position: sticky;
+      top: 20px;
+      transform: translateY(0);
+      max-height: calc(100vh - 120px);
+      width: 280px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      grid-column: 1;
+    }
+
+    .filter-sidebar-header {
+      padding: 20px;
+    }
+
+    .filter-close-btn {
+      display: none;
+    }
+
+    .filter-overlay {
+      display: none;
+    }
+
+    /* Active filters in second column */
+    .collection-filters .active-filters {
+      grid-column: 2;
+      margin: 0;
+    }
+
+    /* Show chevrons on desktop for accordion */
+    .filter-group-title .chevron {
+      display: block;
+    }
+
+    .filter-group-title:hover {
+      color: var(--blue, #2463af);
+    }
+
+    /* Compact spacing for collapsed groups */
+    .filter-group.collapsed {
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+    }
+
+    /* Reduce spacing between filter groups */
+    .filter-group {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+    }
+
+    .filter-group:first-child {
+      margin-top: 4px;
+    }
+
+    .filter-group:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+</style>
+
+<div class="collection-filters" id="collection-filters">
+  <!-- Mobile Filter Toggle Button -->
+  <button type="button" class="filter-toggle-btn" id="filter-toggle-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="4" y1="6" x2="20" y2="6"></line>
+      <line x1="4" y1="12" x2="20" y2="12"></line>
+      <line x1="4" y1="18" x2="14" y2="18"></line>
+    </svg>
+    <span>Filters</span>
+    <span class="filter-count" id="filter-count-badge" style="display: none;">0</span>
+  </button>
+
+  <!-- Filter Sidebar/Drawer -->
+  <div class="filter-sidebar" id="filter-sidebar">
+    <div class="filter-sidebar-header">
+      <h3>Filters</h3>
+      <button type="button" class="filter-close-btn" id="filter-close-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="filter-sidebar-body">
+      <!-- Vehicle Finder -->
+      <div class="filter-group" data-filter-group="vehicle">
+        <h4 class="filter-group-title">
+          <span>Find Your Vehicle</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </h4>
+        <div class="filter-group-content">
+          <div class="ymm-filter-form" id="ymm-filter-form">
+          <!-- Make Dropdown -->
+          <div class="filter-dropdown" data-field="make">
+            <div class="filter-dropdown-trigger" data-placeholder="Make">
+              <span class="filter-dropdown-value">Make</span>
+              <svg class="filter-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="filter-dropdown-menu">
+              <div class="filter-dropdown-search">
+                <input type="text" placeholder="Search make..." autocomplete="off">
+              </div>
+              <div class="filter-dropdown-options"></div>
+            </div>
+          </div>
+
+          <!-- Model Dropdown -->
+          <div class="filter-dropdown" data-field="model">
+            <div class="filter-dropdown-trigger disabled" data-placeholder="Model">
+              <span class="filter-dropdown-value">Model</span>
+              <svg class="filter-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="filter-dropdown-menu">
+              <div class="filter-dropdown-search">
+                <input type="text" placeholder="Search model..." autocomplete="off">
+              </div>
+              <div class="filter-dropdown-options"></div>
+            </div>
+          </div>
+
+          <!-- Year Dropdown -->
+          <div class="filter-dropdown" data-field="year">
+            <div class="filter-dropdown-trigger disabled" data-placeholder="Year">
+              <span class="filter-dropdown-value">Year</span>
+              <svg class="filter-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="filter-dropdown-menu">
+              <div class="filter-dropdown-search">
+                <input type="text" placeholder="Search year..." autocomplete="off">
+              </div>
+              <div class="filter-dropdown-options"></div>
+            </div>
+          </div>
+
+          <button type="button" class="ymm-apply-btn" id="ymm-apply-btn">Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clear All Button -->
+      <div class="filter-actions">
+        <button type="button" class="clear-all-btn" id="clear-all-filters">Clear All Filters</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Filters Chips -->
+  <div class="active-filters" id="active-filters" style="display: none;">
+    <span class="active-filters-label">Active filters:</span>
+    <div class="filter-chips" id="filter-chips"></div>
+  </div>
+
+  <!-- Overlay for mobile drawer -->
+  <div class="filter-overlay" id="filter-overlay"></div>
+</div>
+
+<script>
+  (function () {
+    // Data store
+    let ymmData = {
+      makes: new Set(),
+      models: {},
+      years: {},
+      products: [],
+    };
+
+    // Active filters state
+    let activeFilters = {
+      make: null,
+      model: null,
+      year: null,
+    };
+
+    // Fetch product data for YMM filtering
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/products.json?limit=250');
+        const data = await response.json();
+        parseProductTags(data.products);
+        populateMakes();
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      }
+    }
+
+    // Parse product tags
+    function parseProductTags(products) {
+      ymmData.products = products;
+
+      products.forEach((product) => {
+        let make = null, model = null, years = [];
+
+        product.tags.forEach((tag) => {
+          if (tag.startsWith('Make_')) {
+            make = tag.replace('Make_', '');
+          } else if (tag.startsWith('Model_')) {
+            model = tag.replace('Model_', '');
+          } else if (tag.startsWith('Year_')) {
+            years.push(tag.replace('Year_', ''));
+          }
+        });
+
+        if (make) {
+          ymmData.makes.add(make);
+          if (model) {
+            if (!ymmData.models[make]) {
+              ymmData.models[make] = new Set();
+            }
+            ymmData.models[make].add(model);
+
+            const key = `${make}_${model}`;
+            if (!ymmData.years[key]) {
+              ymmData.years[key] = new Set();
+            }
+            years.forEach((year) => ymmData.years[key].add(year));
+          }
+        }
+      });
+    }
+
+    // Populate makes dropdown
+    function populateMakes() {
+      const dropdown = document.querySelector('[data-field="make"]');
+      const optionsContainer = dropdown.querySelector('.filter-dropdown-options');
+      const sortedMakes = Array.from(ymmData.makes).sort();
+
+      optionsContainer.innerHTML = sortedMakes
+        .map((make) => `<div class="filter-dropdown-option" data-value="${make}">${make}</div>`)
+        .join('');
+
+      attachOptionListeners(dropdown);
+    }
+
+    // Populate models dropdown
+    function populateModels(make) {
+      const dropdown = document.querySelector('[data-field="model"]');
+      const optionsContainer = dropdown.querySelector('.filter-dropdown-options');
+      const trigger = dropdown.querySelector('.filter-dropdown-trigger');
+
+      if (!make || !ymmData.models[make]) {
+        optionsContainer.innerHTML = '';
+        trigger.classList.add('disabled');
+        resetDropdown(dropdown);
+        return;
+      }
+
+      const sortedModels = Array.from(ymmData.models[make]).sort();
+      optionsContainer.innerHTML = sortedModels
+        .map((model) => `<div class="filter-dropdown-option" data-value="${model}">${model}</div>`)
+        .join('');
+
+      trigger.classList.remove('disabled');
+      attachOptionListeners(dropdown);
+    }
+
+    // Populate years dropdown
+    function populateYears(make, model) {
+      const dropdown = document.querySelector('[data-field="year"]');
+      const optionsContainer = dropdown.querySelector('.filter-dropdown-options');
+      const trigger = dropdown.querySelector('.filter-dropdown-trigger');
+
+      const key = `${make}_${model}`;
+      if (!make || !model || !ymmData.years[key]) {
+        optionsContainer.innerHTML = '';
+        trigger.classList.add('disabled');
+        resetDropdown(dropdown);
+        return;
+      }
+
+      const sortedYears = Array.from(ymmData.years[key]).sort((a, b) => b - a);
+      optionsContainer.innerHTML = sortedYears
+        .map((year) => `<div class="filter-dropdown-option" data-value="${year}">${year}</div>`)
+        .join('');
+
+      trigger.classList.remove('disabled');
+      attachOptionListeners(dropdown);
+    }
+
+    // Reset dropdown
+    function resetDropdown(dropdown) {
+      const trigger = dropdown.querySelector('.filter-dropdown-trigger');
+      const valueEl = trigger.querySelector('.filter-dropdown-value');
+      const searchInput = dropdown.querySelector('.filter-dropdown-search input');
+
+      valueEl.textContent = trigger.dataset.placeholder;
+      valueEl.classList.remove('selected');
+      if (searchInput) searchInput.value = '';
+
+      const field = dropdown.dataset.field;
+      activeFilters[field] = null;
+    }
+
+    // Attach option listeners
+    function attachOptionListeners(dropdown) {
+      const options = dropdown.querySelectorAll('.filter-dropdown-option');
+      const field = dropdown.dataset.field;
+
+      options.forEach((option) => {
+        option.addEventListener('click', () => {
+          const value = option.dataset.value;
+          selectOption(dropdown, value);
+
+          if (field === 'make') {
+            activeFilters.make = value;
+            activeFilters.model = null;
+            activeFilters.year = null;
+            resetDropdown(document.querySelector('[data-field="model"]'));
+            resetDropdown(document.querySelector('[data-field="year"]'));
+            populateModels(value);
+            document.querySelector('[data-field="year"] .filter-dropdown-trigger').classList.add('disabled');
+          } else if (field === 'model') {
+            activeFilters.model = value;
+            activeFilters.year = null;
+            resetDropdown(document.querySelector('[data-field="year"]'));
+            populateYears(activeFilters.make, value);
+          } else if (field === 'year') {
+            activeFilters.year = value;
+          }
+
+          closeDropdown(dropdown);
+        });
+      });
+    }
+
+    // Select option
+    function selectOption(dropdown, value) {
+      const trigger = dropdown.querySelector('.filter-dropdown-trigger');
+      const valueEl = trigger.querySelector('.filter-dropdown-value');
+
+      valueEl.textContent = value;
+      valueEl.classList.add('selected');
+
+      dropdown.querySelectorAll('.filter-dropdown-option').forEach((opt) => {
+        opt.classList.toggle('active', opt.dataset.value === value);
+      });
+    }
+
+    // Open/close dropdown
+    function openDropdown(dropdown) {
+      const trigger = dropdown.querySelector('.filter-dropdown-trigger');
+      if (trigger.classList.contains('disabled')) return;
+
+      document.querySelectorAll('.filter-dropdown.open').forEach((d) => {
+        if (d !== dropdown) closeDropdown(d);
+      });
+
+      dropdown.classList.add('open');
+      const searchInput = dropdown.querySelector('.filter-dropdown-search input');
+      if (searchInput && window.innerWidth >= 768) {
+        setTimeout(() => searchInput.focus(), 10);
+      }
+    }
+
+    function closeDropdown(dropdown) {
+      dropdown.classList.remove('open');
+      const searchInput = dropdown.querySelector('.filter-dropdown-search input');
+      if (searchInput) {
+        searchInput.value = '';
+        filterOptions(dropdown, '');
+      }
+    }
+
+    // Filter dropdown options
+    function filterOptions(dropdown, query) {
+      const options = dropdown.querySelectorAll('.filter-dropdown-option');
+      const lowerQuery = query.toLowerCase();
+
+      options.forEach((option) => {
+        const text = option.textContent.toLowerCase();
+        option.style.display = text.includes(lowerQuery) ? '' : 'none';
+      });
+    }
+
+    // Apply filters and update URL
+    function applyFilters() {
+      const params = new URLSearchParams(window.location.search);
+
+      // Clear existing filter params
+      Array.from(params.keys()).forEach(key => {
+        if (key.startsWith('filter.')) {
+          params.delete(key);
+        }
+      });
+
+      // Apply YMM filters
+      if (activeFilters.make) {
+        params.append('filter.p.tag', `Make_${activeFilters.make}`);
+      }
+      if (activeFilters.model) {
+        params.append('filter.p.tag', `Model_${activeFilters.model}`);
+      }
+      if (activeFilters.year) {
+        params.append('filter.p.tag', `Year_${activeFilters.year}`);
+      }
+
+      // Update URL and reload
+      window.location.href = `${window.location.pathname}?${params.toString()}`;
+    }
+
+    // Update filter chips display
+    function updateFilterChips() {
+      const chipsContainer = document.getElementById('filter-chips');
+      const activeFiltersDiv = document.getElementById('active-filters');
+      const countBadge = document.getElementById('filter-count-badge');
+
+      let chips = [];
+      let count = 0;
+
+      if (activeFilters.make || activeFilters.model || activeFilters.year) {
+        const vehicleText = [activeFilters.year, activeFilters.make, activeFilters.model]
+          .filter(Boolean)
+          .join(' ');
+        chips.push(`<span class="filter-chip" data-filter="vehicle">${vehicleText} <button type="button" onclick="window.collectionFilters.removeVehicleFilter()">×</button></span>`);
+        count++;
+      }
+
+      if (chips.length > 0) {
+        chipsContainer.innerHTML = chips.join('');
+        activeFiltersDiv.style.display = 'flex';
+        countBadge.textContent = count;
+        countBadge.style.display = 'inline-flex';
+      } else {
+        activeFiltersDiv.style.display = 'none';
+        countBadge.style.display = 'none';
+      }
+    }
+
+    // Parse URL params to restore filter state
+    function parseUrlFilters() {
+      const params = new URLSearchParams(window.location.search);
+
+      // Parse YMM tags
+      const tags = params.getAll('filter.p.tag');
+      tags.forEach(tag => {
+        if (tag.startsWith('Make_')) activeFilters.make = tag.replace('Make_', '');
+        if (tag.startsWith('Model_')) activeFilters.model = tag.replace('Model_', '');
+        if (tag.startsWith('Year_')) activeFilters.year = tag.replace('Year_', '');
+      });
+
+      updateFilterChips();
+    }
+
+    // Clear all filters
+    function clearAllFilters() {
+      activeFilters = {
+        make: null,
+        model: null,
+        year: null,
+      };
+
+      // Reset UI
+      document.querySelectorAll('.filter-dropdown').forEach(resetDropdown);
+
+      // Redirect to clean collection URL
+      window.location.href = window.location.pathname;
+    }
+
+    // Public API
+    window.collectionFilters = {
+      removeVehicleFilter: () => {
+        activeFilters.make = null;
+        activeFilters.model = null;
+        activeFilters.year = null;
+        applyFilters();
+      }
+    };
+
+    // Initialize collapsible filter groups (desktop only)
+    function initCollapsibleFilters() {
+      const filterGroups = document.querySelectorAll('.filter-group');
+
+      filterGroups.forEach(group => {
+        const title = group.querySelector('.filter-group-title');
+        const content = group.querySelector('.filter-group-content');
+
+        // Set initial max-height for non-collapsed groups
+        if (!group.classList.contains('collapsed')) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        }
+
+        title.addEventListener('click', (e) => {
+          // Only enable accordion on desktop (1024px+)
+          if (window.innerWidth < 1024) return;
+
+          const isCollapsed = group.classList.contains('collapsed');
+
+          if (isCollapsed) {
+            // Expand
+            group.classList.remove('collapsed');
+            group.classList.remove('user-collapsed');
+            content.style.maxHeight = content.scrollHeight + 'px';
+          } else {
+            // Collapse
+            group.classList.add('collapsed');
+            group.classList.add('user-collapsed');
+            content.style.maxHeight = '0';
+          }
+        });
+      });
+
+      // Update max-height on window resize
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          filterGroups.forEach(group => {
+            const content = group.querySelector('.filter-group-content');
+            if (!group.classList.contains('collapsed')) {
+              content.style.maxHeight = content.scrollHeight + 'px';
+            }
+          });
+        }, 250);
+      });
+    }
+
+    // Initialize
+    function init() {
+      fetchProducts();
+      parseUrlFilters();
+      initCollapsibleFilters();
+
+      // Mobile filter toggle
+      document.getElementById('filter-toggle-btn').addEventListener('click', () => {
+        document.getElementById('filter-sidebar').classList.add('open');
+        document.getElementById('filter-overlay').classList.add('visible');
+        document.body.style.overflow = 'hidden';
+      });
+
+      // Close filter sidebar
+      const closeSidebar = () => {
+        document.getElementById('filter-sidebar').classList.remove('open');
+        document.getElementById('filter-overlay').classList.remove('visible');
+        document.body.style.overflow = '';
+      };
+
+      document.getElementById('filter-close-btn').addEventListener('click', closeSidebar);
+      document.getElementById('filter-overlay').addEventListener('click', closeSidebar);
+
+      // Dropdown triggers
+      document.querySelectorAll('.filter-dropdown-trigger').forEach((trigger) => {
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const dropdown = trigger.closest('.filter-dropdown');
+          if (dropdown.classList.contains('open')) {
+            closeDropdown(dropdown);
+          } else {
+            openDropdown(dropdown);
+          }
+        });
+      });
+
+      // Search inputs
+      document.querySelectorAll('.filter-dropdown-search input').forEach((input) => {
+        input.addEventListener('input', (e) => {
+          const dropdown = input.closest('.filter-dropdown');
+          filterOptions(dropdown, e.target.value);
+        });
+        input.addEventListener('click', (e) => e.stopPropagation());
+      });
+
+      // Apply buttons
+      document.getElementById('ymm-apply-btn').addEventListener('click', applyFilters);
+
+      // Clear all
+      document.getElementById('clear-all-filters').addEventListener('click', clearAllFilters);
+
+      // Close dropdowns on outside click
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.filter-dropdown')) {
+          document.querySelectorAll('.filter-dropdown.open').forEach(closeDropdown);
+        }
+      });
+
+      // Keyboard
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.filter-dropdown.open').forEach(closeDropdown);
+          if (document.getElementById('filter-sidebar').classList.contains('open')) {
+            closeSidebar();
+          }
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection Filters",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Collection Filters"
+    }
+  ]
+}
+{% endschema %}

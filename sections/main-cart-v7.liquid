@@ -1,0 +1,953 @@
+{% comment %}
+  V7 Cart Page - ClickShades
+  Mobile-first cart design with green banner, trust rating, upsell carousel
+{% endcomment %}
+
+{%- style -%}
+  /* ========== CART V7 STYLES ========== */
+
+  /* Green Success Banner */
+  .cart-v7__banner {
+    background: #16a34a;
+    padding: 12px 16px;
+    text-align: center;
+  }
+
+  .cart-v7__banner-text {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  /* Cart Container */
+  .cart-v7 {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
+  }
+
+  /* Cart Header */
+  .cart-v7__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .cart-v7__title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .cart-v7__close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    transition: color 0.2s ease;
+  }
+
+  .cart-v7__close:hover {
+    color: #1a1a1a;
+  }
+
+  .cart-v7__close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Empty Cart */
+  .cart-v7__empty {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .cart-v7__empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    color: #d1d5db;
+  }
+
+  .cart-v7__empty-title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 12px;
+  }
+
+  .cart-v7__empty-text {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 24px;
+  }
+
+  .cart-v7__empty-link {
+    display: inline-block;
+    padding: 14px 28px;
+    background: var(--blue, #2463af);
+    color: #ffffff;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+  }
+
+  .cart-v7__empty-link:hover {
+    background: #1a4f8c;
+  }
+
+  /* Cart Items */
+  .cart-v7__items {
+    padding: 0;
+  }
+
+  .cart-v7__item {
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .cart-v7__item-image {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    background: #f9fafb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .cart-v7__item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-v7__item-details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cart-v7__item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .cart-v7__item-title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .cart-v7__item-remove {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .cart-v7__item-remove:hover {
+    color: #ef4444;
+  }
+
+  .cart-v7__item-remove svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .cart-v7__item-variant {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0 0 12px;
+  }
+
+  .cart-v7__item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cart-v7__item-qty {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .cart-v7__item-qty select {
+    appearance: none;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 6px 32px 6px 16px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    cursor: pointer;
+    min-width: 60px;
+  }
+
+  .cart-v7__item-qty select:focus {
+    outline: none;
+    border-color: var(--blue, #2463af);
+  }
+
+  .cart-v7__item-qty-chevron {
+    position: absolute;
+    right: 10px;
+    width: 14px;
+    height: 14px;
+    color: #6b7280;
+    pointer-events: none;
+  }
+
+  .cart-v7__item-price {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  /* Upsell Section */
+  .cart-v7__upsell {
+    padding: 20px;
+    border-top: 8px solid #f3f4f6;
+  }
+
+  .cart-v7__upsell-title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 16px;
+  }
+
+  .cart-v7__upsell-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .cart-v7__upsell-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cart-v7__upsell-item {
+    flex: 0 0 140px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .cart-v7__upsell-image {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f9fafb;
+    overflow: hidden;
+  }
+
+  .cart-v7__upsell-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-v7__upsell-body {
+    padding: 10px;
+  }
+
+  .cart-v7__upsell-name {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0 0 8px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .cart-v7__upsell-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cart-v7__upsell-price {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .cart-v7__upsell-add {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--blue, #2463af);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #ffffff;
+    transition: background 0.2s ease;
+  }
+
+  .cart-v7__upsell-add:hover {
+    background: #1a4f8c;
+  }
+
+  .cart-v7__upsell-add svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Summary Section - In main content */
+  .cart-v7__summary {
+    padding: 20px;
+    border-top: 8px solid #f3f4f6;
+  }
+
+  .cart-v7__shipping {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .cart-v7__shipping-label {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #6b7280;
+  }
+
+  .cart-v7__shipping-value {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #16a34a;
+  }
+
+  .cart-v7__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .cart-v7__total-label {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .cart-v7__total-value {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  /* Disclaimer - In summary section */
+  .cart-v7__disclaimer {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    color: #9ca3af;
+    text-align: center;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Footer Section - Fixed at bottom on mobile (checkout + payments only) */
+  .cart-v7__footer {
+    padding: 12px 20px 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    z-index: 100;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Add bottom padding to cart to account for fixed footer */
+  .cart-v7 {
+    padding-bottom: 140px;
+  }
+
+  .cart-v7__checkout {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(180deg, #2463af 0%, #1a4f8c 100%);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    transition: background 0.2s ease, transform 0.2s ease;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .cart-v7__checkout:hover {
+    background: linear-gradient(180deg, #1a4f8c 0%, #153d6e 100%);
+    transform: translateY(-1px);
+  }
+
+  .cart-v7__checkout svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  .cart-v7__checkout:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+  }
+
+  /* Payment Icons - all on one line */
+  .cart-v7__payments {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: nowrap;
+    margin: 0;
+  }
+
+  .cart-v7__payment-icon {
+    width: 36px;
+    height: 24px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .cart-v7__payment-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Desktop Styles */
+  @media (min-width: 768px) {
+    .cart-v7 {
+      max-width: 600px;
+      margin: 40px auto;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      min-height: auto;
+      overflow: hidden;
+    }
+
+    .cart-v7__banner {
+      border-radius: 16px 16px 0 0;
+    }
+
+    .cart-v7__header {
+      padding: 20px 24px;
+    }
+
+    .cart-v7__title {
+      font-size: 20px;
+    }
+
+    .cart-v7__item {
+      padding: 20px 24px;
+    }
+
+    .cart-v7__item-image {
+      width: 100px;
+      height: 100px;
+    }
+
+    .cart-v7__item-title {
+      font-size: 15px;
+    }
+
+    .cart-v7__upsell {
+      padding: 24px;
+    }
+
+    .cart-v7__upsell-item {
+      flex: 0 0 160px;
+    }
+
+    .cart-v7 {
+      padding-bottom: 0;
+    }
+
+    .cart-v7__summary {
+      padding: 24px;
+    }
+
+    .cart-v7__footer {
+      padding: 24px;
+      position: static;
+      left: auto;
+      right: auto;
+      border-top: 1px solid #e5e7eb;
+      box-shadow: none;
+    }
+  }
+
+  /* Afterpay message in cart */
+  .cart-drawer__afterpay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cart-drawer__afterpay-amount {
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  .cart-drawer__afterpay-logo {
+    font-weight: 700;
+    color: #000;
+    font-size: 12px;
+  }
+{%- endstyle -%}
+
+<div class="cart-v7">
+  <!-- Green Success Banner -->
+  <div class="cart-v7__banner">
+    <p class="cart-v7__banner-text">{{ section.settings.banner_text }}</p>
+  </div>
+
+  <!-- Cart Header -->
+  <div class="cart-v7__header">
+    <h1 class="cart-v7__title">Shopping Cart</h1>
+    <a href="{{ routes.all_products_collection_url }}" class="cart-v7__close" aria-label="Continue shopping">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </a>
+  </div>
+
+  {% if cart.item_count == 0 %}
+    <!-- Empty Cart -->
+    <div class="cart-v7__empty">
+      <div class="cart-v7__empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+      </div>
+      <h2 class="cart-v7__empty-title">Your cart is empty</h2>
+      <p class="cart-v7__empty-text">Looks like you haven't added any shades yet.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="cart-v7__empty-link">Browse Products</a>
+    </div>
+  {% else %}
+    <!-- Cart Form -->
+    <form action="{{ routes.cart_url }}" method="post" id="cart-form-v7">
+      <!-- Cart Items -->
+      <div class="cart-v7__items">
+        {% for item in cart.items %}
+          <div class="cart-v7__item" data-line-item="{{ forloop.index }}">
+            <div class="cart-v7__item-image">
+              {% if item.image %}
+                <img
+                  src="{{ item.image | image_url: width: 200 }}"
+                  alt="{{ item.image.alt | escape | default: item.product.title }}"
+                  loading="lazy"
+                  width="100"
+                  height="100"
+                >
+              {% endif %}
+            </div>
+            <div class="cart-v7__item-details">
+              <div class="cart-v7__item-header">
+                <h3 class="cart-v7__item-title">{{ item.product.title }}</h3>
+                <a
+                  href="{{ item.url_to_remove }}"
+                  class="cart-v7__item-remove"
+                  aria-label="Remove {{ item.product.title }}"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </a>
+              </div>
+              {% if item.variant.title != 'Default Title' %}
+                <p class="cart-v7__item-variant">{{ item.variant.title }}</p>
+              {% endif %}
+              <div class="cart-v7__item-footer">
+                <div class="cart-v7__item-qty">
+                  <select name="updates[]" data-line="{{ forloop.index }}" onchange="this.form.submit()">
+                    {% for i in (1..10) %}
+                      <option
+                        value="{{ i }}"
+                        {% if item.quantity == i %}
+                          selected
+                        {% endif %}
+                      >
+                        {{ i }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                  <svg
+                    class="cart-v7__item-qty-chevron"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+                <span class="cart-v7__item-price">{{ item.final_line_price | money }}</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </form>
+
+    <!-- Upsell Section - Same car products only -->
+    {% if section.settings.show_upsell %}
+      {% assign cart_product_ids = cart.items | map: 'product_id' %}
+      {% assign first_item = cart.items | first %}
+      {% assign first_title = first_item.product.title %}
+
+      {%- comment -%} Extract car model from title (e.g., "Front Windscreen Shade for Toyota RAV 4 2019 ->") {%- endcomment -%}
+      {% assign title_parts = first_title | split: ' for ' %}
+      {% assign car_model = '' %}
+      {% if title_parts.size > 1 %}
+        {% assign car_part = title_parts | last %}
+        {%- comment -%} Remove year, year ranges, and arrows from end {%- endcomment -%}
+        {% assign car_words = car_part | split: ' ' %}
+        {% for word in car_words %}
+          {% assign is_year = false %}
+          {% assign is_year_range = false %}
+          {% assign skip_word = false %}
+
+          {%- comment -%} Check if it's a 4-digit year {%- endcomment -%}
+          {% if word.size == 4 %}
+            {% assign year_check = word | plus: 0 %}
+            {% if year_check > 1990 and year_check < 2030 %}
+              {% assign is_year = true %}
+            {% endif %}
+          {% endif %}
+
+          {%- comment -%} Check if it's a year range like "2015-2021" or "2019->" {%- endcomment -%}
+          {% if word contains '-' %}
+            {% assign word_parts = word | split: '-' %}
+            {% if word_parts.first.size == 4 %}
+              {% assign range_start = word_parts.first | plus: 0 %}
+              {% if range_start > 1990 and range_start < 2030 %}
+                {% assign is_year_range = true %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+
+          {%- comment -%} Skip arrows, standalone dashes, and empty strings {%- endcomment -%}
+          {% if word == '->' or word == '-' or word == '' or word == '>' %}
+            {% assign skip_word = true %}
+          {% endif %}
+
+          {% unless is_year or is_year_range or skip_word %}
+            {% if car_model == '' %}
+              {% assign car_model = word %}
+            {% else %}
+              {% assign car_model = car_model | append: ' ' | append: word %}
+            {% endif %}
+          {% endunless %}
+        {% endfor %}
+      {% endif %}
+
+      {%- comment -%} Upsell Section - Loaded via JavaScript for full product catalog access {%- endcomment -%}
+      {%- if car_model != blank -%}
+        <div
+          id="cart-v7-upsell-container"
+          class="cart-v7__upsell"
+          data-car-model="{{ car_model | escape }}"
+          data-cart-ids="{{ cart_product_ids | join: ',' }}"
+          style="display: none;"
+        >
+          <h3 class="cart-v7__upsell-title">Complete your set for {{ car_model }}</h3>
+          <div class="cart-v7__upsell-scroll" id="cart-v7-upsell-scroll">
+            <!-- Products loaded via JavaScript -->
+          </div>
+        </div>
+      {%- endif -%}
+    {% endif %}
+
+    <!-- Summary Section (Shipping, Total, Disclaimer) -->
+    <div class="cart-v7__summary">
+      <!-- Shipping -->
+      <div class="cart-v7__shipping">
+        <span class="cart-v7__shipping-label">Shipping</span>
+        <span class="cart-v7__shipping-value">{{ section.settings.shipping_text }}</span>
+      </div>
+
+      <!-- Total -->
+      <div class="cart-v7__total">
+        <span class="cart-v7__total-label">Total</span>
+        <span class="cart-v7__total-value">{{ cart.total_price | money }}</span>
+      </div>
+
+      <!-- Disclaimer -->
+      <p class="cart-v7__disclaimer">{{ section.settings.disclaimer_text }}</p>
+    </div>
+
+    <!-- Footer (Sticky - Checkout + Payments only) -->
+    <div class="cart-v7__footer">
+      <!-- Checkout Button -->
+      <button type="submit" name="checkout" form="cart-form-v7" class="cart-v7__checkout">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 1C8.676 1 6 3.676 6 7v2H4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V10a1 1 0 0 0-1-1h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4zm0 10a2 2 0 0 1 1 3.732V18a1 1 0 1 1-2 0v-1.268A2 2 0 0 1 12 13z"/>
+        </svg>
+        Checkout Securely
+      </button>
+
+      <!-- Payment Icons -->
+      <div class="cart-v7__payments">
+        {%- for type in shop.enabled_payment_types -%}
+          {{ type | payment_type_svg_tag: class: 'cart-v7__payment-icon' }}
+        {%- endfor -%}
+      </div>
+      <!-- Afterpay message -->
+      {% assign afterpay_installment = cart.total_price | divided_by: 4 %}
+      <div class="cart-drawer__afterpay">
+        <span>or 4 interest-free payments of</span>
+        <span class="cart-drawer__afterpay-amount">{{ afterpay_installment | money }}</span>
+        <span>with</span>
+        <span class="cart-drawer__afterpay-logo">Afterpay</span>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  // Simple quantity update via select change
+  document.querySelectorAll('.cart-v7__item-qty select').forEach((select) => {
+    select.addEventListener('change', function () {
+      const form = document.getElementById('cart-form-v7');
+      if (form) {
+        form.submit();
+      }
+    });
+  });
+
+  // Load upsell products via JavaScript (bypasses Shopify's 50 product Liquid limit)
+  async function loadCartV7Upsells() {
+    const container = document.getElementById('cart-v7-upsell-container');
+    const scroll = document.getElementById('cart-v7-upsell-scroll');
+    if (!container || !scroll) return;
+
+    const carModel = container.dataset.carModel;
+    const cartIds = container.dataset.cartIds ? container.dataset.cartIds.split(',').map((id) => parseInt(id, 10)) : [];
+
+    if (!carModel) return;
+
+    try {
+      let allProducts = [];
+      let page = 1;
+      let hasMore = true;
+
+      while (hasMore && page <= 5) {
+        const response = await fetch(`/products.json?limit=250&page=${page}`);
+        const data = await response.json();
+
+        if (data.products && data.products.length > 0) {
+          allProducts = allProducts.concat(data.products);
+          page++;
+          if (data.products.length < 250) hasMore = false;
+        } else {
+          hasMore = false;
+        }
+      }
+
+      const matchingProducts = allProducts.filter((product) => {
+        const titleMatches = product.title.toLowerCase().includes(carModel.toLowerCase());
+        const notInCart = !cartIds.includes(product.id);
+        const isAvailable = product.variants && product.variants.some((v) => v.available);
+        return titleMatches && notInCart && isAvailable;
+      });
+
+      const productsToShow = matchingProducts.slice(0, 6);
+
+      if (productsToShow.length > 0) {
+        scroll.innerHTML = productsToShow
+          .map((product) => {
+            const variant = product.variants.find((v) => v.available) || product.variants[0];
+            const price = parseFloat(variant.price).toFixed(0);
+            const image = product.images && product.images[0] ? product.images[0].src : '';
+
+            return `
+            <div class="cart-v7__upsell-item">
+              <div class="cart-v7__upsell-image">
+                ${image ? `<img src="${image}" alt="${product.title}" loading="lazy" width="140" height="140">` : ''}
+              </div>
+              <div class="cart-v7__upsell-body">
+                <p class="cart-v7__upsell-name">${product.title}</p>
+                <div class="cart-v7__upsell-footer">
+                  <span class="cart-v7__upsell-price">$${price}</span>
+                  <form action="/cart/add" method="post" style="margin:0;">
+                    <input type="hidden" name="id" value="${variant.id}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="cart-v7__upsell-add" aria-label="Add ${product.title} to cart">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          `;
+          })
+          .join('');
+
+        container.style.display = 'block';
+      }
+    } catch (error) {
+      console.error('Error loading upsells:', error);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadCartV7Upsells);
+  } else {
+    loadCartV7Upsells();
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Cart V7",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "text",
+      "id": "banner_text",
+      "label": "Banner text",
+      "default": "Great choice! 🎉"
+    },
+    {
+      "type": "header",
+      "content": "Trust Rating"
+    },
+    {
+      "type": "text",
+      "id": "trust_label",
+      "label": "Trust label",
+      "default": "Trustpilot"
+    },
+    {
+      "type": "text",
+      "id": "trust_score",
+      "label": "Trust score",
+      "default": "4.6 / 5"
+    },
+    {
+      "type": "header",
+      "content": "Upsell"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_upsell",
+      "label": "Show upsell section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "upsell_title",
+      "label": "Upsell title",
+      "default": "Others also bought"
+    },
+    {
+      "type": "collection",
+      "id": "upsell_collection",
+      "label": "Upsell collection"
+    },
+    {
+      "type": "header",
+      "content": "Footer"
+    },
+    {
+      "type": "text",
+      "id": "shipping_text",
+      "label": "Shipping text",
+      "default": "FREE"
+    },
+    {
+      "type": "text",
+      "id": "checkout_text",
+      "label": "Checkout button text",
+      "default": "Go to checkout"
+    },
+    {
+      "type": "textarea",
+      "id": "disclaimer_text",
+      "label": "Disclaimer text",
+      "default": "Shipping fee and taxes will be calculated at checkout"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart V7"
+    }
+  ]
+}
+{% endschema %}

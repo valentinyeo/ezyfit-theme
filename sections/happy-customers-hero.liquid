@@ -1,0 +1,51 @@
+<style>
+  /* ========== HAPPY CUSTOMERS SECTION ========== */
+  .happy-customers-section {
+    padding: 48px 16px 0;
+    background: var(--white, #ffffff);
+  }
+
+  .happy-customers-container {
+    max-width: 1168px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .happy-customers-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 40px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .happy-customers-section {
+      padding: 80px 40px 0;
+    }
+
+    .happy-customers-title {
+      font-size: 42px;
+      margin-bottom: 48px;
+    }
+  }
+</style>
+
+<section class="happy-customers-section">
+  <div class="happy-customers-container">
+    <h1 class="happy-customers-title">Happy Customers</h1>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Happy Customers Hero",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Happy Customers Hero"
+    }
+  ]
+}
+{% endschema %}

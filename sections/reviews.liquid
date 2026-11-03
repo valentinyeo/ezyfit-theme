@@ -1,0 +1,294 @@
+{% comment %}
+  Loox Product Reviews Widget
+  Displays customer photo reviews from the Loox app
+  This section uses the Loox Product Reviews Widget which pulls real reviews
+  from customers with their photos, ratings, and testimonials
+{% endcomment %}
+
+<style>
+  /* ========== LOOX REVIEWS SECTION ========== */
+  .loox-reviews-section {
+    padding: 24px 16px;
+    background: var(--white, #ffffff);
+  }
+
+  .loox-reviews-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .loox-reviews-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 12px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .loox-reviews-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .loox-summary-stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .loox-summary-stars svg {
+    width: 18px;
+    height: 18px;
+    color: #fbbf24;
+  }
+
+  .loox-summary-text {
+    font-size: 13px;
+    color: var(--text-muted, #333333);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Loox Product Reviews Widget Container */
+  .loox-widget-container,
+  #looxReviews {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Override Loox default styles for better integration */
+  .loox-reviews-section [class*="loox"] img,
+  #looxReviews img {
+    border-radius: 12px !important;
+  }
+
+  /* ========== BIGGER LOOX IMAGES ========== */
+  /* Make Loox carousel/gallery images larger */
+  .loox-reviews-section .loox-carousel-slide,
+  .loox-reviews-section [class*="loox-review-card"],
+  .loox-reviews-section [class*="loox-gallery"] {
+    min-width: 280px !important;
+  }
+
+  /* Increase image size in review cards */
+  .loox-reviews-section [class*="loox"] img,
+  .loox-reviews-section .loox-review-photo,
+  .loox-reviews-section [class*="review-photo"],
+  .loox-reviews-section [class*="loox-image"],
+  .loox-reviews-section [class*="ReviewCard"] img,
+  #looxReviews img {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 200px !important;
+    max-height: 320px !important;
+    object-fit: cover !important;
+  }
+
+  /* Make gallery thumbnails larger */
+  .loox-reviews-section [class*="thumbnail"],
+  .loox-reviews-section [class*="Thumbnail"] {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  /* Ensure review card containers are wider */
+  .loox-reviews-section [class*="loox-carousel"] > div,
+  .loox-reviews-section [class*="ReviewCarousel"] > div {
+    gap: 16px !important;
+  }
+
+  /* Desktop: Make images even larger */
+  @media (min-width: 768px) {
+    .loox-reviews-section [class*="loox"] img,
+    .loox-reviews-section .loox-review-photo,
+    .loox-reviews-section [class*="review-photo"],
+    .loox-reviews-section [class*="loox-image"],
+    .loox-reviews-section [class*="ReviewCard"] img,
+    #looxReviews img {
+      min-height: 280px !important;
+      max-height: 400px !important;
+    }
+
+    .loox-reviews-section .loox-carousel-slide,
+    .loox-reviews-section [class*="loox-review-card"],
+    .loox-reviews-section [class*="loox-gallery"] {
+      min-width: 340px !important;
+    }
+
+    .loox-reviews-section [class*="thumbnail"],
+    .loox-reviews-section [class*="Thumbnail"] {
+      width: 100px !important;
+      height: 100px !important;
+    }
+  }
+
+  /* CTA Link */
+  .loox-reviews-cta {
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .loox-reviews-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue, #2463af);
+    text-decoration: none;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: color 0.2s;
+  }
+
+  .loox-reviews-link:hover {
+    color: var(--blue-dark, #1a4f8c);
+  }
+
+  .loox-reviews-link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .loox-reviews-section {
+      padding: 32px 40px;
+      max-width: 1168px;
+      margin: 0 auto;
+    }
+
+    .loox-reviews-title {
+      font-size: 24px;
+    }
+
+    .loox-summary-stars svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .loox-summary-text {
+      font-size: 14px;
+    }
+
+    .loox-reviews-cta {
+      margin-top: 32px;
+    }
+
+    .loox-reviews-link {
+      font-size: 15px;
+    }
+  }
+</style>
+
+{% if template.suffix contains 'clickblades' or template.suffix contains 'wiper-v' %}
+<style>
+  /* Preview only: cap the long Loox block so the demo isn't ~3.7 screens of reviews */
+  .loox-reviews-section .loox-widget-container,
+  .loox-reviews-section #looxReviews {
+    max-height: 560px;
+    overflow: hidden;
+    position: relative;
+    -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  }
+</style>
+{% endif %}
+
+<section class="loox-reviews-section" id="reviews">
+  <div class="loox-reviews-header">
+    <h2 class="loox-reviews-title">{{ section.settings.heading | default: 'What Our Customers Say' }}</h2>
+    {% if section.settings.show_rating_summary %}
+    <div class="loox-reviews-summary">
+      <div class="loox-summary-stars">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+      </div>
+      <span class="loox-summary-text">{{ section.settings.rating_text | default: '5.0 out of 5 based on 11 reviews' }}</span>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Loox Product Reviews Widget - App Blocks -->
+  <div class="loox-widget-container">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when '@app' -%}
+          {% render block %}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+  <!-- Fallback container if no app blocks -->
+  {%- if section.blocks.size == 0 -%}
+    <div id="looxReviews"></div>
+  {%- endif -%}
+
+  {% if section.settings.show_all_reviews_link %}
+  <div class="loox-reviews-cta">
+    <a href="{{ section.settings.reviews_page_url | default: '/pages/reviews' }}" class="loox-reviews-link">
+      {{ section.settings.cta_text | default: 'Read All Reviews' }}
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 4l6 6-6 6"/>
+      </svg>
+    </a>
+  </div>
+  {% endif %}
+</section>
+
+
+{% schema %}
+{
+  "name": "Reviews",
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating_summary",
+      "label": "Show Rating Summary",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating Summary Text",
+      "default": "5.0 out of 5 based on 11 reviews"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_reviews_link",
+      "label": "Show 'Read All Reviews' Link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "reviews_page_url",
+      "label": "Reviews Page URL",
+      "default": "/pages/happy-customers"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Read All Reviews"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews"
+    }
+  ]
+}
+{% endschema %}

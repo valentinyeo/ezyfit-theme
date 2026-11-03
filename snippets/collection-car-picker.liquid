@@ -1,0 +1,565 @@
+{% comment %}
+  Collection Car Picker (body-only inline snippet)
+  Toggle lives in the section toolbar. This renders the expandable body + JS.
+  Pass collection handle via: {% render 'collection-car-picker', collection_handle: collection.handle %}
+{% endcomment %}
+
+<style>
+  /* ========== COLLECTION CAR PICKER BODY ========== */
+  .coll-picker {
+    padding: 0;
+  }
+
+  .coll-picker-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0;
+  }
+
+  .coll-picker.expanded .coll-picker-body {
+    max-height: 400px;
+    padding: 10px 0 12px;
+  }
+
+  .coll-ymm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* ========== CUSTOM DROPDOWN ========== */
+  .coll-dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  .coll-dropdown-trigger {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted, #333333);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--white, #ffffff);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .coll-dropdown-trigger:hover:not(.disabled) {
+    border-color: var(--blue, #2463af);
+  }
+
+  .coll-dropdown.active-step .coll-dropdown-trigger:not(.disabled) {
+    border: 2px solid var(--blue, #2463af);
+    background: #f8fafc;
+    box-shadow: 0 0 0 2px rgba(36, 99, 175, 0.15);
+  }
+
+  .coll-dropdown.active-step .coll-dropdown-value:not(.selected) {
+    color: var(--blue, #2463af);
+    font-weight: 600;
+  }
+
+  .coll-dropdown-trigger.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #f0f0f0;
+  }
+
+  .coll-dropdown.open .coll-dropdown-trigger {
+    border-color: var(--blue, #2463af);
+    box-shadow: 0 0 0 2px rgba(36, 99, 175, 0.15);
+  }
+
+  .coll-dropdown-value {
+    flex: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .coll-dropdown-value.selected {
+    color: var(--text, #333333);
+  }
+
+  .coll-dropdown-arrow {
+    width: 16px;
+    height: 16px;
+    stroke: #666;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+
+  .coll-dropdown.open .coll-dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* ========== DROPDOWN MENU ========== */
+  .coll-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+    background: var(--white, #ffffff);
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+    max-height: 280px;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .coll-dropdown.open .coll-dropdown-menu {
+    display: flex;
+  }
+
+  .coll-dropdown-search {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border, #e0e0e0);
+    flex-shrink: 0;
+  }
+
+  .coll-dropdown-search input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .coll-dropdown-search input:focus {
+    border-color: var(--blue, #2463af);
+  }
+
+  .coll-dropdown-search input::placeholder {
+    color: #999;
+  }
+
+  .coll-dropdown-options {
+    overflow-y: auto;
+    max-height: 200px;
+    padding: 4px 0;
+  }
+
+  .coll-dropdown-option {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .coll-dropdown-option:hover {
+    background: #e3f0ff;
+  }
+
+  .coll-dropdown-option.active {
+    background: var(--blue, #2463af);
+    color: white;
+    font-weight: 700;
+  }
+
+  .coll-dropdown-loading,
+  .coll-dropdown-empty {
+    padding: 12px;
+    text-align: center;
+    color: #666;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+  }
+
+  /* ========== SUBMIT BUTTON ========== */
+  .coll-ymm-submit {
+    width: 100%;
+    padding: 10px;
+    background: var(--yellow, #ffd600);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+  }
+
+  .coll-ymm-submit:hover {
+    background: var(--yellow-hover, #e6c100);
+  }
+
+  .coll-ymm-submit.incomplete {
+    opacity: 0.85;
+  }
+
+  /* ========== DESKTOP ========== */
+  @media (min-width: 768px) {
+    .coll-picker.expanded .coll-picker-body {
+      padding: 10px 0 12px;
+    }
+
+    .coll-ymm-form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) auto;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .coll-dropdown-trigger {
+      height: 42px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    .coll-ymm-submit {
+      width: auto;
+      height: 42px;
+      padding: 0 24px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .coll-dropdown-menu {
+      min-width: 200px;
+    }
+  }
+</style>
+
+<div class="coll-picker" id="coll-car-picker" data-collection-handle="{{ collection_handle }}">
+  <div class="coll-picker-body">
+    <div class="coll-ymm-form" id="coll-ymm-form">
+      <!-- Make -->
+      <div class="coll-dropdown" data-field="make">
+        <div class="coll-dropdown-trigger" data-placeholder="Select Make">
+          <span class="coll-dropdown-value">Select Make</span>
+          <svg class="coll-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="coll-dropdown-menu">
+          <div class="coll-dropdown-search"><input type="text" placeholder="Search make..." autocomplete="off"></div>
+          <div class="coll-dropdown-options"></div>
+        </div>
+      </div>
+      <!-- Model -->
+      <div class="coll-dropdown" data-field="model">
+        <div class="coll-dropdown-trigger disabled" data-placeholder="Select Model">
+          <span class="coll-dropdown-value">Select Model</span>
+          <svg class="coll-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="coll-dropdown-menu">
+          <div class="coll-dropdown-search"><input type="text" placeholder="Search model..." autocomplete="off"></div>
+          <div class="coll-dropdown-options"></div>
+        </div>
+      </div>
+      <!-- Year -->
+      <div class="coll-dropdown" data-field="year">
+        <div class="coll-dropdown-trigger disabled" data-placeholder="Select Year">
+          <span class="coll-dropdown-value">Select Year</span>
+          <svg class="coll-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="coll-dropdown-menu">
+          <div class="coll-dropdown-search"><input type="text" placeholder="Search year..." autocomplete="off"></div>
+          <div class="coll-dropdown-options"></div>
+        </div>
+      </div>
+      <!-- Submit -->
+      <button type="button" class="coll-ymm-submit" id="coll-ymm-submit">Find Your Car</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var PICKER = document.getElementById('coll-car-picker');
+  if (!PICKER) return;
+
+  var TOOLBAR = document.querySelector('.collection-controls');
+  var TOOLBAR_TEXT = document.getElementById('toolbar-picker-text');
+  var TOOLBAR_TOGGLE = document.getElementById('toolbar-picker-toggle');
+  var collectionHandle = PICKER.dataset.collectionHandle;
+
+  var brandCollections = {
+    'sun-shade-for-car-wiper-bladess-for-toyota': 'Toyota',
+    'sun-shade-for-car-wiper-bladess-for-ford': 'Ford',
+    'sun-shade-for-car-wiper-bladess-for-mazda': 'Mazda',
+    'car-windscreen-shade-windscreen-wiper-blades-for-honda': 'Honda',
+    'sun-shade-for-car-wiper-bladess-for-hyundai': 'Hyundai',
+    'sun-shade-for-car-wiper-bladess-for-nissan': 'Nissan',
+    'sun-shade-for-car-wiper-bladess-for-mitsubishi': 'Mitsubishi',
+    'sun-shade-for-car-wiper-bladess-for-kia': 'Kia',
+    'car-window-sun-shades-wiper-blade-for-bmw': 'BMW',
+    'sun-shade-for-car-wiper-bladess-for-mercedes': 'Mercedes-Benz',
+    'sun-shade-for-car-wiper-bladess-for-volkswagen': 'Volkswagen',
+    'sun-shade-for-car-good-wiper-blades-for-subaru': 'Subaru',
+    'car-windscreen-shade-windscreen-wiper-blades-for-isuzu': 'Isuzu',
+    'sun-shade-for-car-wiper-bladess-for-lexus': 'Lexus',
+    'sunshades-for-car-windows-wiper-blade-for-mg': 'MG',
+    'sun-shade-for-car-wiper-bladess-for-chevrolet': 'Chevrolet',
+    'sun-shade-for-car-wiper-bladess-for-geely': 'Geely',
+    'sun-shade-for-car-wiper-bladess-for-infiniti': 'Infiniti',
+    'sun-shade-for-car-wiper-bladess-for-byd': 'BYD',
+    'sun-shade-for-car-wiper-bladess-for-chery': 'Chery',
+  };
+
+  var handleToBrand = {};
+  Object.entries(brandCollections).forEach(function(e) { handleToBrand[e[0]] = e[1]; });
+
+  var modelAliases = {
+    'Land Cruiser 250': 'Prado 250',
+    'Land Cruiser 300': 'Land Cruiser 300',
+    'Land Cruiser 200': 'Land Cruiser 200',
+    'Land Cruiser Prado 150': 'Prado 150',
+    'Land Cruiser Prado 250': 'Prado 250',
+    'Land Cruiser Troop Carrier 70': 'Land Cruiser Troop Carrier 70',
+  };
+
+  var preselectedBrand = handleToBrand[collectionHandle] || null;
+  var ymmData = { collections: {}, models: {}, years: {} };
+  var selections = { make: null, makeHandle: null, model: null, year: null, matchingProducts: [] };
+
+  function qs(sel) { return PICKER.querySelector(sel); }
+  function qsa(sel) { return PICKER.querySelectorAll(sel); }
+
+  function parseProductTitle(title, brandName) {
+    var cleaned = title
+      .replace(/^Front Windscreen (Shade|Wipers|Click Shade|Click Shades|Shades) for /i, '')
+      .replace(/^Rear Side Windows Click Shades for /i, '')
+      .replace(/^Rear Side Windows Shades for /i, '');
+    var brandRegex = new RegExp('^' + brandName.replace('-', '[-\\s]?') + '\\s*', 'i');
+    cleaned = cleaned.replace(brandRegex, '');
+    var years = [], model = cleaned;
+    var openEndMatch = cleaned.match(/(\d{4})\s*->\s*$/);
+    if (openEndMatch) {
+      var startYear = parseInt(openEndMatch[1]), currentYear = new Date().getFullYear();
+      for (var y = startYear; y <= currentYear; y++) years.push(y.toString());
+      model = cleaned.replace(/\s*\d{4}\s*->\s*$/, '').trim();
+    } else {
+      var rangeMatch = cleaned.match(/(\d{4})\s*[-–]\s*(\d{4})/);
+      if (rangeMatch) {
+        for (var y = parseInt(rangeMatch[1]); y <= parseInt(rangeMatch[2]); y++) years.push(y.toString());
+        model = cleaned.replace(/\s*\d{4}\s*[-–]\s*\d{4}\s*$/, '').trim();
+      } else {
+        var singleMatch = cleaned.match(/(\d{4})\s*$/);
+        if (singleMatch) { years.push(singleMatch[1]); model = cleaned.replace(/\s*\d{4}\s*$/, '').trim(); }
+      }
+    }
+    return { model: model.trim(), years: years };
+  }
+
+  async function fetchCollectionProducts(h) {
+    try { var r = await fetch('/collections/' + h + '/products.json?limit=250'); var d = await r.json(); return d.products || []; } catch(e) { return []; }
+  }
+
+  function processProductsForBrand(products, brandName) {
+    var models = {}, years = {};
+    products.forEach(function(p) {
+      var parsed = parseProductTitle(p.title, brandName);
+      if (parsed.model) {
+        var cm = modelAliases[parsed.model] || parsed.model;
+        if (!models[cm]) models[cm] = [];
+        models[cm].push(p);
+        var key = brandName + '_' + cm;
+        if (!years[key]) years[key] = new Set();
+        parsed.years.forEach(function(y) { years[key].add(y); });
+      }
+    });
+    ymmData.models[brandName] = models;
+    Object.assign(ymmData.years, years);
+  }
+
+  function populateMakes() {
+    var dd = qs('[data-field="make"]'), opts = dd.querySelector('.coll-dropdown-options');
+    var sorted = Object.entries(brandCollections).map(function(e) { return {handle:e[0],name:e[1]}; }).sort(function(a,b){return a.name.localeCompare(b.name);});
+    sorted.forEach(function(b) { ymmData.collections[b.name] = b.handle; });
+    opts.innerHTML = sorted.map(function(b){return '<div class="coll-dropdown-option" data-value="'+b.name+'">'+b.name+'</div>';}).join('');
+    attachOptionListeners(dd); updateActiveStep();
+  }
+
+  async function populateModels(make) {
+    var dd = qs('[data-field="model"]'), opts = dd.querySelector('.coll-dropdown-options'), tr = dd.querySelector('.coll-dropdown-trigger');
+    if (!make) { opts.innerHTML=''; tr.classList.add('disabled'); resetDropdown(dd); return; }
+    opts.innerHTML = '<div class="coll-dropdown-loading">Loading models...</div>'; tr.classList.remove('disabled');
+    var products = await fetchCollectionProducts(ymmData.collections[make]);
+    processProductsForBrand(products, make);
+    var mdls = Object.keys(ymmData.models[make]||{}).sort();
+    if (!mdls.length) { opts.innerHTML='<div class="coll-dropdown-empty">No models found</div>'; return; }
+    opts.innerHTML = mdls.map(function(m){return '<div class="coll-dropdown-option" data-value="'+m+'">'+m+'</div>';}).join('');
+    attachOptionListeners(dd);
+  }
+
+  async function fetchMetafieldYears(h, make) {
+    try {
+      var params = new URLSearchParams({sections:'filter-data','filter.p.m.custom.vehicles_make':make});
+      var r = await fetch('/collections/'+h+'?'+params); var d = await r.json();
+      var doc = new DOMParser().parseFromString(d['filter-data']||'','text/html');
+      return Array.from(doc.querySelectorAll('[data-year]')).map(function(el){return el.dataset.year;});
+    } catch(e) { return null; }
+  }
+
+  async function populateYears(make, model) {
+    var dd = qs('[data-field="year"]'), opts = dd.querySelector('.coll-dropdown-options'), tr = dd.querySelector('.coll-dropdown-trigger');
+    if (!make||!model) { opts.innerHTML=''; tr.classList.add('disabled'); resetDropdown(dd); return; }
+    opts.innerHTML = '<div class="coll-dropdown-loading">Loading years...</div>'; tr.classList.remove('disabled');
+    var key = make+'_'+model, titleYears = new Set(Array.from(ymmData.years[key]||[]));
+    var mfYears = await fetchMetafieldYears(ymmData.collections[make], make);
+    var years;
+    if (mfYears && mfYears.length > 0) { var mfSet = new Set(mfYears); years = Array.from(titleYears).filter(function(y){return mfSet.has(y);}); }
+    else { years = Array.from(titleYears); }
+    if (!years.length) { opts.innerHTML='<div class="coll-dropdown-empty">No years found</div>'; return; }
+    years.sort(function(a,b){return b-a;});
+    opts.innerHTML = years.map(function(y){return '<div class="coll-dropdown-option" data-value="'+y+'">'+y+'</div>';}).join('');
+    attachOptionListeners(dd);
+  }
+
+  function updateActiveStep() {
+    qsa('.coll-dropdown').forEach(function(d){d.classList.remove('active-step');});
+    if (!selections.make) qs('[data-field="make"]').classList.add('active-step');
+    else if (!selections.model) qs('[data-field="model"]').classList.add('active-step');
+    else if (!selections.year) qs('[data-field="year"]').classList.add('active-step');
+  }
+
+  function resetDropdown(dd) {
+    var tr = dd.querySelector('.coll-dropdown-trigger'), val = tr.querySelector('.coll-dropdown-value');
+    val.textContent = tr.dataset.placeholder; val.classList.remove('selected');
+    var si = dd.querySelector('.coll-dropdown-search input'); if (si) si.value = '';
+    selections[dd.dataset.field] = null;
+  }
+
+  function attachOptionListeners(dd) {
+    dd.querySelectorAll('.coll-dropdown-option').forEach(function(opt) {
+      opt.addEventListener('click', async function() {
+        var val = opt.dataset.value, field = dd.dataset.field;
+        selectOption(dd, val);
+        if (field === 'make') {
+          selections.make = val; selections.makeHandle = ymmData.collections[val]; selections.model = null; selections.year = null;
+          resetDropdown(qs('[data-field="model"]')); resetDropdown(qs('[data-field="year"]'));
+          await populateModels(val); qs('[data-field="year"] .coll-dropdown-trigger').classList.add('disabled');
+          setTimeout(function(){openDropdown(qs('[data-field="model"]'));},50);
+        } else if (field === 'model') {
+          selections.model = val; selections.year = null; resetDropdown(qs('[data-field="year"]'));
+          await populateYears(selections.make, val); setTimeout(function(){openDropdown(qs('[data-field="year"]'));},50);
+        } else if (field === 'year') {
+          selections.year = val;
+          var mdls = ymmData.models[selections.make]||{};
+          selections.matchingProducts = (mdls[selections.model]||[]).filter(function(p){return parseProductTitle(p.title,selections.make).years.includes(val);});
+        }
+        updateActiveStep(); updateSubmitButton(); updateToolbarText(); closeDropdown(dd);
+      });
+    });
+  }
+
+  function selectOption(dd, val) {
+    var v = dd.querySelector('.coll-dropdown-value'); v.textContent = val; v.classList.add('selected');
+    dd.querySelectorAll('.coll-dropdown-option').forEach(function(o){o.classList.toggle('active',o.dataset.value===val);});
+  }
+
+  function updateSubmitButton() {
+    qs('#coll-ymm-submit').classList.toggle('incomplete', !(selections.make && selections.model && selections.year));
+  }
+
+  function openDropdown(dd) {
+    if (dd.querySelector('.coll-dropdown-trigger').classList.contains('disabled')) return;
+    qsa('.coll-dropdown.open').forEach(function(d){if(d!==dd)closeDropdown(d);}); dd.classList.add('open');
+    var si = dd.querySelector('.coll-dropdown-search input'); if (si) setTimeout(function(){si.focus();},10);
+  }
+
+  function closeDropdown(dd) {
+    dd.classList.remove('open');
+    var si = dd.querySelector('.coll-dropdown-search input'); if (si) { si.value=''; filterOptions(dd,''); }
+  }
+
+  function filterOptions(dd, q) {
+    var lq = q.toLowerCase();
+    dd.querySelectorAll('.coll-dropdown-option').forEach(function(o){o.style.display=o.textContent.toLowerCase().includes(lq)?'':'none';});
+  }
+
+  function handleSubmit() {
+    if (!selections.make) { openDropdown(qs('[data-field="make"]')); return; }
+    if (!selections.model) { openDropdown(qs('[data-field="model"]')); return; }
+    if (!selections.year) { openDropdown(qs('[data-field="year"]')); return; }
+    var m = selections.matchingProducts;
+    if (m.length === 1) window.location.href = '/products/' + m[0].handle;
+    else window.location.href = '/search?type=product&q=' + encodeURIComponent(selections.make + ' ' + selections.model);
+  }
+
+  async function preselect() {
+    if (!preselectedBrand) return;
+    selectOption(qs('[data-field="make"]'), preselectedBrand);
+    selections.make = preselectedBrand; selections.makeHandle = ymmData.collections[preselectedBrand];
+    await populateModels(preselectedBrand); updateActiveStep(); updateSubmitButton(); updateToolbarText();
+  }
+
+  function updateToolbarText() {
+    if (!TOOLBAR_TEXT) return;
+    var parts = [];
+    if (selections.make) parts.push(selections.make);
+    if (selections.model) parts.push(selections.model);
+    if (selections.year) parts.push(selections.year);
+    TOOLBAR_TEXT.textContent = parts.length ? parts.join(' | ') : 'Find your car';
+  }
+
+  function togglePicker() {
+    var body = qs('.coll-picker-body');
+    if (PICKER.classList.contains('expanded')) {
+      body.style.overflow = 'hidden';
+      PICKER.classList.remove('expanded');
+      if (TOOLBAR) TOOLBAR.classList.remove('picker-open');
+    } else {
+      PICKER.classList.add('expanded');
+      if (TOOLBAR) TOOLBAR.classList.add('picker-open');
+      body.addEventListener('transitionend', function handler() {
+        if (PICKER.classList.contains('expanded')) {
+          body.style.overflow = 'visible';
+        }
+        body.removeEventListener('transitionend', handler);
+      });
+    }
+  }
+
+  function init() {
+    qs('#coll-ymm-submit').classList.add('incomplete');
+    populateMakes(); preselect();
+
+    // Auto-expand picker so users can select model/year
+    togglePicker();
+
+    // Toolbar toggle click
+    if (TOOLBAR_TOGGLE) {
+      TOOLBAR_TOGGLE.addEventListener('click', function(e) {
+        e.stopPropagation();
+        togglePicker();
+      });
+    }
+
+    qsa('.coll-dropdown-trigger').forEach(function(tr) {
+      tr.addEventListener('click', function(e) { e.stopPropagation(); var dd=tr.closest('.coll-dropdown'); dd.classList.contains('open')?closeDropdown(dd):openDropdown(dd); });
+    });
+    qsa('.coll-dropdown-search input').forEach(function(inp) {
+      inp.addEventListener('input', function(e){filterOptions(inp.closest('.coll-dropdown'),e.target.value);});
+      inp.addEventListener('click', function(e){e.stopPropagation();});
+    });
+    document.addEventListener('click', function(e){if(!e.target.closest('.coll-dropdown'))qsa('.coll-dropdown.open').forEach(closeDropdown);});
+    qs('#coll-ymm-submit').addEventListener('click', function(e){e.stopPropagation();handleSubmit();});
+    document.addEventListener('keydown', function(e){if(e.key==='Escape')qsa('.coll-dropdown.open').forEach(closeDropdown);});
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>

@@ -1,0 +1,460 @@
+<style>
+  /* ========== ROOT VARIABLES ========== */
+  :root {
+    --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --blue: #2463af;
+    --blue-dark: #1a4f8c;
+    --blue-light: #e8f1fb;
+    --yellow: #ffd600;
+    --yellow-hover: #e6c100;
+    --black: #000000;
+    --dark: #1a1a1a;
+    --text: #333333;
+    --text-muted: #333333;
+    --gray: #f3f3f3;
+    --border: #e0e0e0;
+    --white: #ffffff;
+    scroll-behavior: smooth;
+  }
+
+  .hero-product-image {
+    width: 100%;
+  }
+
+  /* ========== HERO ========== */
+  .hero {
+    background: linear-gradient(180deg, var(--blue-light) 0%, var(--white) 100%);
+    padding: 20px 16px 24px;
+    text-align: left;
+  }
+
+  .hero-content {
+    max-width: 1168px;
+    margin: 0 auto;
+    padding: 0 8px;
+  }
+
+  .hero-badge-link {
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--white);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .hero-badge-link:hover .hero-badge {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+  }
+
+  .hero-stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .hero-stars svg {
+    width: 18px;
+    height: 18px;
+    fill: #fbbf24;
+  }
+
+  .hero-title {
+    font-size: clamp(19px, 5.2vw, 28px);
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+    margin: 0;
+    padding: 8px 0 12px;
+    font-family: var(--font-primary);
+    text-wrap: balance;
+  }
+
+  .hero-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin: 8px 0 0;
+    font-family: var(--font-primary);
+  }
+
+  .hero-video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+    font-family: var(--font-primary);
+    transition: color 0.2s, gap 0.2s;
+  }
+
+  .hero-video-link:hover {
+    color: var(--blue-dark);
+    gap: 10px;
+  }
+
+  .hero-video-link svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  /* Mobile: video row with stars */
+  .hero-video-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  .hero-mobile-stars-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-mobile-stars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .hero-mobile-stars svg {
+    width: 18px;
+    height: 18px;
+    fill: #fbbf24;
+  }
+
+  .hero-mobile-rating {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-left: 6px;
+  }
+
+  /* Hide badge on mobile */
+  .hero-badge-link {
+    display: none;
+  }
+
+  /* Hero Video Lightbox - Cinema Mode */
+  .hero-video-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .hero-video-lightbox.active {
+    display: flex;
+  }
+
+  .hero-lightbox-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+    z-index: 0;
+  }
+
+  .hero-lightbox-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 95vw;
+    max-height: 90vh;
+  }
+
+  .hero-lightbox-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    color: #1a1a1a;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 10;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .hero-lightbox-close:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  .hero-lightbox-close svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  #heroLightboxVideo {
+    max-height: 90vh;
+    max-width: 95vw;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    background: black;
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      padding: 40px 40px 48px;
+      text-align: center;
+    }
+    .hero-content {
+      padding: 0 24px;
+    }
+    .hero-badge-link {
+      display: inline-block;
+    }
+    .hero-mobile-stars {
+      display: none;
+    }
+    .hero-video-row {
+      justify-content: center;
+    }
+    .hero-title {
+      font-size: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+      margin-top: 12px;
+    }
+    .hero-video-link {
+      font-size: 15px;
+      margin-top: 20px;
+    }
+  }
+
+  /* ========== PRODUCT IMAGE ========== */
+  .product-section {
+    padding: 0 16px 32px;
+  }
+
+  .product-image {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .product-section {
+      padding: 0 24px 60px;
+      max-width: 1168px;
+      margin: 0 auto;
+    }
+  }
+</style>
+
+{%- if section.settings.enable_hero -%}
+<section class="hero">
+  <div class="hero-content">
+  <a href="#reviews" class="hero-badge-link">
+    <div class="hero-badge">
+      <div class="hero-stars">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+      </div>
+      {{ section.settings.badge_text }}
+    </div>
+  </a>
+  <h1 class="hero-title">
+    {{ section.settings.hero_title | default: 'Snap-On Shades That<br>Never Fall Off' }}
+  </h1>
+  <div class="hero-video-row">
+    <a href="#" class="hero-video-link" id="heroVideoLink">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+      See how it works
+    </a>
+    <a href="#reviews" class="hero-mobile-stars-link">
+      <span class="hero-mobile-stars">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        <span class="hero-mobile-rating">5.0</span>
+      </span>
+    </a>
+  </div>
+  </div>
+</section>
+
+<!-- Hero Video Lightbox (Cinema Mode) -->
+<div class="hero-video-lightbox" id="heroVideoLightbox">
+  <div class="hero-lightbox-backdrop" id="heroLightboxBackdrop"></div>
+  <div class="hero-lightbox-content">
+    <video id="heroLightboxVideo" controls playsinline>
+      <source src="https://cdn.shopify.com/videos/c/o/v/183b9ee200c44eda82e1f183a8769fb7.mp4" type="video/mp4">
+    </video>
+    <button class="hero-lightbox-close" id="heroLightboxCloseBtn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+</div>
+{%- endif -%}
+
+{%- if section.settings.enable_product_image -%}
+<section class="product-section">
+  <div class="product-image">
+    {% if section.settings.product_image %}
+      {{ section.settings.product_image | img_url: '1200x' | img_tag: section.settings.image_alt }}
+    {% else %}
+      <img src="https://clickshades.com.au/cdn/shop/files/SideShade2.png?v=1762038252&width=1200" alt="{{ section.settings.image_alt }}">
+    {% endif %}
+  </div>
+</section>
+{%- endif -%}
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const heroVideoLink = document.getElementById('heroVideoLink');
+  const heroLightbox = document.getElementById('heroVideoLightbox');
+  const heroLightboxVideo = document.getElementById('heroLightboxVideo');
+  const heroLightboxClose = heroLightbox?.querySelector('.hero-lightbox-close');
+  const heroLightboxBackdrop = heroLightbox?.querySelector('.hero-lightbox-backdrop');
+
+  function openHeroLightbox(e) {
+    e.preventDefault();
+    if (heroLightbox && heroLightboxVideo) {
+      heroLightbox.classList.add('active');
+      heroLightboxVideo.play();
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeHeroLightbox() {
+    if (heroLightbox && heroLightboxVideo) {
+      heroLightbox.classList.remove('active');
+      heroLightboxVideo.pause();
+      heroLightboxVideo.currentTime = 0;
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (heroVideoLink) heroVideoLink.addEventListener('click', openHeroLightbox);
+  if (heroLightboxClose) heroLightboxClose.addEventListener('click', closeHeroLightbox);
+  if (heroLightboxBackdrop) heroLightboxBackdrop.addEventListener('click', closeHeroLightbox);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && heroLightbox?.classList.contains('active')) {
+      closeHeroLightbox();
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Hero + Product Image",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_hero",
+      "label": "Enable Hero Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "4.9 - Top Rated Car Shades"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "Snap-On Shades That Never Fall Off"
+    },
+    {
+      "type": "text",
+      "id": "hero_subtitle",
+      "label": "Hero Subtitle",
+      "default": "Guaranteed fit for your specific vehicle"
+    },
+    {
+      "type": "header",
+      "content": "Product Image Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_product_image",
+      "label": "Enable Product Image",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text",
+      "default": "ClickShades Car Window Shades"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero + Product Image"
+    }
+  ]
+}
+{% endschema %}

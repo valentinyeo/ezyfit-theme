@@ -1,0 +1,281 @@
+<style>
+  .cb-compare-section {
+    padding: 50px 16px;
+    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  }
+
+  .cb-compare-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 40px;
+  }
+
+  .cb-compare-title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+    margin: 0 0 12px;
+  }
+
+  .cb-compare-subtitle {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #555555;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .cb-compare-wrapper {
+    max-width: 750px;
+    margin: 0 auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .cb-compare-table {
+    min-width: 500px;
+    background: #ffffff;
+  }
+
+  .cb-compare-table__header {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .cb-compare-table__hcell {
+    padding: 18px 12px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    color: #6c757d;
+  }
+
+  .cb-compare-table__hcell--feature {
+    text-align: left;
+    color: #1a1a1a;
+  }
+
+  .cb-compare-table__hcell--brand {
+    background: var(--blue, #2463af);
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .cb-compare-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+  }
+
+  .cb-compare-row:last-child {
+    border-bottom: none;
+  }
+
+  .cb-compare-row:hover {
+    background-color: #fafbfc;
+  }
+
+  .cb-compare-cell {
+    padding: 14px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cb-compare-cell--feature {
+    justify-content: flex-start;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+
+  .cb-compare-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cb-compare-icon--yes {
+    background: var(--blue, #2463af);
+  }
+
+  .cb-compare-icon--yes svg {
+    width: 14px;
+    height: 14px;
+    stroke: #ffffff;
+    stroke-width: 3;
+    fill: none;
+  }
+
+  .cb-compare-icon--no {
+    background: #e9ecef;
+  }
+
+  .cb-compare-icon--no svg {
+    width: 12px;
+    height: 12px;
+    stroke: #6c757d;
+    stroke-width: 3;
+    fill: none;
+  }
+
+  .cb-compare-cell--competitor .cb-compare-icon--yes {
+    background: transparent;
+    border: 2px solid #6c757d;
+  }
+
+  .cb-compare-cell--competitor .cb-compare-icon--yes svg {
+    stroke: #6c757d;
+  }
+
+  @media (max-width: 480px) {
+    .cb-compare-section { padding: 40px 16px; }
+    .cb-compare-title { font-size: 22px; }
+    .cb-compare-table__hcell { padding: 14px 8px; font-size: 10px; }
+    .cb-compare-cell { padding: 12px 8px; }
+    .cb-compare-cell--feature { font-size: 12px; }
+    .cb-compare-icon { width: 22px; height: 22px; }
+  }
+
+  @media (min-width: 768px) {
+    .cb-compare-section { padding: 70px 40px; }
+    .cb-compare-title { font-size: 32px; }
+    .cb-compare-subtitle { font-size: 16px; }
+    .cb-compare-table__hcell { padding: 22px 16px; font-size: 13px; }
+    .cb-compare-cell { padding: 18px 16px; }
+    .cb-compare-cell--feature { font-size: 15px; }
+    .cb-compare-icon { width: 30px; height: 30px; }
+  }
+</style>
+
+<section class="cb-compare-section">
+  <div class="cb-compare-header">
+    <h2 class="cb-compare-title">{{ section.settings.title }}</h2>
+    <p class="cb-compare-subtitle">{{ section.settings.subtitle }}</p>
+  </div>
+
+  <div class="cb-compare-wrapper">
+    <div class="cb-compare-table">
+      <div class="cb-compare-table__header">
+        <div class="cb-compare-table__hcell cb-compare-table__hcell--feature">Feature</div>
+        <div class="cb-compare-table__hcell cb-compare-table__hcell--brand">{{ section.settings.brand_label | default: 'Click Blades' }}</div>
+        <div class="cb-compare-table__hcell cb-compare-table__hcell">{{ section.settings.cheap_label | default: 'Cheap Blades' }}</div>
+        <div class="cb-compare-table__hcell cb-compare-table__hcell">{{ section.settings.dealer_label | default: 'Dealership' }}</div>
+      </div>
+
+      {%- for block in section.blocks -%}
+        <div class="cb-compare-row" {{ block.shopify_attributes }}>
+          <div class="cb-compare-cell cb-compare-cell--feature">{{ block.settings.feature_name }}</div>
+          <div class="cb-compare-cell">
+            {%- if block.settings.brand_has -%}
+              <span class="cb-compare-icon cb-compare-icon--yes"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+            {%- else -%}
+              <span class="cb-compare-icon cb-compare-icon--no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+            {%- endif -%}
+          </div>
+          <div class="cb-compare-cell cb-compare-cell--competitor">
+            {%- if block.settings.cheap_has -%}
+              <span class="cb-compare-icon cb-compare-icon--yes"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+            {%- else -%}
+              <span class="cb-compare-icon cb-compare-icon--no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+            {%- endif -%}
+          </div>
+          <div class="cb-compare-cell cb-compare-cell--competitor">
+            {%- if block.settings.dealer_has -%}
+              <span class="cb-compare-icon cb-compare-icon--yes"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+            {%- else -%}
+              <span class="cb-compare-icon cb-compare-icon--no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CB Comparison Table",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "How Click Blades Compare"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "See why thousands of Australians choose Click Blades over cheap alternatives and overpriced dealerships"
+    },
+    {
+      "type": "text",
+      "id": "brand_label",
+      "label": "Brand column label",
+      "default": "Click Blades"
+    },
+    {
+      "type": "text",
+      "id": "cheap_label",
+      "label": "Cheap column label",
+      "default": "Cheap Blades"
+    },
+    {
+      "type": "text",
+      "id": "dealer_label",
+      "label": "Dealership column label",
+      "default": "Dealership"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_name",
+          "label": "Feature name",
+          "default": "Feature"
+        },
+        {
+          "type": "checkbox",
+          "id": "brand_has",
+          "label": "Click Blades has this",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "cheap_has",
+          "label": "Cheap Blades has this",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "dealer_has",
+          "label": "Dealership has this",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CB Comparison Table"
+    }
+  ]
+}
+{% endschema %}

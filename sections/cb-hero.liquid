@@ -1,0 +1,370 @@
+<style>
+  .cb-hero {
+    background: linear-gradient(180deg, var(--blue-light, #e8f1fb) 0%, var(--white, #ffffff) 100%);
+    padding: 20px 16px 24px;
+    text-align: left;
+  }
+
+  .cb-hero-content {
+    max-width: 1168px;
+    margin: 0 auto;
+    padding: 0 8px;
+  }
+
+  .cb-hero-badge-link {
+    text-decoration: none;
+    display: none;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .cb-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--white, #ffffff);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text, #333333);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .cb-hero-badge-link:hover .cb-hero-badge {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+  }
+
+  .cb-hero-stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .cb-hero-stars svg {
+    width: 18px;
+    height: 18px;
+    fill: #fbbf24;
+  }
+
+  .cb-hero-title {
+    font-size: clamp(19px, 5.2vw, 28px);
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    line-height: 1.2;
+    margin: 0;
+    padding: 8px 0 12px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-wrap: balance;
+  }
+
+  .cb-hero-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-muted, #333333);
+    margin: 8px 0 0;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Mobile: video row with stars */
+  .cb-hero-video-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  .cb-hero-video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue, #2463af);
+    text-decoration: none;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: color 0.2s, gap 0.2s;
+  }
+
+  .cb-hero-video-link:hover {
+    color: #1a4f8c;
+    gap: 10px;
+  }
+
+  .cb-hero-video-link svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .cb-hero-mobile-stars-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .cb-hero-mobile-stars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .cb-hero-mobile-stars svg {
+    width: 18px;
+    height: 18px;
+    fill: #fbbf24;
+  }
+
+  .cb-hero-mobile-rating {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text, #333333);
+    margin-left: 6px;
+  }
+
+  /* Hero Video Lightbox - Cinema Mode */
+  .cb-hero-video-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .cb-hero-video-lightbox.active {
+    display: flex;
+  }
+
+  .cb-hero-lightbox-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+    z-index: 0;
+  }
+
+  .cb-hero-lightbox-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 95vw;
+    max-height: 90vh;
+  }
+
+  .cb-hero-lightbox-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    color: #1a1a1a;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 10;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .cb-hero-lightbox-close:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  .cb-hero-lightbox-close svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  #cbHeroLightboxVideo {
+    max-height: 90vh;
+    max-width: 95vw;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    background: black;
+  }
+
+  @media (min-width: 768px) {
+    .cb-hero {
+      padding: 40px 40px 48px;
+      text-align: center;
+    }
+
+    .cb-hero-content {
+      padding: 0 24px;
+    }
+
+    .cb-hero-badge-link {
+      display: inline-block;
+    }
+
+    .cb-hero-mobile-stars {
+      display: none;
+    }
+
+    .cb-hero-video-row {
+      justify-content: center;
+    }
+
+    .cb-hero-title {
+      font-size: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .cb-hero-subtitle {
+      font-size: 16px;
+      margin-top: 12px;
+    }
+
+    .cb-hero-video-link {
+      font-size: 15px;
+      margin-top: 20px;
+    }
+  }
+</style>
+
+<section class="cb-hero">
+  <div class="cb-hero-content">
+    <a href="#reviews" class="cb-hero-badge-link">
+      <div class="cb-hero-badge">
+        <div class="cb-hero-stars">
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        {{ section.settings.badge_text | default: '4.9 - Top Rated Wiper Blades' }}
+      </div>
+    </a>
+
+    <h1 class="cb-hero-title">
+      {{ section.settings.headline | default: 'Crystal Clear Vision,<br>Rain or Shine' }}
+    </h1>
+
+    <div class="cb-hero-video-row">
+      <a href="#" class="cb-hero-video-link" id="cbHeroVideoLink">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        See how it works
+      </a>
+      <a href="#reviews" class="cb-hero-mobile-stars-link">
+        <span class="cb-hero-mobile-stars">
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <span class="cb-hero-mobile-rating">5.0</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Hero Video Lightbox (Cinema Mode) -->
+<div class="cb-hero-video-lightbox" id="cbHeroVideoLightbox">
+  <div class="cb-hero-lightbox-backdrop" id="cbHeroLightboxBackdrop"></div>
+  <div class="cb-hero-lightbox-content">
+    <video id="cbHeroLightboxVideo" controls playsinline>
+      <source src="https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4" type="video/mp4">
+    </video>
+    <button class="cb-hero-lightbox-close" id="cbHeroLightboxCloseBtn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const cbVideoLink = document.getElementById('cbHeroVideoLink');
+  const cbLightbox = document.getElementById('cbHeroVideoLightbox');
+  const cbLightboxVideo = document.getElementById('cbHeroLightboxVideo');
+  const cbLightboxClose = cbLightbox?.querySelector('.cb-hero-lightbox-close');
+  const cbLightboxBackdrop = cbLightbox?.querySelector('.cb-hero-lightbox-backdrop');
+
+  function openCbLightbox(e) {
+    e.preventDefault();
+    if (cbLightbox && cbLightboxVideo) {
+      cbLightbox.classList.add('active');
+      cbLightboxVideo.play();
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeCbLightbox() {
+    if (cbLightbox && cbLightboxVideo) {
+      cbLightbox.classList.remove('active');
+      cbLightboxVideo.pause();
+      cbLightboxVideo.currentTime = 0;
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (cbVideoLink) cbVideoLink.addEventListener('click', openCbLightbox);
+  if (cbLightboxClose) cbLightboxClose.addEventListener('click', closeCbLightbox);
+  if (cbLightboxBackdrop) cbLightboxBackdrop.addEventListener('click', closeCbLightbox);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && cbLightbox?.classList.contains('active')) {
+      closeCbLightbox();
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "CB Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "4.9 - Top Rated Wiper Blades"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Crystal Clear Vision,<br>Rain or Shine"
+    },
+    {
+      "type": "text",
+      "id": "subhead",
+      "label": "Subhead",
+      "default": "Precision-fit wiper blades engineered for your exact vehicle"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CB Hero"
+    }
+  ]
+}
+{% endschema %}

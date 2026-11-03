@@ -1,0 +1,404 @@
+{% comment %}
+  ⚠️ DISABLED - DO NOT USE
+  Shop by Brand section has been replaced with Popular Models section
+  due to trademark concerns (Toyota brand logo usage issue).
+  Keeping this file for reference only.
+
+  Original: Horizontal swipeable carousel showing car brand logos
+  Links to collection filtered by Make tag
+{% endcomment %}
+
+{%- style -%}
+  /* ========== SHOP BY BRAND SECTION ========== */
+  .shop-by-brand {
+    padding: 40px 20px;
+    background: #ffffff;
+  }
+
+  .shop-by-brand__header {
+    padding: 0;
+    margin-bottom: 24px;
+  }
+
+  .shop-by-brand__title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    letter-spacing: 0.3px;
+  }
+
+  /* Carousel Container */
+  .brand-carousel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .brand-carousel__track {
+    display: flex;
+    gap: 16px;
+    padding: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .brand-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Brand Card */
+  .brand-card {
+    flex: 0 0 auto;
+    width: 140px;
+    scroll-snap-align: start;
+    text-decoration: none;
+  }
+
+  .brand-card__image-wrapper {
+    width: 140px;
+    height: 140px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .brand-card__logo {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+  }
+
+  /* Fallback text logo */
+  .brand-card__text-logo {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+  }
+
+  .brand-card__name {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-align: center;
+    margin: 0 0 4px;
+  }
+
+  .brand-card__count {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    color: #6c757d;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Navigation Arrows */
+  .brand-carousel__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .brand-carousel__nav--prev {
+    left: 8px;
+  }
+
+  .brand-carousel__nav--next {
+    right: 8px;
+  }
+
+  .brand-carousel__nav svg {
+    width: 18px;
+    height: 18px;
+    stroke: #1a1a1a;
+    stroke-width: 2;
+    fill: none;
+  }
+
+  /* Hide nav on mobile (touch scrolling is better) */
+  @media (max-width: 768px) {
+    .brand-carousel__nav {
+      display: none;
+    }
+
+    .brand-card {
+      width: 120px;
+    }
+
+    .brand-card__image-wrapper {
+      width: 120px;
+      height: 120px;
+    }
+
+    .brand-card__text-logo {
+      font-size: 24px;
+    }
+
+    .shop-by-brand__title {
+      font-size: 20px;
+    }
+  }
+
+  /* Desktop: larger cards */
+  @media (min-width: 1024px) {
+    .shop-by-brand {
+      padding: 60px 40px;
+    }
+
+    .shop-by-brand__header {
+      max-width: 1168px;
+      margin: 0 auto 32px;
+      padding: 0;
+    }
+
+    .brand-carousel__track {
+      padding: 0;
+      max-width: 1168px;
+      margin: 0 auto;
+    }
+
+    .brand-card {
+      width: 160px;
+    }
+
+    .brand-card__image-wrapper {
+      width: 160px;
+      height: 160px;
+    }
+
+    .brand-carousel__nav--prev {
+      left: calc(50% - 620px);
+    }
+
+    .brand-carousel__nav--next {
+      right: calc(50% - 620px);
+    }
+  }
+{%- endstyle -%}
+
+<section class="shop-by-brand">
+  <div class="shop-by-brand__header">
+    <h2 class="shop-by-brand__title">{{ section.settings.heading | default: 'Shop by Brand' }}</h2>
+  </div>
+
+  <div class="brand-carousel" data-brand-carousel>
+    <!-- Previous Arrow -->
+    <button class="brand-carousel__nav brand-carousel__nav--prev" aria-label="Previous brands" data-carousel-prev>
+      <svg viewBox="0 0 24 24">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="brand-carousel__track" data-carousel-track>
+      {%- assign brands = 'Toyota,Honda,Mazda,Hyundai,Kia,Ford,Nissan,Mitsubishi,Subaru,Volkswagen,BMW,Tesla,MG,BYD,Isuzu'
+        | split: ','
+      -%}
+
+      {%- for brand in brands -%}
+        {%- assign brand_handle = brand | handleize -%}
+        {%- assign brand_tag = 'Make_' | append: brand -%}
+
+        {%- comment %} Count products with this brand tag {%- endcomment %}
+        {%- assign product_count = 0 -%}
+        {%- for product in collections.all.products -%}
+          {%- if product.tags contains brand_tag -%}
+            {%- assign product_count = product_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment %} Only show brands that have products {%- endcomment %}
+        {%- if product_count > 0 or section.settings.show_all_brands -%}
+          <a href="{{ routes.collections_url }}/all?filter.p.tag={{ brand_tag | url_encode }}" class="brand-card">
+            <div class="brand-card__image-wrapper">
+              {%- assign logo_setting = 'logo_' | append: brand_handle -%}
+              {%- if section.settings[logo_setting] != blank -%}
+                <img
+                  src="{{ section.settings[logo_setting] | image_url: width: 200 }}"
+                  alt="{{ brand }} logo"
+                  class="brand-card__logo"
+                  loading="lazy"
+                  width="160"
+                  height="160"
+                >
+              {%- else -%}
+                {%- comment %} Use GitHub car-logos-dataset as default {%- endcomment %}
+                {%- assign github_slug = brand | downcase | replace: ' ', '-' -%}
+                <img
+                  src="https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/thumb/{{ github_slug }}.png"
+                  alt="{{ brand }} logo"
+                  class="brand-card__logo"
+                  loading="lazy"
+                  width="160"
+                  height="160"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+                >
+                <span class="brand-card__text-logo" style="display:none;">{{ brand }}</span>
+              {%- endif -%}
+            </div>
+            <p class="brand-card__name">{{ brand }}</p>
+            {%- if product_count > 0 -%}
+              <p class="brand-card__count">{{ product_count }} product{{ product_count | pluralize: '', 's' }}</p>
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <!-- Next Arrow -->
+    <button class="brand-carousel__nav brand-carousel__nav--next" aria-label="Next brands" data-carousel-next>
+      <svg viewBox="0 0 24 24">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const carousel = document.querySelector('[data-brand-carousel]');
+    if (!carousel) return;
+
+    const track = carousel.querySelector('[data-carousel-track]');
+    const prevBtn = carousel.querySelector('[data-carousel-prev]');
+    const nextBtn = carousel.querySelector('[data-carousel-next]');
+
+    const scrollAmount = 320; // Scroll by ~2 cards
+
+    prevBtn?.addEventListener('click', () => {
+      track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Shop by Brand",
+  "tag": "section",
+  "class": "section-shop-by-brand",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Brand"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_brands",
+      "label": "Show all brands (even with 0 products)",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Brand Logos",
+      "info": "Upload logo images for each brand. If not uploaded, brand initials will be shown."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_toyota",
+      "label": "Toyota logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_honda",
+      "label": "Honda logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mazda",
+      "label": "Mazda logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_hyundai",
+      "label": "Hyundai logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_kia",
+      "label": "Kia logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_ford",
+      "label": "Ford logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_nissan",
+      "label": "Nissan logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mitsubishi",
+      "label": "Mitsubishi logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_subaru",
+      "label": "Subaru logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_volkswagen",
+      "label": "Volkswagen logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_bmw",
+      "label": "BMW logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_tesla",
+      "label": "Tesla logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mg",
+      "label": "MG logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_byd",
+      "label": "BYD logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_isuzu",
+      "label": "Isuzu logo"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Brand"
+    }
+  ]
+}
+{% endschema %}

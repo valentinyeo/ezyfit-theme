@@ -1,0 +1,287 @@
+<style>
+  /* ========== ABOUT US SECTION ========== */
+  .about-us-section {
+    padding: 48px 16px;
+    background: var(--white, #ffffff);
+  }
+
+  .about-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* Hero */
+  .about-hero {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .about-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 24px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .about-intro {
+    font-size: 18px;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 16px;
+    line-height: 1.6;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .about-intro-text {
+    font-size: 15px;
+    color: #4b5563;
+    margin: 0;
+    line-height: 1.7;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Content Sections */
+  .about-content-section {
+    margin-bottom: 48px;
+  }
+
+  .about-content-section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 20px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .about-content-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 12px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .about-content-section p {
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.7;
+    margin: 0 0 16px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .about-content-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Offer Items */
+  .offer-item {
+    margin-bottom: 32px;
+    padding-left: 20px;
+    border-left: 4px solid var(--blue, #2463af);
+  }
+
+  .offer-item:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Why Grid */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .why-item {
+    padding: 24px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .why-item h3 {
+    margin-bottom: 12px;
+  }
+
+  .why-item p {
+    margin: 0;
+  }
+
+  /* Excellence Section */
+  .excellence-section {
+    background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+    padding: 40px 24px;
+    border-radius: 16px;
+    margin-top: 60px;
+  }
+
+  .excellence-section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--blue, #2463af);
+    margin: 0 0 20px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .excellence-section p {
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.7;
+    margin: 0 0 16px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .excellence-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Desktop Styles */
+  @media (min-width: 768px) {
+    .about-us-section {
+      padding: 80px 40px;
+    }
+
+    .about-title {
+      font-size: 42px;
+      margin-bottom: 32px;
+    }
+
+    .about-intro {
+      font-size: 20px;
+    }
+
+    .about-intro-text {
+      font-size: 16px;
+    }
+
+    .about-content-section {
+      margin-bottom: 64px;
+    }
+
+    .about-content-section h2 {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
+
+    .about-content-section h3 {
+      font-size: 20px;
+    }
+
+    .about-content-section p {
+      font-size: 16px;
+    }
+
+    .why-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .excellence-section {
+      padding: 48px 40px;
+    }
+
+    .excellence-section h2 {
+      font-size: 28px;
+    }
+
+    .excellence-section p {
+      font-size: 16px;
+    }
+  }
+</style>
+
+
+<section class="about-us-section">
+  <div class="about-container">
+    <!-- Hero -->
+    <div class="about-hero">
+      <h1 class="about-title">About Us</h1>
+      <p class="about-intro"><strong>Welcome to Click Shades</strong> – Australia's trusted destination for high-quality, made-to-measure car accessories designed for comfort, protection, and style.</p>
+      <p class="about-intro-text">At Click Shades, we create precision-engineered <strong>vehicle window shades and accessories</strong> that make every journey more enjoyable. Whether you're parked under the harsh summer sun or cruising through town, our products are built to deliver <strong>premium protection, a perfect fit, and easy installation every</strong> time.</p>
+    </div>
+
+    <!-- Our Story -->
+    <div class="about-content-section">
+      <h2>Our Story</h2>
+      <p>Click Shades was built with a simple mission: to help drivers <strong>stay cool, safe, and comfortable</strong> on the road. What started as a focused effort to provide better sun and heat protection has grown into a widely loved range of automotive accessories tailored for vehicles of all makes and models across Australia.</p>
+      <p>We understand the Australian climate like no other. Long summers, intense UV rays, and sweltering heat can make even short drives uncomfortable. That's why we set out to design solutions that are <strong>effective, reliable, and easy to use</strong> for all drivers.</p>
+    </div>
+
+    <!-- What We Offer -->
+    <div class="about-content-section">
+      <h2>What We Offer</h2>
+      <p>Click Shades specialises in a wide range of <strong>custom car shade products</strong>, each engineered with performance and precision in mind:</p>
+
+      <div class="offer-item">
+        <h3>Made-to-Measure Window Shades</h3>
+        <p>Our signature products include side and rear window shades that are specially tailored for specific car models like the <strong>Hyundai Kona</strong>, <strong>MG ZS</strong>, <strong>Toyota Prado</strong>, <strong>Mazda CX-5</strong>, and many more. Each shade is crafted to fit perfectly using advanced design techniques, helping to block UV rays and reduce heat inside your vehicle.</p>
+      </div>
+
+      <div class="offer-item">
+        <h3>Front Windscreen Shades</h3>
+        <p>Designed with <strong>triple laminate technology</strong>, our front windscreen Click Shades help reduce interior temperatures and protect your dashboard and seating from UV damage. They are <strong>easy to install in seconds</strong> and require no tools.</p>
+      </div>
+
+      <div class="offer-item">
+        <h3>Click Blades – Premium Wiper Blades</h3>
+        <p>In addition to sun protection, we offer <strong>CLICK BLADES</strong> – ergonomically designed windscreen wipers engineered to fit a wide range of vehicle models with superior flexibility and performance.</p>
+      </div>
+    </div>
+
+    <!-- Why Choose -->
+    <div class="about-content-section">
+      <h2>Why Choose Click Shades?</h2>
+
+      <div class="why-grid">
+        <div class="why-item">
+          <h3>Precision Fit Every Time</h3>
+          <p>Our products are designed using <strong>3D laser scanning</strong> and advanced engineering to ensure a perfect fit for your specific vehicle model. This means better coverage, a cleaner look, and more effective protection.</p>
+        </div>
+
+        <div class="why-item">
+          <h3>Quality You Can Trust</h3>
+          <p>We use premium materials and technologies such as <strong>cross-mesh fabric and laminated layers</strong> to block UV rays, reduce heat, and improve overall comfort — all backed with a quality guarantee.</p>
+        </div>
+
+        <div class="why-item">
+          <h3>Easy, Tool-Free Installation</h3>
+          <p>Every product is built for convenience. Most Click Shades simply "click" into place using embedded high-strength magnets or fold-out designs, making setup a breeze.</p>
+        </div>
+
+        <div class="why-item">
+          <h3>Stylish and Functional</h3>
+          <p>Protective accessories shouldn't look dull. Our shades and blades are thoughtfully designed to complement your vehicle's look while keeping it cool and protected.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Our Commitment -->
+    <div class="about-content-section commitment-section">
+      <h2>Our Commitment</h2>
+      <p>We are committed to delivering products that help drivers enjoy greater comfort, safety, and value. Whether you're heading to work, going on a road trip, or just running errands around town, Click Shades products are there to help you keep your vehicle cooler, protect its interior, and travel with peace of mind.</p>
+      <p>Stay connected with us for the latest updates, new models, and special offers. Join the community of satisfied drivers who prefer reliability, quality, and performance that truly make a difference on the road.</p>
+    </div>
+
+    <!-- Excellence Section -->
+    <div class="excellence-section">
+      <h2>A Shining Example of Excellence</h2>
+      <p>Looking after our customers goes a long way beyond just protecting them from the heat and UV rays with our range of automotive sunshades.</p>
+      <p>We go the extra mile with our exceptional customer service that puts the competition in the shade. Not only do we offer click and collect, we also provide free fitting at our convenient service depot in Bibra Lake, Perth.</p>
+      <p>We're proud to be an Australian-owned and operated business, and that gives us an unrivalled understanding of the dangers of the fierce and unforgiving sun in this part of the world—and how to combat them.</p>
+      <p>Better still, our friendly approach and attention to detail will ensure that once you've enjoyed the smooth CLICK SHADES experience for the first time, you're sure to return time and time again.</p>
+      <p><strong>We look forward to welcoming you soon.</strong></p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Us",
+  "settings": [],
+  "presets": [
+    {
+      "name": "About Us"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,639 @@
+{% comment %}
+  Search Car Picker (body-only inline snippet)
+  Toggle lives in the section toolbar. This renders the expandable body + JS.
+  Renders inside main-search-v2.liquid
+{% endcomment %}
+
+<style>
+  /* ========== SEARCH CAR PICKER BODY ========== */
+  .srch-picker {
+    padding: 0;
+  }
+
+  .srch-picker-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0;
+    background: #f8fafc;
+    border-bottom: 1px solid transparent;
+  }
+
+  .srch-picker.expanded .srch-picker-body {
+    max-height: 400px;
+    padding: 10px 0 12px;
+    border-bottom-color: var(--border, #e0e0e0);
+  }
+
+  .srch-ymm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* ========== CUSTOM DROPDOWN ========== */
+  .srch-dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  .srch-dropdown-trigger {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted, #333333);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--white, #ffffff);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .srch-dropdown-trigger:hover:not(.disabled) {
+    border-color: var(--blue, #2463af);
+  }
+
+  .srch-dropdown.active-step .srch-dropdown-trigger:not(.disabled) {
+    border: 2px solid var(--blue, #2463af);
+    background: #f8fafc;
+    box-shadow: 0 0 0 2px rgba(36, 99, 175, 0.15);
+  }
+
+  .srch-dropdown.active-step .srch-dropdown-value:not(.selected) {
+    color: var(--blue, #2463af);
+    font-weight: 600;
+  }
+
+  .srch-dropdown-trigger.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #f0f0f0;
+  }
+
+  .srch-dropdown.open .srch-dropdown-trigger {
+    border-color: var(--blue, #2463af);
+    box-shadow: 0 0 0 2px rgba(36, 99, 175, 0.15);
+  }
+
+  .srch-dropdown-value {
+    flex: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .srch-dropdown-value.selected {
+    color: var(--text, #333333);
+  }
+
+  .srch-dropdown-arrow {
+    width: 16px;
+    height: 16px;
+    stroke: #666;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+
+  .srch-dropdown.open .srch-dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* ========== DROPDOWN MENU ========== */
+  .srch-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+    background: var(--white, #ffffff);
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+    max-height: 280px;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .srch-dropdown.open .srch-dropdown-menu {
+    display: flex;
+  }
+
+  .srch-dropdown-search {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border, #e0e0e0);
+    flex-shrink: 0;
+  }
+
+  .srch-dropdown-search input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .srch-dropdown-search input:focus {
+    border-color: var(--blue, #2463af);
+  }
+
+  .srch-dropdown-search input::placeholder {
+    color: #999;
+  }
+
+  .srch-dropdown-options {
+    overflow-y: auto;
+    max-height: 200px;
+    padding: 4px 0;
+  }
+
+  .srch-dropdown-option {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .srch-dropdown-option:hover {
+    background: #e3f0ff;
+  }
+
+  .srch-dropdown-option.active {
+    background: var(--blue, #2463af);
+    color: white;
+    font-weight: 700;
+  }
+
+  .srch-dropdown-loading,
+  .srch-dropdown-empty {
+    padding: 12px;
+    text-align: center;
+    color: #666;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+  }
+
+  /* ========== SUBMIT BUTTON ========== */
+  .srch-ymm-submit {
+    width: 100%;
+    padding: 10px;
+    background: var(--yellow, #ffd600);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+  }
+
+  .srch-ymm-submit:hover {
+    background: var(--yellow-hover, #e6c100);
+  }
+
+  .srch-ymm-submit.incomplete {
+    opacity: 0.85;
+  }
+
+  /* ========== DESKTOP ========== */
+  @media (min-width: 768px) {
+    .srch-picker.expanded .srch-picker-body {
+      padding: 10px 0 12px;
+    }
+
+    .srch-ymm-form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) auto;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .srch-dropdown-trigger {
+      height: 42px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    .srch-ymm-submit {
+      width: auto;
+      height: 42px;
+      padding: 0 24px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .srch-dropdown-menu {
+      min-width: 200px;
+    }
+  }
+</style>
+
+<div class="srch-picker" id="srch-car-picker">
+  <div class="srch-picker-body">
+    <div class="srch-ymm-form" id="srch-ymm-form">
+      <!-- Make -->
+      <div class="srch-dropdown" data-field="make">
+        <div class="srch-dropdown-trigger" data-placeholder="Select Make">
+          <span class="srch-dropdown-value">Select Make</span>
+          <svg class="srch-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="srch-dropdown-menu">
+          <div class="srch-dropdown-search"><input type="text" placeholder="Search make..." autocomplete="off"></div>
+          <div class="srch-dropdown-options"></div>
+        </div>
+      </div>
+      <!-- Model -->
+      <div class="srch-dropdown" data-field="model">
+        <div class="srch-dropdown-trigger disabled" data-placeholder="Select Model">
+          <span class="srch-dropdown-value">Select Model</span>
+          <svg class="srch-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="srch-dropdown-menu">
+          <div class="srch-dropdown-search"><input type="text" placeholder="Search model..." autocomplete="off"></div>
+          <div class="srch-dropdown-options"></div>
+        </div>
+      </div>
+      <!-- Year -->
+      <div class="srch-dropdown" data-field="year">
+        <div class="srch-dropdown-trigger disabled" data-placeholder="Select Year">
+          <span class="srch-dropdown-value">Select Year</span>
+          <svg class="srch-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="srch-dropdown-menu">
+          <div class="srch-dropdown-search"><input type="text" placeholder="Search year..." autocomplete="off"></div>
+          <div class="srch-dropdown-options"></div>
+        </div>
+      </div>
+      <!-- Submit -->
+      <button type="button" class="srch-ymm-submit incomplete" id="srch-ymm-submit">Find Your Car</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var PICKER = document.getElementById('srch-car-picker');
+  if (!PICKER) return;
+
+  var TOOLBAR = document.querySelector('.search-controls');
+  var TOOLBAR_TEXT = document.getElementById('toolbar-picker-text');
+  var TOOLBAR_TOGGLE = document.getElementById('toolbar-picker-toggle');
+
+  var brandCollections = {
+    'sun-shade-for-car-wiper-bladess-for-toyota': 'Toyota',
+    'sun-shade-for-car-wiper-bladess-for-ford': 'Ford',
+    'sun-shade-for-car-wiper-bladess-for-mazda': 'Mazda',
+    'car-windscreen-shade-windscreen-wiper-blades-for-honda': 'Honda',
+    'sun-shade-for-car-wiper-bladess-for-hyundai': 'Hyundai',
+    'sun-shade-for-car-wiper-bladess-for-nissan': 'Nissan',
+    'sun-shade-for-car-wiper-bladess-for-mitsubishi': 'Mitsubishi',
+    'sun-shade-for-car-wiper-bladess-for-kia': 'Kia',
+    'car-window-sun-shades-wiper-blade-for-bmw': 'BMW',
+    'sun-shade-for-car-wiper-bladess-for-mercedes': 'Mercedes-Benz',
+    'sun-shade-for-car-wiper-bladess-for-volkswagen': 'Volkswagen',
+    'sun-shade-for-car-good-wiper-blades-for-subaru': 'Subaru',
+    'car-windscreen-shade-windscreen-wiper-blades-for-isuzu': 'Isuzu',
+    'sun-shade-for-car-wiper-bladess-for-lexus': 'Lexus',
+    'sunshades-for-car-windows-wiper-blade-for-mg': 'MG',
+    'sun-shade-for-car-wiper-bladess-for-chevrolet': 'Chevrolet',
+    'sun-shade-for-car-wiper-bladess-for-geely': 'Geely',
+    'sun-shade-for-car-wiper-bladess-for-infiniti': 'Infiniti',
+    'sun-shade-for-car-wiper-bladess-for-byd': 'BYD',
+    'sun-shade-for-car-wiper-bladess-for-chery': 'Chery',
+  };
+
+  var modelAliases = {
+    'Land Cruiser 250': 'Prado 250',
+    'Land Cruiser 300': 'Land Cruiser 300',
+    'Land Cruiser 200': 'Land Cruiser 200',
+    'Land Cruiser Prado 150': 'Prado 150',
+    'Land Cruiser Prado 250': 'Prado 250',
+    'Land Cruiser Troop Carrier 70': 'Land Cruiser Troop Carrier 70',
+  };
+
+  var ymmData = { collections: {}, models: {}, years: {} };
+  var selections = { make: null, makeHandle: null, model: null, year: null, matchingProducts: [] };
+
+  function qs(sel) { return PICKER.querySelector(sel); }
+  function qsa(sel) { return PICKER.querySelectorAll(sel); }
+
+  function parseProductTitle(title, brandName) {
+    var cleaned = title
+      .replace(/^Front Windscreen (Shade|Wipers|Click Shade|Click Shades|Shades) for /i, '')
+      .replace(/^Rear Side Windows Click Shades for /i, '')
+      .replace(/^Rear Side Windows Shades for /i, '');
+    var brandRegex = new RegExp('^' + brandName.replace('-', '[-\\s]?') + '\\s*', 'i');
+    cleaned = cleaned.replace(brandRegex, '');
+    var years = [], model = cleaned;
+    var openEndMatch = cleaned.match(/(\d{4})\s*->\s*$/);
+    if (openEndMatch) {
+      var startYear = parseInt(openEndMatch[1]), currentYear = new Date().getFullYear();
+      for (var y = startYear; y <= currentYear; y++) years.push(y.toString());
+      model = cleaned.replace(/\s*\d{4}\s*->\s*$/, '').trim();
+    } else {
+      var rangeMatch = cleaned.match(/(\d{4})\s*[-–]\s*(\d{4})/);
+      if (rangeMatch) {
+        for (var y2 = parseInt(rangeMatch[1]); y2 <= parseInt(rangeMatch[2]); y2++) years.push(y2.toString());
+        model = cleaned.replace(/\s*\d{4}\s*[-–]\s*\d{4}\s*$/, '').trim();
+      } else {
+        var singleMatch = cleaned.match(/(\d{4})\s*$/);
+        if (singleMatch) { years.push(singleMatch[1]); model = cleaned.replace(/\s*\d{4}\s*$/, '').trim(); }
+      }
+    }
+    return { model: model.trim(), years: years };
+  }
+
+  function fetchCollectionProducts(h) {
+    return fetch('/collections/' + h + '/products.json?limit=250')
+      .then(function(r) { return r.json(); })
+      .then(function(d) { return d.products || []; })
+      .catch(function() { return []; });
+  }
+
+  function processProductsForBrand(products, brandName) {
+    var models = {}, years = {};
+    products.forEach(function(p) {
+      var parsed = parseProductTitle(p.title, brandName);
+      if (parsed.model) {
+        var cm = modelAliases[parsed.model] || parsed.model;
+        if (!models[cm]) models[cm] = [];
+        models[cm].push(p);
+        var key = brandName + '_' + cm;
+        if (!years[key]) years[key] = new Set();
+        parsed.years.forEach(function(y) { years[key].add(y); });
+      }
+    });
+    ymmData.models[brandName] = models;
+    Object.keys(years).forEach(function(k) { ymmData.years[k] = years[k]; });
+  }
+
+  function populateMakes() {
+    var dd = qs('[data-field="make"]'), opts = dd.querySelector('.srch-dropdown-options');
+    var sorted = Object.entries(brandCollections).map(function(e) { return {handle:e[0],name:e[1]}; }).sort(function(a,b){return a.name.localeCompare(b.name);});
+    sorted.forEach(function(b) { ymmData.collections[b.name] = b.handle; });
+    opts.innerHTML = sorted.map(function(b){return '<div class="srch-dropdown-option" data-value="'+b.name+'">'+b.name+'</div>';}).join('');
+    attachOptionListeners(dd); updateActiveStep();
+  }
+
+  function populateModels(make) {
+    var dd = qs('[data-field="model"]'), opts = dd.querySelector('.srch-dropdown-options'), tr = dd.querySelector('.srch-dropdown-trigger');
+    if (!make) { opts.innerHTML=''; tr.classList.add('disabled'); resetDropdown(dd); return Promise.resolve(); }
+    opts.innerHTML = '<div class="srch-dropdown-loading">Loading models...</div>'; tr.classList.remove('disabled');
+    var collHandle = ymmData.collections[make];
+    return fetchCollectionProducts(collHandle).then(function(products) {
+      processProductsForBrand(products, make);
+      var mdls = Object.keys(ymmData.models[make]||{}).sort();
+      if (!mdls.length) { opts.innerHTML='<div class="srch-dropdown-empty">No models found</div>'; return; }
+      opts.innerHTML = mdls.map(function(m){return '<div class="srch-dropdown-option" data-value="'+m+'">'+m+'</div>';}).join('');
+      attachOptionListeners(dd);
+    });
+  }
+
+  function fetchMetafieldYears(h, make) {
+    var params = new URLSearchParams({sections:'filter-data','filter.p.m.custom.vehicles_make':make});
+    return fetch('/collections/'+h+'?'+params)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var doc = new DOMParser().parseFromString(d['filter-data']||'','text/html');
+        return Array.from(doc.querySelectorAll('[data-year]')).map(function(el){return el.dataset.year;});
+      })
+      .catch(function() { return null; });
+  }
+
+  function populateYears(make, model) {
+    var dd = qs('[data-field="year"]'), opts = dd.querySelector('.srch-dropdown-options'), tr = dd.querySelector('.srch-dropdown-trigger');
+    if (!make||!model) { opts.innerHTML=''; tr.classList.add('disabled'); resetDropdown(dd); return Promise.resolve(); }
+    opts.innerHTML = '<div class="srch-dropdown-loading">Loading years...</div>'; tr.classList.remove('disabled');
+    var key = make+'_'+model, titleYears = new Set(Array.from(ymmData.years[key]||[]));
+    var collHandle = ymmData.collections[make];
+    return fetchMetafieldYears(collHandle, make).then(function(mfYears) {
+      var years;
+      if (mfYears && mfYears.length > 0) { var mfSet = new Set(mfYears); years = Array.from(titleYears).filter(function(y){return mfSet.has(y);}); }
+      else { years = Array.from(titleYears); }
+      if (!years.length) { opts.innerHTML='<div class="srch-dropdown-empty">No years found</div>'; return; }
+      years.sort(function(a,b){return b-a;});
+      opts.innerHTML = years.map(function(y){return '<div class="srch-dropdown-option" data-value="'+y+'">'+y+'</div>';}).join('');
+      attachOptionListeners(dd);
+    });
+  }
+
+  function updateActiveStep() {
+    qsa('.srch-dropdown').forEach(function(d){d.classList.remove('active-step');});
+    if (!selections.make) qs('[data-field="make"]').classList.add('active-step');
+    else if (!selections.model) qs('[data-field="model"]').classList.add('active-step');
+    else if (!selections.year) qs('[data-field="year"]').classList.add('active-step');
+  }
+
+  function resetDropdown(dd) {
+    var tr = dd.querySelector('.srch-dropdown-trigger'), val = tr.querySelector('.srch-dropdown-value');
+    val.textContent = tr.dataset.placeholder; val.classList.remove('selected');
+    var si = dd.querySelector('.srch-dropdown-search input'); if (si) si.value = '';
+    selections[dd.dataset.field] = null;
+  }
+
+  function attachOptionListeners(dd) {
+    dd.querySelectorAll('.srch-dropdown-option').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        var val = opt.dataset.value, field = dd.dataset.field;
+        selectOption(dd, val);
+        if (field === 'make') {
+          selections.make = val; selections.makeHandle = ymmData.collections[val]; selections.model = null; selections.year = null;
+          resetDropdown(qs('[data-field="model"]')); resetDropdown(qs('[data-field="year"]'));
+          populateModels(val).then(function() {
+            qs('[data-field="year"] .srch-dropdown-trigger').classList.add('disabled');
+            setTimeout(function(){openDropdown(qs('[data-field="model"]'));},50);
+          });
+        } else if (field === 'model') {
+          selections.model = val; selections.year = null; resetDropdown(qs('[data-field="year"]'));
+          populateYears(selections.make, val).then(function() {
+            setTimeout(function(){openDropdown(qs('[data-field="year"]'));},50);
+          });
+        } else if (field === 'year') {
+          selections.year = val;
+          var mdls = ymmData.models[selections.make]||{};
+          selections.matchingProducts = (mdls[selections.model]||[]).filter(function(p){return parseProductTitle(p.title,selections.make).years.includes(val);});
+        }
+        updateActiveStep(); updateSubmitButton(); updateToolbarText(); closeDropdown(dd); saveSelections();
+      });
+    });
+  }
+
+  function saveSelections() {
+    try {
+      sessionStorage.setItem('ymm_selections', JSON.stringify({
+        make: selections.make, makeHandle: selections.makeHandle,
+        model: selections.model, year: selections.year
+      }));
+    } catch (e) {}
+  }
+
+  function selectOption(dd, val) {
+    var v = dd.querySelector('.srch-dropdown-value'); v.textContent = val; v.classList.add('selected');
+    dd.querySelectorAll('.srch-dropdown-option').forEach(function(o){o.classList.toggle('active',o.dataset.value===val);});
+  }
+
+  function updateSubmitButton() {
+    qs('#srch-ymm-submit').classList.toggle('incomplete', !(selections.make && selections.model && selections.year));
+  }
+
+  function openDropdown(dd) {
+    if (dd.querySelector('.srch-dropdown-trigger').classList.contains('disabled')) return;
+    qsa('.srch-dropdown.open').forEach(function(d){if(d!==dd)closeDropdown(d);}); dd.classList.add('open');
+    var si = dd.querySelector('.srch-dropdown-search input'); if (si && window.innerWidth >= 768) setTimeout(function(){si.focus();},10);
+  }
+
+  function closeDropdown(dd) {
+    dd.classList.remove('open');
+    var si = dd.querySelector('.srch-dropdown-search input'); if (si) { si.value=''; filterOptions(dd,''); }
+  }
+
+  function filterOptions(dd, q) {
+    var lq = q.toLowerCase();
+    dd.querySelectorAll('.srch-dropdown-option').forEach(function(o){o.style.display=o.textContent.toLowerCase().includes(lq)?'':'none';});
+  }
+
+  function handleSubmit() {
+    if (!selections.make) { openDropdown(qs('[data-field="make"]')); return; }
+    if (!selections.model) { openDropdown(qs('[data-field="model"]')); return; }
+    if (!selections.year) { openDropdown(qs('[data-field="year"]')); return; }
+    var m = selections.matchingProducts;
+    if (m.length === 1) window.location.href = '/products/' + m[0].handle;
+    else window.location.href = '/search?type=product&q=' + encodeURIComponent(selections.make + ' ' + selections.model);
+  }
+
+  // Parse search query to find Make and Model
+  function parseSearchQuery() {
+    var params = new URLSearchParams(window.location.search);
+    var query = params.get('q');
+    if (!query) return null;
+    var q = query.trim();
+    var brandNames = Object.values(brandCollections).sort(function(a, b) { return b.length - a.length; });
+    for (var i = 0; i < brandNames.length; i++) {
+      var brand = brandNames[i];
+      if (q.toLowerCase().indexOf(brand.toLowerCase()) === 0) {
+        var rest = q.substring(brand.length).trim();
+        return { make: brand, model: rest || null };
+      }
+    }
+    return null;
+  }
+
+  // Pre-populate from search query and/or sessionStorage
+  function preselectFromQuery() {
+    var parsed = parseSearchQuery();
+    var savedYear = null;
+    try {
+      var saved = sessionStorage.getItem('ymm_selections');
+      if (saved) { savedYear = JSON.parse(saved).year || null; }
+    } catch (e) {}
+
+    if (!parsed || !parsed.make) return Promise.resolve();
+
+    selectOption(qs('[data-field="make"]'), parsed.make);
+    selections.make = parsed.make;
+    selections.makeHandle = ymmData.collections[parsed.make];
+
+    return populateModels(parsed.make).then(function() {
+      if (!parsed.model) { updateActiveStep(); updateSubmitButton(); return; }
+
+      var models = ymmData.models[parsed.make] || {};
+      var modelNames = Object.keys(models);
+      var exactMatch = modelNames.find(function(m) { return m === parsed.model; });
+      if (!exactMatch) exactMatch = modelNames.find(function(m) { return m.toLowerCase() === parsed.model.toLowerCase(); });
+      if (!exactMatch) { updateActiveStep(); updateSubmitButton(); return; }
+
+      selectOption(qs('[data-field="model"]'), exactMatch);
+      selections.model = exactMatch;
+
+      return populateYears(parsed.make, exactMatch).then(function() {
+        if (savedYear) {
+          var yearOpts = qs('[data-field="year"]').querySelectorAll('.srch-dropdown-option');
+          var yearExists = Array.from(yearOpts).some(function(opt) { return opt.dataset.value === savedYear; });
+          if (yearExists) {
+            selectOption(qs('[data-field="year"]'), savedYear);
+            selections.year = savedYear;
+            var mdls = ymmData.models[selections.make] || {};
+            selections.matchingProducts = (mdls[selections.model] || []).filter(function(p) {
+              return parseProductTitle(p.title, selections.make).years.includes(savedYear);
+            });
+          }
+        }
+        updateActiveStep(); updateSubmitButton();
+      });
+    });
+  }
+
+  function updateToolbarText() {
+    if (!TOOLBAR_TEXT) return;
+    var parts = [];
+    if (selections.make) parts.push(selections.make);
+    if (selections.model) parts.push(selections.model);
+    if (selections.year) parts.push(selections.year);
+    TOOLBAR_TEXT.textContent = parts.length ? parts.join(' | ') : 'Find your car';
+  }
+
+  function togglePicker() {
+    var body = qs('.srch-picker-body');
+    if (PICKER.classList.contains('expanded')) {
+      body.style.overflow = 'hidden';
+      PICKER.classList.remove('expanded');
+      if (TOOLBAR) TOOLBAR.classList.remove('picker-open');
+    } else {
+      PICKER.classList.add('expanded');
+      if (TOOLBAR) TOOLBAR.classList.add('picker-open');
+      body.addEventListener('transitionend', function handler() {
+        if (PICKER.classList.contains('expanded')) body.style.overflow = 'visible';
+        body.removeEventListener('transitionend', handler);
+      });
+    }
+  }
+
+  function init() {
+    populateMakes();
+
+    // Pre-select from search query
+    preselectFromQuery().then(function() {
+      updateToolbarText();
+    });
+
+    // Toolbar toggle click
+    if (TOOLBAR_TOGGLE) {
+      TOOLBAR_TOGGLE.addEventListener('click', function(e) {
+        e.stopPropagation();
+        togglePicker();
+      });
+    }
+
+    qsa('.srch-dropdown-trigger').forEach(function(tr) {
+      tr.addEventListener('click', function(e) { e.stopPropagation(); var dd=tr.closest('.srch-dropdown'); dd.classList.contains('open')?closeDropdown(dd):openDropdown(dd); });
+    });
+    qsa('.srch-dropdown-search input').forEach(function(inp) {
+      inp.addEventListener('input', function(e){filterOptions(inp.closest('.srch-dropdown'),e.target.value);});
+      inp.addEventListener('click', function(e){e.stopPropagation();});
+    });
+    document.addEventListener('click', function(e){if(!e.target.closest('.srch-dropdown'))qsa('.srch-dropdown.open').forEach(closeDropdown);});
+    qs('#srch-ymm-submit').addEventListener('click', function(e){e.stopPropagation();handleSubmit();});
+    document.addEventListener('keydown', function(e){if(e.key==='Escape')qsa('.srch-dropdown.open').forEach(closeDropdown);});
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>

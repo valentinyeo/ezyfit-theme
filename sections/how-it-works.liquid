@@ -1,0 +1,310 @@
+<style>
+  /* ========== HOW IT WORKS SECTION ========== */
+  .how-it-works-section {
+    padding: 40px 16px;
+    background: var(--white, #ffffff);
+  }
+
+  .how-it-works-container {
+    max-width: 1168px;
+    margin: 0 auto;
+  }
+
+  .how-it-works-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .how-it-works-heading {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 8px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .how-it-works-subtitle {
+    font-size: 14px;
+    color: var(--text-muted, #333333);
+    margin: 0;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .how-it-works-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .step-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .step-number {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: var(--blue, #2463af);
+    color: var(--white, #ffffff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .step-content {
+    flex: 1;
+    padding-top: 4px;
+  }
+
+  .step-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 6px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-muted, #333333);
+    margin: 0;
+    line-height: 1.5;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .how-it-works-cta {
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .hiw-cta-button {
+    display: inline-block;
+    background: var(--blue, #2463af);
+    color: var(--white, #ffffff);
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: background 0.2s ease;
+  }
+
+  .hiw-cta-button:hover {
+    background: #1d4f8a;
+  }
+
+  /* Desktop Layout */
+  @media (min-width: 768px) {
+    .how-it-works-section {
+      padding: 60px 40px;
+    }
+
+    .how-it-works-header {
+      margin-bottom: 48px;
+    }
+
+    .how-it-works-heading {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .how-it-works-subtitle {
+      font-size: 16px;
+    }
+
+    .how-it-works-steps {
+      flex-direction: row;
+      gap: 32px;
+    }
+
+    .step-item {
+      flex-direction: column;
+      flex: 1;
+      text-align: center;
+      gap: 16px;
+    }
+
+    .step-number {
+      width: 64px;
+      height: 64px;
+      font-size: 28px;
+      margin: 0 auto;
+    }
+
+    .step-content {
+      padding-top: 0;
+    }
+
+    .step-title {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 15px;
+    }
+
+    .how-it-works-cta {
+      margin-top: 48px;
+    }
+
+    .hiw-cta-button {
+      font-size: 18px;
+      padding: 16px 40px;
+    }
+  }
+</style>
+
+<section class="how-it-works-section">
+  <div class="how-it-works-container">
+    <div class="how-it-works-header">
+      <h2 class="how-it-works-heading">{{ section.settings.heading | default: 'How It Works' }}</h2>
+      {% if section.settings.subtitle != blank %}
+        <p class="how-it-works-subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div class="how-it-works-steps">
+      <!-- Step 1 -->
+      <div class="step-item">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3 class="step-title">{{ section.settings.step_1_title | default: 'Select Your Vehicle' }}</h3>
+          <p class="step-desc">{{ section.settings.step_1_desc | default: "Choose your exact make, model and year to get custom-fit shades designed specifically for your car's windows" }}</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-item">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3 class="step-title">{{ section.settings.step_2_title | default: 'Position & Click' }}</h3>
+          <p class="step-desc">{{ section.settings.step_2_desc | default: 'Simply position the shade against your window and the magnetic clips snap into place instantly - no tools needed' }}</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-item">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3 class="step-title">{{ section.settings.step_3_title | default: 'Enjoy the Ride' }}</h3>
+          <p class="step-desc">{{ section.settings.step_3_desc | default: "Experience instant UV protection and heat reduction. Remove just as easily when you don't need them" }}</p>
+        </div>
+      </div>
+    </div>
+
+    {% if section.settings.show_cta %}
+      <div class="how-it-works-cta">
+        <a href="#car-selector" class="hiw-cta-button">
+          {{ section.settings.cta_text | default: 'Find Your Fit' }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "How It Works",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "How It Works"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Get perfect-fit car shades in 3 simple steps"
+    },
+    {
+      "type": "header",
+      "content": "Step 1"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Title",
+      "default": "Select Your Vehicle"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1_desc",
+      "label": "Description",
+      "default": "Choose your exact make, model and year to get custom-fit shades designed specifically for your car's windows"
+    },
+    {
+      "type": "header",
+      "content": "Step 2"
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Title",
+      "default": "Position & Click"
+    },
+    {
+      "type": "textarea",
+      "id": "step_2_desc",
+      "label": "Description",
+      "default": "Simply position the shade against your window and the magnetic clips snap into place instantly - no tools needed"
+    },
+    {
+      "type": "header",
+      "content": "Step 3"
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Title",
+      "default": "Enjoy the Ride"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3_desc",
+      "label": "Description",
+      "default": "Experience instant UV protection and heat reduction. Remove just as easily when you don't need them"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show CTA Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "Find Your Fit"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button URL",
+      "default": "/collections/all"
+    }
+  ],
+  "presets": [
+    {
+      "name": "How It Works"
+    }
+  ]
+}
+{% endschema %}

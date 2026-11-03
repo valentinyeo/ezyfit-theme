@@ -1,0 +1,415 @@
+<style>
+  .video-carousel-section {
+    padding: 0;
+    background: var(--white, #ffffff);
+  }
+
+  .video-carousel-wrapper {
+    position: relative;
+  }
+
+  .video-carousel-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .video-carousel-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .video-carousel-track {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .video-item {
+    flex: 0 0 auto;
+    width: 46vw;
+    aspect-ratio: 9 / 16;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--gray, #f3f3f3);
+    position: relative;
+    cursor: pointer;
+  }
+
+  .video-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  .video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.2s;
+  }
+
+  .video-item:hover .video-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .play-icon {
+    width: 48px;
+    height: 48px;
+    color: white;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.2s, transform 0.2s;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+
+  .video-item:hover .play-icon {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Navigation arrow - hidden on mobile */
+  .video-nav-arrow {
+    display: none;
+  }
+
+  /* Lightbox */
+  .video-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .video-lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+
+  .lightbox-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: -16px;
+    right: -16px;
+    width: 44px;
+    height: 44px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    color: #1a1a1a;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 10;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .lightbox-close:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .lightbox-close svg {
+    width: 100%;
+    height: 100%;
+    stroke-width: 2.5;
+  }
+
+  #lightboxVideo {
+    width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    background: black;
+  }
+
+  @media (min-width: 768px) {
+    #lightboxVideo {
+      width: auto;
+      height: 90vh;
+      max-width: 95vw;
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .video-carousel-section {
+      max-width: 1168px;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
+    .video-carousel-wrapper {
+      position: relative;
+      padding-right: 60px;
+    }
+
+    .video-carousel-container {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .video-carousel-container::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.8) 50%, white);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .video-carousel-track {
+      padding: 24px;
+      padding-right: 80px;
+      gap: 16px;
+      justify-content: flex-start;
+      transition: transform 0.3s ease;
+    }
+
+    .video-item {
+      width: 280px;
+    }
+
+    /* Show navigation arrows on desktop */
+    .video-nav-arrow {
+      display: flex;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: white;
+      border: 1px solid #e5e5e5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+
+    .video-nav-arrow.video-nav-right {
+      right: 0;
+    }
+
+    .video-nav-arrow.video-nav-left {
+      left: 0;
+    }
+
+    .video-nav-arrow:hover {
+      background: var(--blue, #2463af);
+      border-color: var(--blue, #2463af);
+      color: white;
+    }
+
+    .video-nav-arrow svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .video-nav-arrow.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .video-item {
+      width: 320px;
+    }
+  }
+</style>
+
+
+<section class="video-carousel-section">
+  <div class="video-carousel-wrapper">
+    <div class="video-carousel-container" id="videoCarousel">
+      <div class="video-carousel-track">
+        {% for block in section.blocks %}
+          {% if block.type == 'video' and block.settings.video_url != blank %}
+            <div class="video-item" data-video-src="{{ block.settings.video_url }}" {{ block.shopify_attributes }}>
+              <video autoplay muted loop playsinline>
+                <source src="{{ block.settings.video_url }}" type="video/mp4">
+              </video>
+              <div class="video-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Desktop navigation arrows -->
+    <button class="video-nav-arrow video-nav-left hidden" id="videoNavLeft" aria-label="Scroll left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <button class="video-nav-arrow video-nav-right" id="videoNavRight" aria-label="Scroll right">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Video Lightbox Modal (Cinema Mode) - v2 -->
+  <div class="video-lightbox" id="videoLightbox">
+    <div class="lightbox-backdrop"></div>
+    <div class="lightbox-content">
+      <video id="lightboxVideo" controls playsinline>
+        <source src="" type="video/mp4">
+      </video>
+      <button class="lightbox-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const carousel = document.getElementById('videoCarousel');
+  const track = carousel?.querySelector('.video-carousel-track');
+  const navLeft = document.getElementById('videoNavLeft');
+  const navRight = document.getElementById('videoNavRight');
+  const lightbox = document.getElementById('videoLightbox');
+  const lightboxVideo = document.getElementById('lightboxVideo');
+  const lightboxClose = lightbox?.querySelector('.lightbox-close');
+  const lightboxBackdrop = lightbox?.querySelector('.lightbox-backdrop');
+  const videoItems = document.querySelectorAll('.video-item');
+
+  if (!carousel || !track) return;
+
+  // Desktop scroll with arrows
+  let scrollPosition = 0;
+  const scrollAmount = 320;
+
+  function updateArrowVisibility() {
+    const maxScroll = track.scrollWidth - carousel.clientWidth;
+
+    // Left arrow: hidden when at start
+    if (navLeft) {
+      if (scrollPosition <= 0) {
+        navLeft.classList.add('hidden');
+      } else {
+        navLeft.classList.remove('hidden');
+      }
+    }
+
+    // Right arrow: hidden when at end
+    if (navRight) {
+      if (scrollPosition >= maxScroll - 10) {
+        navRight.classList.add('hidden');
+      } else {
+        navRight.classList.remove('hidden');
+      }
+    }
+  }
+
+  if (navLeft) {
+    navLeft.addEventListener('click', function() {
+      scrollPosition = Math.max(scrollPosition - scrollAmount, 0);
+      track.style.transform = `translateX(-${scrollPosition}px)`;
+      updateArrowVisibility();
+    });
+  }
+
+  if (navRight) {
+    navRight.addEventListener('click', function() {
+      const maxScroll = track.scrollWidth - carousel.clientWidth;
+      scrollPosition = Math.min(scrollPosition + scrollAmount, maxScroll);
+      track.style.transform = `translateX(-${scrollPosition}px)`;
+      updateArrowVisibility();
+    });
+  }
+
+  // Click to open lightbox
+  videoItems.forEach(function(item) {
+    item.addEventListener('click', function() {
+      const videoSrc = item.dataset.videoSrc;
+      if (videoSrc && lightboxVideo && lightbox) {
+        lightboxVideo.src = videoSrc;
+        lightbox.classList.add('active');
+        lightboxVideo.play();
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+
+  // Close lightbox
+  function closeLightbox() {
+    if (lightbox && lightboxVideo) {
+      lightbox.classList.remove('active');
+      lightboxVideo.pause();
+      lightboxVideo.src = '';
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (lightboxBackdrop) lightboxBackdrop.addEventListener('click', closeLightbox);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Initial arrow state
+  updateArrowVisibility();
+});
+</script>
+
+{% schema %}
+{
+  "name": "Video Carousel",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "Video URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Carousel"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1070 @@
+<style>
+  /* ========== DEAL HEADER (Standalone above card) ========== */
+  .deal-header {
+    background: transparent;
+    padding: 0 16px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .deal-header-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .deal-badge {
+    background: #cc0c39;
+    color: #ffffff;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .deal-text {
+    color: #cc0c39;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .deal-countdown {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #cc0c39;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .countdown-icon {
+    width: 16px;
+    height: 16px;
+    stroke: #cc0c39;
+  }
+
+  .countdown-timer {
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== CAR SELECTOR SECTION ========== */
+  .selector-section {
+    padding: 0 16px 8px;
+    margin-top: -16px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .selector-card {
+    background: var(--white, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.18);
+    overflow: visible;
+  }
+
+  .selector-body {
+    padding: 12px;
+  }
+
+
+  /* ========== YMM FORM ========== */
+  .ymm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* ========== CUSTOM DROPDOWN ========== */
+  .ymm-dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  .ymm-dropdown-trigger {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted, #333333);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--white, #ffffff);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .ymm-dropdown-trigger:hover:not(.disabled) {
+    border-color: var(--blue, #1e52d4);
+  }
+
+  .ymm-dropdown.active-step .ymm-dropdown-trigger:not(.disabled) {
+    border: 2px solid var(--blue, #1e52d4);
+    background: #f8fafc;
+    box-shadow: 0 0 0 3px rgba(30, 82, 212, 0.2);
+  }
+
+  .ymm-dropdown.active-step .ymm-dropdown-value:not(.selected) {
+    color: var(--blue, #1e52d4);
+    font-weight: 600;
+  }
+
+  .ymm-dropdown-trigger.disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    background: #f5f5f5;
+    color: #666666;
+  }
+
+  .ymm-dropdown.open .ymm-dropdown-trigger {
+    border-color: var(--blue, #1e52d4);
+    box-shadow: 0 0 0 2px rgba(30, 82, 212, 0.2);
+  }
+
+  .ymm-dropdown-value {
+    flex: 1;
+    text-align: left;
+  }
+
+  .ymm-dropdown-value.selected {
+    color: var(--text, #333333);
+  }
+
+  .ymm-dropdown-arrow {
+    width: 20px;
+    height: 20px;
+    stroke: #333333;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .ymm-dropdown.open .ymm-dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* ========== DROPDOWN MENU ========== */
+  .ymm-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--white, #ffffff);
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+    max-height: 280px;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .ymm-dropdown.open .ymm-dropdown-menu {
+    display: flex;
+  }
+
+  /* ========== SEARCH INPUT ========== */
+  .ymm-dropdown-search {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border, #e0e0e0);
+    flex-shrink: 0;
+  }
+
+  .ymm-dropdown-search input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .ymm-dropdown-search input:focus {
+    border-color: var(--blue, #1e52d4);
+  }
+
+  .ymm-dropdown-search input::placeholder {
+    color: #999999;
+  }
+
+  /* ========== OPTIONS LIST ========== */
+  .ymm-dropdown-options {
+    overflow-y: auto;
+    max-height: 200px;
+    padding: 6px 0;
+  }
+
+  .ymm-dropdown-option {
+    padding: 12px 16px;
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .ymm-dropdown-option:hover {
+    background: #e3f0ff;
+    color: #1a1a1a;
+  }
+
+  .ymm-dropdown-option.active {
+    background: #1e52d4;
+    color: white;
+    font-weight: 700;
+  }
+
+  .ymm-dropdown-loading,
+  .ymm-dropdown-empty {
+    padding: 16px;
+    text-align: center;
+    color: #666;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+  }
+
+  /* ========== SUBMIT BUTTON ========== */
+  .ymm-submit {
+    width: 100%;
+    padding: 12px;
+    background: var(--yellow, #ffd600);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+  }
+
+  .ymm-submit:hover {
+    background: var(--yellow-hover, #e6c100);
+  }
+
+  .ymm-submit.incomplete {
+    opacity: 0.9;
+  }
+
+  /* ========== GUARANTEE BADGE ========== */
+  .guarantee-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    white-space: nowrap;
+  }
+
+  .guarantee-badge svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--brand-blue, #2463af);
+    flex-shrink: 0;
+  }
+
+  /* ========== DESKTOP LAYOUT ========== */
+  @media (min-width: 768px) {
+    .deal-header {
+      padding: 14px 24px;
+    }
+
+    .deal-badge {
+      font-size: 14px;
+      padding: 5px 12px;
+    }
+
+    .deal-text {
+      font-size: 15px;
+    }
+
+    .countdown-timer {
+      font-size: 15px;
+    }
+
+    .selector-section {
+      padding: 0 40px 20px;
+      max-width: 900px;
+      margin: -30px auto 0;
+    }
+
+    .selector-body {
+      padding: 20px 24px;
+    }
+
+    .ymm-form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) auto;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .ymm-dropdown-trigger {
+      height: 48px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .ymm-submit {
+      width: auto;
+      height: 48px;
+      padding: 0 28px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ymm-dropdown-menu {
+      min-width: 200px;
+    }
+  }
+</style>
+
+<section class="selector-section" id="car-selector">
+  {% if section.settings.show_deal_banner %}
+  <!-- Deal Header - Standalone above card -->
+  <div class="deal-header">
+    <div class="deal-header-content">
+      <span class="deal-badge">30% off</span>
+      <span class="deal-text">Limited time deal</span>
+    </div>
+    <div class="deal-countdown">
+      <svg class="countdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span class="countdown-timer" id="deal-countdown">47:59:59</span>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="selector-card">
+    <div class="selector-body">
+      <div class="ymm-form" id="ymm-form">
+        <!-- Make Dropdown -->
+        <div class="ymm-dropdown" data-field="make">
+          <div class="ymm-dropdown-trigger" data-placeholder="Select Make">
+            <span class="ymm-dropdown-value">Select Make</span>
+            <svg class="ymm-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="ymm-dropdown-menu">
+            <div class="ymm-dropdown-search">
+              <input type="text" placeholder="Search make..." autocomplete="off">
+            </div>
+            <div class="ymm-dropdown-options"></div>
+          </div>
+        </div>
+
+        <!-- Model Dropdown -->
+        <div class="ymm-dropdown" data-field="model">
+          <div class="ymm-dropdown-trigger disabled" data-placeholder="Select Model">
+            <span class="ymm-dropdown-value">Select Model</span>
+            <svg class="ymm-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="ymm-dropdown-menu">
+            <div class="ymm-dropdown-search">
+              <input type="text" placeholder="Search model..." autocomplete="off">
+            </div>
+            <div class="ymm-dropdown-options"></div>
+          </div>
+        </div>
+
+        <!-- Year Dropdown -->
+        <div class="ymm-dropdown" data-field="year">
+          <div class="ymm-dropdown-trigger disabled" data-placeholder="Select Year">
+            <span class="ymm-dropdown-value">Select Year</span>
+            <svg class="ymm-dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="ymm-dropdown-menu">
+            <div class="ymm-dropdown-search">
+              <input type="text" placeholder="Search year..." autocomplete="off">
+            </div>
+            <div class="ymm-dropdown-options"></div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="button" class="ymm-submit" id="ymm-submit">
+          {{ section.settings.button_text | default: 'Find Your Car' }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="guarantee-badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      <polyline points="9 12 11 14 15 10"></polyline>
+    </svg>
+    <span>100% Satisfaction or Your Money Back</span>
+  </div>
+</section>
+
+<script>
+  (function () {
+    // Brand collections mapping (collection handle -> display name)
+    const brandCollections = {
+      'sun-shade-for-car-wiper-bladess-for-toyota': 'Toyota',
+      'sun-shade-for-car-wiper-bladess-for-ford': 'Ford',
+      'sun-shade-for-car-wiper-bladess-for-mazda': 'Mazda',
+      'car-windscreen-shade-windscreen-wiper-blades-for-honda': 'Honda',
+      'sun-shade-for-car-wiper-bladess-for-hyundai': 'Hyundai',
+      'sun-shade-for-car-wiper-bladess-for-nissan': 'Nissan',
+      'sun-shade-for-car-wiper-bladess-for-mitsubishi': 'Mitsubishi',
+      'sun-shade-for-car-wiper-bladess-for-kia': 'Kia',
+      'car-window-sun-shades-wiper-blade-for-bmw': 'BMW',
+      'sun-shade-for-car-wiper-bladess-for-mercedes': 'Mercedes-Benz',
+      'sun-shade-for-car-wiper-bladess-for-volkswagen': 'Volkswagen',
+      'sun-shade-for-car-good-wiper-blades-for-subaru': 'Subaru',
+      'car-windscreen-shade-windscreen-wiper-blades-for-isuzu': 'Isuzu',
+      'sun-shade-for-car-wiper-bladess-for-lexus': 'Lexus',
+      'sunshades-for-car-windows-wiper-blade-for-mg': 'MG',
+      'sun-shade-for-car-wiper-bladess-for-chevrolet': 'Chevrolet',
+      'sun-shade-for-car-wiper-bladess-for-geely': 'Geely',
+      'sun-shade-for-car-wiper-bladess-for-infiniti': 'Infiniti',
+      'sun-shade-for-car-wiper-bladess-for-byd': 'BYD',
+      'sun-shade-for-car-wiper-bladess-for-chery': 'Chery',
+    };
+
+    // Model name synonyms - maps variations to canonical names
+    const modelAliases = {
+      'Land Cruiser 250': 'Prado 250',
+      'Land Cruiser 300': 'Land Cruiser 300',
+      'Land Cruiser 200': 'Land Cruiser 200',
+      'Land Cruiser Prado 150': 'Prado 150',
+      'Land Cruiser Prado 250': 'Prado 250',
+      'Land Cruiser Troop Carrier 70': 'Land Cruiser Troop Carrier 70',
+    };
+
+    // Store data
+    let ymmData = {
+      collections: {}, // { brandName: collectionHandle }
+      models: {}, // { brandName: { modelName: [products] } }
+      years: {}, // { brandName_modelName: Set of years }
+    };
+
+    // Current selections
+    let selections = {
+      make: null,
+      makeHandle: null,
+      model: null,
+      year: null,
+      matchingProducts: [],
+    };
+
+    // Parse model and years from product title
+    function parseProductTitle(title, brandName) {
+      // Remove common prefixes
+      let cleaned = title
+        .replace(/^Front Windscreen (Shade|Wipers|Click Shade|Click Shades|Shades) for /i, '')
+        .replace(/^Rear Side Windows Click Shades for /i, '')
+        .replace(/^Rear Side Windows Shades for /i, '');
+
+      // Remove brand name from start
+      const brandRegex = new RegExp('^' + brandName.replace('-', '[-\\s]?') + '\\s*', 'i');
+      cleaned = cleaned.replace(brandRegex, '');
+
+      // Extract years - handle various formats
+      let years = [];
+      let model = cleaned;
+
+      // Pattern: "2019 ->" or "2019->" means 2019 to current year
+      const openEndMatch = cleaned.match(/(\d{4})\s*->\s*$/);
+      if (openEndMatch) {
+        const startYear = parseInt(openEndMatch[1]);
+        const currentYear = new Date().getFullYear();
+        // Don't generate future years - cap at current year
+        for (let y = startYear; y <= currentYear; y++) {
+          years.push(y.toString());
+        }
+        model = cleaned.replace(/\s*\d{4}\s*->\s*$/, '').trim();
+      } else {
+        // Pattern: "2019-2024" or "2019 - 2024"
+        const rangeMatch = cleaned.match(/(\d{4})\s*[-–]\s*(\d{4})/);
+        if (rangeMatch) {
+          const startYear = parseInt(rangeMatch[1]);
+          const endYear = parseInt(rangeMatch[2]);
+          for (let y = startYear; y <= endYear; y++) {
+            years.push(y.toString());
+          }
+          model = cleaned.replace(/\s*\d{4}\s*[-–]\s*\d{4}\s*$/, '').trim();
+        } else {
+          // Single year at end
+          const singleMatch = cleaned.match(/(\d{4})\s*$/);
+          if (singleMatch) {
+            years.push(singleMatch[1]);
+            model = cleaned.replace(/\s*\d{4}\s*$/, '').trim();
+          }
+        }
+      }
+
+      // Clean up model name
+      model = model.trim();
+
+      return { model, years };
+    }
+
+    // Fetch products from a specific collection
+    async function fetchCollectionProducts(collectionHandle) {
+      try {
+        const response = await fetch(`/collections/${collectionHandle}/products.json?limit=250`);
+        const data = await response.json();
+        return data.products || [];
+      } catch (error) {
+        console.error('Failed to fetch collection products:', error);
+        return [];
+      }
+    }
+
+    // Process products for a brand
+    function processProductsForBrand(products, brandName) {
+      const models = {};
+      const years = {};
+
+      products.forEach((product) => {
+        const parsed = parseProductTitle(product.title, brandName);
+
+        if (parsed.model) {
+          // Apply synonym mapping to get canonical model name
+          const canonicalModel = modelAliases[parsed.model] || parsed.model;
+
+          // Group by canonical model
+          if (!models[canonicalModel]) {
+            models[canonicalModel] = [];
+          }
+          models[canonicalModel].push(product);
+
+          // Track years for this model
+          const key = `${brandName}_${canonicalModel}`;
+          if (!years[key]) {
+            years[key] = new Set();
+          }
+          parsed.years.forEach((y) => years[key].add(y));
+        }
+      });
+
+      ymmData.models[brandName] = models;
+      Object.assign(ymmData.years, years);
+    }
+
+    // Populate makes dropdown from brand collections
+    function populateMakes() {
+      const dropdown = document.querySelector('[data-field="make"]');
+      const optionsContainer = dropdown.querySelector('.ymm-dropdown-options');
+
+      // Sort brands alphabetically
+      const sortedBrands = Object.entries(brandCollections)
+        .map(([handle, name]) => ({ handle, name }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      // Store for lookup
+      sortedBrands.forEach(({ handle, name }) => {
+        ymmData.collections[name] = handle;
+      });
+
+      optionsContainer.innerHTML = sortedBrands
+        .map(({ name }) => `<div class="ymm-dropdown-option" data-value="${name}">${name}</div>`)
+        .join('');
+
+      attachOptionListeners(dropdown);
+      updateActiveStep();
+    }
+
+    // Populate models dropdown based on selected make
+    async function populateModels(make) {
+      const dropdown = document.querySelector('[data-field="model"]');
+      const optionsContainer = dropdown.querySelector('.ymm-dropdown-options');
+      const trigger = dropdown.querySelector('.ymm-dropdown-trigger');
+
+      if (!make) {
+        optionsContainer.innerHTML = '';
+        trigger.classList.add('disabled');
+        resetDropdown(dropdown);
+        return;
+      }
+
+      // Show loading
+      optionsContainer.innerHTML = '<div class="ymm-dropdown-loading">Loading models...</div>';
+      trigger.classList.remove('disabled');
+
+      // Fetch products from the brand's collection
+      const collectionHandle = ymmData.collections[make];
+      const products = await fetchCollectionProducts(collectionHandle);
+
+      // Process products to extract models
+      processProductsForBrand(products, make);
+
+      const models = ymmData.models[make] || {};
+
+      // Get unique canonical model names (this deduplicates the dropdown)
+      const sortedModels = Object.keys(models).sort();
+
+      if (sortedModels.length === 0) {
+        optionsContainer.innerHTML = '<div class="ymm-dropdown-empty">No models found</div>';
+        return;
+      }
+
+      optionsContainer.innerHTML = sortedModels
+        .map((model) => `<div class="ymm-dropdown-option" data-value="${model}">${model}</div>`)
+        .join('');
+
+      attachOptionListeners(dropdown);
+    }
+
+    // Fetch available year filter values from Shopify metafields via section rendering
+    // Only filters by make (not model) because model metafield values don't reliably
+    // match title-parsed model names, causing empty results
+    async function fetchMetafieldYears(collectionHandle, make) {
+      try {
+        const params = new URLSearchParams({
+          sections: 'filter-data',
+          'filter.p.m.custom.vehicles_make': make,
+        });
+        const response = await fetch(`/collections/${collectionHandle}?${params}`);
+        const data = await response.json();
+        const html = data['filter-data'] || '';
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        return Array.from(doc.querySelectorAll('[data-year]')).map((el) => el.dataset.year);
+      } catch (error) {
+        console.error('Failed to fetch metafield years:', error);
+        return null;
+      }
+    }
+
+    // Populate years dropdown based on selected make and model
+    async function populateYears(make, model) {
+      const dropdown = document.querySelector('[data-field="year"]');
+      const optionsContainer = dropdown.querySelector('.ymm-dropdown-options');
+      const trigger = dropdown.querySelector('.ymm-dropdown-trigger');
+
+      if (!make || !model) {
+        optionsContainer.innerHTML = '';
+        trigger.classList.add('disabled');
+        resetDropdown(dropdown);
+        return;
+      }
+
+      // Show loading state
+      optionsContainer.innerHTML = '<div class="ymm-dropdown-loading">Loading years...</div>';
+      trigger.classList.remove('disabled');
+
+      // Get title-parsed years for this specific model
+      const key = `${make}_${model}`;
+      const titleYears = new Set(Array.from(ymmData.years[key] || []));
+
+      // Fetch metafield years (filtered by make only) to validate against real data
+      const collectionHandle = ymmData.collections[make];
+      const metafieldYears = await fetchMetafieldYears(collectionHandle, make);
+
+      let years;
+      if (metafieldYears && metafieldYears.length > 0) {
+        // Intersect: only show years that exist in BOTH metafield data AND title-parsed data
+        // This prevents showing years like 2026 that titles claim but metafields don't have
+        const metafieldSet = new Set(metafieldYears);
+        years = Array.from(titleYears).filter((y) => metafieldSet.has(y));
+      } else {
+        // Fallback: if metafield fetch fails entirely, use title-parsed years
+        years = Array.from(titleYears);
+      }
+
+      if (years.length === 0) {
+        optionsContainer.innerHTML = '<div class="ymm-dropdown-empty">No years found</div>';
+        return;
+      }
+
+      const sortedYears = years.sort((a, b) => b - a); // Descending
+      optionsContainer.innerHTML = sortedYears
+        .map((year) => `<div class="ymm-dropdown-option" data-value="${year}">${year}</div>`)
+        .join('');
+
+      attachOptionListeners(dropdown);
+    }
+
+    // Update which dropdown has the active step highlight
+    function updateActiveStep() {
+      document.querySelectorAll('.ymm-dropdown').forEach((d) => d.classList.remove('active-step'));
+
+      if (!selections.make) {
+        document.querySelector('[data-field="make"]').classList.add('active-step');
+      } else if (!selections.model) {
+        document.querySelector('[data-field="model"]').classList.add('active-step');
+      } else if (!selections.year) {
+        document.querySelector('[data-field="year"]').classList.add('active-step');
+      }
+    }
+
+    // Reset a dropdown to its placeholder state
+    function resetDropdown(dropdown) {
+      const trigger = dropdown.querySelector('.ymm-dropdown-trigger');
+      const valueEl = trigger.querySelector('.ymm-dropdown-value');
+      const searchInput = dropdown.querySelector('.ymm-dropdown-search input');
+
+      valueEl.textContent = trigger.dataset.placeholder;
+      valueEl.classList.remove('selected');
+      if (searchInput) searchInput.value = '';
+
+      const field = dropdown.dataset.field;
+      selections[field] = null;
+    }
+
+    // Attach click listeners to dropdown options
+    function attachOptionListeners(dropdown) {
+      const options = dropdown.querySelectorAll('.ymm-dropdown-option');
+      const field = dropdown.dataset.field;
+
+      options.forEach((option) => {
+        option.addEventListener('click', async () => {
+          const value = option.dataset.value;
+          selectOption(dropdown, value);
+
+          if (field === 'make') {
+            selections.make = value;
+            selections.makeHandle = ymmData.collections[value];
+            selections.model = null;
+            selections.year = null;
+            resetDropdown(document.querySelector('[data-field="model"]'));
+            resetDropdown(document.querySelector('[data-field="year"]'));
+            await populateModels(value);
+            document.querySelector('[data-field="year"] .ymm-dropdown-trigger').classList.add('disabled');
+            // Auto-open Model dropdown after Make selection
+            setTimeout(() => {
+              openDropdown(document.querySelector('[data-field="model"]'));
+            }, 50);
+          } else if (field === 'model') {
+            selections.model = value;
+            selections.year = null;
+            resetDropdown(document.querySelector('[data-field="year"]'));
+            await populateYears(selections.make, value);
+            // Auto-open Year dropdown after years are loaded
+            setTimeout(() => {
+              openDropdown(document.querySelector('[data-field="year"]'));
+            }, 50);
+          } else if (field === 'year') {
+            selections.year = value;
+            // Find matching products
+            const models = ymmData.models[selections.make] || {};
+            selections.matchingProducts = (models[selections.model] || []).filter((p) => {
+              const parsed = parseProductTitle(p.title, selections.make);
+              return parsed.years.includes(value);
+            });
+          }
+
+          updateActiveStep();
+          updateSubmitButton();
+          closeDropdown(dropdown);
+          saveSelections();
+        });
+      });
+    }
+
+    // Save current selections to sessionStorage
+    function saveSelections() {
+      try {
+        sessionStorage.setItem('ymm_selections', JSON.stringify({
+          make: selections.make,
+          makeHandle: selections.makeHandle,
+          model: selections.model,
+          year: selections.year
+        }));
+      } catch (e) {
+        // sessionStorage not available, silently fail
+      }
+    }
+
+    // Restore selections from sessionStorage
+    async function restoreSelections() {
+      try {
+        const saved = sessionStorage.getItem('ymm_selections');
+        if (!saved) return;
+
+        const data = JSON.parse(saved);
+        if (!data.make) return;
+
+        // Restore Make
+        const makeDropdown = document.querySelector('[data-field="make"]');
+        selectOption(makeDropdown, data.make);
+        selections.make = data.make;
+        selections.makeHandle = data.makeHandle;
+
+        if (!data.model) {
+          updateActiveStep();
+          updateSubmitButton();
+          return;
+        }
+
+        // Populate models (async fetch) then restore model selection
+        await populateModels(data.make);
+        const modelDropdown = document.querySelector('[data-field="model"]');
+        selectOption(modelDropdown, data.model);
+        selections.model = data.model;
+
+        if (!data.year) {
+          updateActiveStep();
+          updateSubmitButton();
+          return;
+        }
+
+        // Populate years (async fetch) then restore year selection
+        await populateYears(data.make, data.model);
+        const yearDropdown = document.querySelector('[data-field="year"]');
+        selectOption(yearDropdown, data.year);
+        selections.year = data.year;
+
+        // Rebuild matchingProducts for submit to work
+        const models = ymmData.models[selections.make] || {};
+        selections.matchingProducts = (models[selections.model] || []).filter((p) => {
+          const parsed = parseProductTitle(p.title, selections.make);
+          return parsed.years.includes(data.year);
+        });
+
+        updateActiveStep();
+        updateSubmitButton();
+      } catch (e) {
+        // If anything fails during restore, just start fresh
+      }
+    }
+
+    // Select an option in a dropdown
+    function selectOption(dropdown, value) {
+      const trigger = dropdown.querySelector('.ymm-dropdown-trigger');
+      const valueEl = trigger.querySelector('.ymm-dropdown-value');
+
+      valueEl.textContent = value;
+      valueEl.classList.add('selected');
+
+      dropdown.querySelectorAll('.ymm-dropdown-option').forEach((opt) => {
+        opt.classList.toggle('active', opt.dataset.value === value);
+      });
+    }
+
+    // Update submit button state
+    function updateSubmitButton() {
+      const submitBtn = document.getElementById('ymm-submit');
+      const isComplete = selections.make && selections.model && selections.year;
+      submitBtn.classList.toggle('incomplete', !isComplete);
+    }
+
+    // Open dropdown
+    function openDropdown(dropdown) {
+      const trigger = dropdown.querySelector('.ymm-dropdown-trigger');
+      if (trigger.classList.contains('disabled')) return;
+
+      document.querySelectorAll('.ymm-dropdown.open').forEach((d) => {
+        if (d !== dropdown) closeDropdown(d);
+      });
+
+      dropdown.classList.add('open');
+      const searchInput = dropdown.querySelector('.ymm-dropdown-search input');
+      if (searchInput && window.innerWidth >= 768) {
+        setTimeout(() => searchInput.focus(), 10);
+      }
+    }
+
+    // Close dropdown
+    function closeDropdown(dropdown) {
+      dropdown.classList.remove('open');
+      const searchInput = dropdown.querySelector('.ymm-dropdown-search input');
+      if (searchInput) {
+        searchInput.value = '';
+        filterOptions(dropdown, '');
+      }
+    }
+
+    // Filter options based on search
+    function filterOptions(dropdown, query) {
+      const options = dropdown.querySelectorAll('.ymm-dropdown-option');
+      const lowerQuery = query.toLowerCase();
+
+      options.forEach((option) => {
+        const text = option.textContent.toLowerCase();
+        option.style.display = text.includes(lowerQuery) ? '' : 'none';
+      });
+    }
+
+    // Handle form submission
+    function handleSubmit() {
+      if (!selections.make) {
+        openDropdown(document.querySelector('[data-field="make"]'));
+        return;
+      }
+
+      if (!selections.model) {
+        openDropdown(document.querySelector('[data-field="model"]'));
+        return;
+      }
+
+      if (!selections.year) {
+        openDropdown(document.querySelector('[data-field="year"]'));
+        return;
+      }
+
+      const matches = selections.matchingProducts;
+
+      if (matches.length === 1) {
+        // Single match — go directly to the product page
+        window.location.href = `/products/${matches[0].handle}`;
+      } else {
+        // Multiple matches — search by brand + model (metafield filters don't work)
+        const query = `${selections.make} ${selections.model}`;
+        window.location.href = `/search?type=product&q=${encodeURIComponent(query)}`;
+      }
+    }
+
+    // Initialize
+    function init() {
+      document.getElementById('ymm-submit').classList.add('incomplete');
+
+      // Populate makes from our known brand collections
+      populateMakes();
+
+      // Restore any saved selections from sessionStorage (e.g. after browser Back)
+      restoreSelections();
+
+      // Dropdown trigger clicks
+      document.querySelectorAll('.ymm-dropdown-trigger').forEach((trigger) => {
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const dropdown = trigger.closest('.ymm-dropdown');
+          if (dropdown.classList.contains('open')) {
+            closeDropdown(dropdown);
+          } else {
+            openDropdown(dropdown);
+          }
+        });
+      });
+
+      // Search input handling
+      document.querySelectorAll('.ymm-dropdown-search input').forEach((input) => {
+        input.addEventListener('input', (e) => {
+          const dropdown = input.closest('.ymm-dropdown');
+          filterOptions(dropdown, e.target.value);
+        });
+
+        input.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      });
+
+      // Close dropdowns on outside click
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.ymm-dropdown')) {
+          document.querySelectorAll('.ymm-dropdown.open').forEach(closeDropdown);
+        }
+      });
+
+      // Submit button
+      document.getElementById('ymm-submit').addEventListener('click', (e) => {
+        e.stopPropagation();
+        handleSubmit();
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.ymm-dropdown.open').forEach(closeDropdown);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+
+  // Countdown Timer
+  (function () {
+    const COUNTDOWN_KEY = 'clickshades_deal_end';
+    const COUNTDOWN_HOURS = 48;
+
+    function getEndTime() {
+      let endTime = localStorage.getItem(COUNTDOWN_KEY);
+      if (!endTime) {
+        endTime = Date.now() + COUNTDOWN_HOURS * 60 * 60 * 1000;
+        localStorage.setItem(COUNTDOWN_KEY, endTime);
+      }
+      return parseInt(endTime);
+    }
+
+    function formatTime(ms) {
+      if (ms <= 0) return '00:00:00';
+      const totalSeconds = Math.floor(ms / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds
+        .toString()
+        .padStart(2, '0')}`;
+    }
+
+    function updateCountdown() {
+      const countdownEl = document.getElementById('deal-countdown');
+      if (!countdownEl) return;
+
+      const endTime = getEndTime();
+      const remaining = endTime - Date.now();
+
+      if (remaining <= 0) {
+        localStorage.removeItem(COUNTDOWN_KEY);
+        countdownEl.textContent = formatTime(COUNTDOWN_HOURS * 60 * 60 * 1000);
+        return;
+      }
+
+      countdownEl.textContent = formatTime(remaining);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Car Selector",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_deal_banner",
+      "label": "Show deal banner",
+      "default": false,
+      "info": "Toggle the 30% off limited time deal banner"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Find Your Car"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Car Selector"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,587 @@
+{% comment %}
+  Upsell Products Section
+  Priority:
+  1. Shopify's complementary products (manually mapped by client via Search & Discovery app)
+  2. Automatic matching via vehicles_make + vehicles_model metafields
+{% endcomment %}
+
+<style>
+  /* ========== UPSELL PRODUCTS SECTION ========== */
+  .upsell-products-section {
+    padding: 12px 16px 24px;
+    background: #f8fafc;
+  }
+
+  .upsell-container {
+    max-width: 1168px;
+    margin: 0 auto;
+  }
+
+  .upsell-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 20px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .upsell-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .upsell-item {
+    position: relative;
+  }
+
+  .upsell-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .upsell-card:hover {
+    border-color: var(--blue, #2463af);
+    box-shadow: 0 2px 8px rgba(36, 99, 175, 0.1);
+  }
+
+  .upsell-image {
+    width: 80px;
+    min-width: 80px;
+    border-radius: 6px;
+    overflow: visible;
+    background: #f9fafb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .upsell-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 100px;
+  }
+
+  .upsell-details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .upsell-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark, #1a1a1a);
+    margin: 0 0 6px;
+    line-height: 1.3;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .upsell-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .upsell-price .price-current {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .upsell-price .price-compare {
+    font-size: 14px;
+    color: #cc0000;
+    text-decoration: line-through;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .upsell-add-single {
+    padding: 8px 16px;
+    background: linear-gradient(180deg, #2463af 0%, #1a4f8c 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .upsell-add-single:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(36, 99, 175, 0.3);
+  }
+
+  .upsell-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .upsell-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .upsell-count {
+    color: #6b7280;
+  }
+
+  .upsell-total {
+    font-weight: 700;
+    color: var(--dark, #1a1a1a);
+    font-size: 16px;
+  }
+
+  .upsell-add-btn {
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(180deg, #FFD814 0%, #F7CA00 100%);
+    color: var(--dark, #1a1a1a);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .upsell-add-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .upsell-add-btn:disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .upsell-products-section {
+      padding: 16px 40px 32px;
+    }
+
+    .upsell-heading {
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+
+    .upsell-grid {
+      gap: 16px;
+    }
+
+    .upsell-card {
+      padding: 16px;
+    }
+
+    .upsell-image {
+      width: 100px;
+      min-width: 100px;
+    }
+
+    .upsell-image img {
+      max-height: 120px;
+    }
+
+    .upsell-title {
+      font-size: 15px;
+    }
+
+    .upsell-actions {
+      flex-direction: row;
+      align-items: center;
+      padding: 20px 24px;
+    }
+
+    .upsell-add-btn {
+      width: auto;
+      min-width: 200px;
+    }
+  }
+</style>
+
+{%- comment -%} Get current product's make and model for fallback heading {%- endcomment -%}
+{%- assign current_make = product.metafields.custom.vehicles_make.value | first -%}
+{%- assign current_model = product.metafields.custom.vehicles_model.value | first -%}
+{%- assign car_display_name = current_make | append: ' ' | append: current_model -%}
+
+{%- comment -%} Fallback: Find products matching the same car via metafields {%- endcomment -%}
+{%- assign matching_products = '' | split: ',' -%}
+{%- if current_make != blank and current_model != blank -%}
+  {%- for p in collections.all.products limit: 100 -%}
+    {%- if p.id != product.id and p.available -%}
+      {%- assign p_make = p.metafields.custom.vehicles_make.value | first -%}
+      {%- assign p_model = p.metafields.custom.vehicles_model.value | first -%}
+      {%- if p_make == current_make and p_model == current_model -%}
+        {%- assign matching_products = matching_products | push: p -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- assign fallback_count = matching_products.size -%}
+
+<div class="upsell-products-section" id="upsell-section"
+     data-product-id="{{ product.id }}"
+     data-product-url="{{ product.url }}"
+     data-main-variant-id="{{ product.selected_or_first_available_variant.id }}"
+     data-main-price="{{ product.price }}"
+     data-main-title="{{ product.title | escape }}"
+     style="display: none;">
+  <div class="upsell-container">
+    <h2 class="upsell-heading" id="upsell-heading">{{ section.settings.heading | default: 'Select Add Ons' }}</h2>
+
+    <div id="upsell-content">
+      <!-- Content will be populated by JavaScript -->
+    </div>
+
+    <div class="upsell-actions" id="upsell-actions" style="display: none;">
+      <div class="upsell-summary">
+        <span class="upsell-count" id="upsell-all-count">Add all items</span>
+        <span class="upsell-total" id="upsell-all-total">$0.00</span>
+      </div>
+      <button type="button" id="add-all-btn" class="upsell-add-btn">
+        Add All to Cart
+      </button>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Store fallback products as JSON for JavaScript {%- endcomment -%}
+<script type="application/json" id="fallback-upsell-data">
+{
+  "carName": {{ car_display_name | json }},
+  "products": [
+    {%- for upsell_product in matching_products limit: section.settings.products_to_show -%}
+      {
+        "id": {{ upsell_product.id | json }},
+        "title": {{ upsell_product.title | json }},
+        "url": {{ upsell_product.url | json }},
+        "price": {{ upsell_product.price | json }},
+        "priceFormatted": {{ upsell_product.price | money | json }},
+        "compareAtPrice": {{ upsell_product.compare_at_price | json }},
+        "compareAtPriceFormatted": {{ upsell_product.compare_at_price | money | json }},
+        "variantId": {{ upsell_product.selected_or_first_available_variant.id | json }},
+        "image": {{ upsell_product.featured_image | image_url: width: 300 | json }},
+        "available": {{ upsell_product.available | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async function() {
+    const section = document.getElementById('upsell-section');
+    const content = document.getElementById('upsell-content');
+    const heading = document.getElementById('upsell-heading');
+    const actions = document.getElementById('upsell-actions');
+
+    if (!section || !content) return;
+
+    const productId = section.dataset.productId;
+    const productUrl = section.dataset.productUrl;
+    const mainVariantId = section.dataset.mainVariantId;
+    const mainPrice = parseInt(section.dataset.mainPrice || 0);
+    const mainTitle = section.dataset.mainTitle;
+
+    // Get fallback data
+    const fallbackDataEl = document.getElementById('fallback-upsell-data');
+    const fallbackData = fallbackDataEl ? JSON.parse(fallbackDataEl.textContent) : { products: [], carName: '' };
+
+    let upsellProducts = [];
+    let useComplementary = false;
+
+    // Try to fetch Shopify's complementary products first
+    try {
+      const response = await fetch(`${productUrl}?section_id=product-recommendations-complementary`);
+      if (response.ok) {
+        const html = await response.text();
+        // Parse the response to extract product data
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        // Check if complementary products exist (Shopify returns them in a specific format)
+      }
+    } catch (e) {
+      console.log('Complementary products not available, using fallback');
+    }
+
+    // Try the recommendations API directly
+    try {
+      const recResponse = await fetch(`/recommendations/products.json?product_id=${productId}&limit=4&intent=complementary`);
+      if (recResponse.ok) {
+        const recData = await recResponse.json();
+        if (recData.products && recData.products.length > 0) {
+          upsellProducts = recData.products.map(p => ({
+            id: p.id,
+            title: p.title,
+            url: p.url,
+            price: p.price,
+            priceFormatted: formatMoney(p.price),
+            compareAtPrice: p.compare_at_price,
+            compareAtPriceFormatted: p.compare_at_price ? formatMoney(p.compare_at_price) : null,
+            variantId: p.variants[0]?.id,
+            image: p.featured_image,
+            available: p.available
+          }));
+          useComplementary = true;
+        }
+      }
+    } catch (e) {
+      console.log('Recommendations API error, using fallback');
+    }
+
+    // Fall back to metafield-based matching if no complementary products
+    if (upsellProducts.length === 0 && fallbackData.products.length > 0) {
+      upsellProducts = fallbackData.products;
+      // Update heading to show car name
+      if (fallbackData.carName && fallbackData.carName.trim()) {
+        heading.textContent = `Complete your set for ${fallbackData.carName}`;
+      }
+    }
+
+    // If still no products, hide the section
+    if (upsellProducts.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    // Render the upsell products
+    renderUpsellProducts(upsellProducts);
+    section.style.display = 'block';
+
+    function formatMoney(cents) {
+      return '$' + (cents / 100).toFixed(2);
+    }
+
+    function renderUpsellProducts(products) {
+      const grid = document.createElement('div');
+      grid.className = 'upsell-grid';
+
+      products.forEach((product, index) => {
+        if (!product.available) return;
+
+        const hasSale = product.compareAtPrice && product.compareAtPrice > product.price;
+
+        const item = document.createElement('div');
+        item.className = 'upsell-item';
+        item.innerHTML = `
+          <div class="upsell-card">
+            <div class="upsell-image">
+              ${product.image ? `<img src="${product.image}" alt="${escapeHtml(product.title)}" loading="lazy">` : ''}
+            </div>
+            <div class="upsell-details">
+              <h3 class="upsell-title">${escapeHtml(product.title)}</h3>
+              <div class="upsell-price${hasSale ? ' has-sale' : ''}">
+                ${hasSale ? `<span class="price-compare">${product.compareAtPriceFormatted}</span>` : ''}
+                <span class="price-current">${product.priceFormatted}</span>
+              </div>
+            </div>
+            <button type="button" class="upsell-add-single" data-variant-id="${product.variantId}">
+              Add to Cart +
+            </button>
+          </div>
+        `;
+        grid.appendChild(item);
+      });
+
+      content.innerHTML = '';
+      content.appendChild(grid);
+
+      // Calculate total for main product + all upsells
+      const availableUpsells = products.filter(p => p.available);
+      const upsellsTotal = availableUpsells.reduce((sum, p) => sum + p.price, 0);
+      const grandTotal = mainPrice + upsellsTotal;
+      const totalItemCount = 1 + availableUpsells.length; // main product + upsells
+
+      // Show "Add All" actions section
+      if (availableUpsells.length > 0) {
+        actions.style.display = 'flex';
+        document.getElementById('upsell-all-count').textContent = `Add all ${totalItemCount} items`;
+        document.getElementById('upsell-all-total').textContent = formatMoney(grandTotal);
+        initializeAddAllButton(availableUpsells);
+      }
+
+      // Initialize single add buttons
+      initializeSingleAddButtons();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function initializeAddAllButton(availableUpsells) {
+      const addAllBtn = document.getElementById('add-all-btn');
+
+      addAllBtn.addEventListener('click', async function() {
+        addAllBtn.textContent = 'Adding...';
+        addAllBtn.disabled = true;
+
+        try {
+          // Build items array: main product + all upsells
+          const items = [
+            { id: parseInt(mainVariantId), quantity: 1 }
+          ];
+
+          availableUpsells.forEach(product => {
+            items.push({ id: parseInt(product.variantId), quantity: 1 });
+          });
+
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items })
+          });
+
+          if (response.ok) {
+            const isMobile = window.innerWidth < 768;
+            
+            if (isMobile) {
+              window.location.href = '/cart';
+            } else {
+              const cartDrawer = document.querySelector('cart-drawer');
+              
+              if (cartDrawer) {
+                try {
+                  // Get fresh cart data
+                  const cartResponse = await fetch('/cart.js');
+                  const cartData = await cartResponse.json();
+                  
+                  // Use Dawn's native render method
+                  if (typeof cartDrawer.renderContents === 'function') {
+                    cartDrawer.renderContents(cartData);
+                  } else {
+                    // Fallback: fetch sections and update
+                    const sections = await fetch('/cart?sections=cart-drawer');
+                    const sectionsData = await sections.json();
+                    
+                    const parser = new DOMParser();
+                    const newHTML = parser.parseFromString(sectionsData['cart-drawer'], 'text/html');
+                    const newContent = newHTML.querySelector('.drawer__contents');
+                    const currentContent = cartDrawer.querySelector('.drawer__contents');
+                    
+                    if (newContent && currentContent) {
+                      currentContent.replaceWith(newContent);
+                    }
+                  }
+                  
+                  cartDrawer.open();
+                } catch (drawerError) {
+                  console.error('Drawer update error:', drawerError);
+                  // If drawer update fails, just reload
+                  window.location.reload();
+                }
+              }
+            }
+          } else {
+            const errorData = await response.json();
+            console.error('Cart add failed:', errorData);
+            throw new Error(errorData.description || 'Failed to add items');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error adding items to cart. Please try again.');
+          addAllBtn.textContent = 'Add All to Cart';
+          addAllBtn.disabled = false;
+        }
+      });
+    }
+
+    function initializeSingleAddButtons() {
+      const buttons = content.querySelectorAll('.upsell-add-single');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const variantId = btn.dataset.variantId;
+          const originalText = btn.textContent;
+          btn.textContent = 'Adding...';
+          btn.disabled = true;
+
+          try {
+            const response = await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                items: [{ id: parseInt(variantId), quantity: 1 }]
+              })
+            });
+
+            if (response.ok) {
+              btn.textContent = 'Added ✓';
+              btn.style.background = '#22c55e';
+              
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            } else {
+              throw new Error('Failed');
+            }
+          } catch (error) {
+            btn.textContent = 'Error';
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.disabled = false;
+            }, 2000);
+          }
+        });
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Upsell Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Select Add Ons"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4,
+      "label": "Max products to show (fallback only)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Upsell Products"
+    }
+  ]
+}
+{% endschema %}

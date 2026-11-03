@@ -1,0 +1,61 @@
+<style>
+  .product-image-section {
+    padding: 0 16px 32px;
+  }
+
+  .product-image-wrapper {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .product-hero-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .product-image-section {
+      padding: 0 40px 60px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+  }
+</style>
+
+<section class="product-image-section">
+  <div class="product-image-wrapper">
+    {% if section.settings.image %}
+      {{ section.settings.image | img_url: '1200x' | img_tag: section.settings.image_alt, class: 'product-hero-img' }}
+    {% else %}
+      <img src="https://clickshades.com.au/cdn/shop/files/SideShade2.png?v=1762038252&width=1200" alt="{{ section.settings.image_alt | default: 'ClickShades Car Window Shades' }}" class="product-hero-img">
+    {% endif %}
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Product Image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text",
+      "default": "ClickShades Car Window Shades"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Image"
+    }
+  ]
+}
+{% endschema %}

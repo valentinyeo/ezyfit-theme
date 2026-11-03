@@ -1,0 +1,120 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-v2",
+      "settings": {
+        "show_quantity": false
+      }
+    },
+    "cb-gallery": {
+      "type": "cb-gallery",
+      "settings": {
+        "heading": "Real Click Blades on real Aussie cars",
+        "subheading": "Fitted and photographed by actual customers"
+      }
+    },
+    "video-carousel": {
+      "type": "video-carousel",
+      "blocks": {
+        "cb-vid-1": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/99b54df20fd4401eac093847ed32b01d.mp4" } },
+        "cb-vid-2": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4" } },
+        "cb-vid-3": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/30bc3aa912464145a5c46d9595f146ea.mp4" } }
+      },
+      "block_order": ["cb-vid-1", "cb-vid-2", "cb-vid-3"],
+      "settings": {}
+    },
+    "loox-reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "What Our Customers Say",
+        "show_rating_summary": false,
+        "rating_text": "5.0 out of 5 based on 11 reviews",
+        "show_all_reviews_link": true,
+        "reviews_page_url": "/pages/happy-customers",
+        "cta_text": "Read All Reviews"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "faq-1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I know which wiper blades fit my car?",
+            "answer": "<p>Every Click Blades set is matched to your exact make, model and year. The fitment is shown right on this page, and our Perfect Fit Guarantee has you covered.</p>"
+          }
+        },
+        "faq-2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Are Click Blades easy to install?",
+            "answer": "<p>Yes. They clip on in under 2 minutes with no tools. Remove your old blades and clip the new ones into place.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long do Click Blades last?",
+            "answer": "<p>With normal use, 12 to 18 months depending on conditions. Replace them if you notice streaking or skipping.</p>"
+          }
+        },
+        "faq-4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What's your return policy?",
+            "answer": "<p>30-day satisfaction guarantee with a full refund, no questions asked. If they don't fit or you're not happy, email sales@clickshades.com.au.</p>"
+          }
+        },
+        "faq-5": {
+          "type": "faq_item",
+          "settings": {
+            "question": "When will my order be dispatched?",
+            "answer": "<p>Same-day despatch on orders placed before 2:00 PM (AWST), Monday to Friday. Orders after 2:00 PM or on weekends ship the next business day. Shipped from Bibra Lake, WA.</p>"
+          }
+        },
+        "faq-6": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How much does shipping cost?",
+            "answer": "<p>Free standard shipping on all wiper blade orders across Australia. Express is available at checkout for an extra $10.</p>"
+          }
+        },
+        "faq-7": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do you sell rear wiper blades too?",
+            "answer": "<p>Right now we focus on front windscreen wiper blades. Rear blades are coming soon.</p>"
+          }
+        },
+        "faq-8": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What payment methods do you accept?",
+            "answer": "<p>Visa, Mastercard, American Express, UnionPay, Apple Pay, Google Pay, Shop Pay and Afterpay.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4",
+        "faq-5",
+        "faq-6",
+        "faq-7",
+        "faq-8"
+      ],
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "subtitle": "Got questions about Click Blades? We've got answers."
+      }
+    }
+  },
+  "order": [
+    "main",
+    "cb-gallery",
+    "video-carousel",
+    "loox-reviews",
+    "faq"
+  ]
+}
