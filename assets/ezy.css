@@ -63,7 +63,7 @@
 .ezy-hero { background: var(--ezy-yellow); padding: 28px 0 32px; border-bottom: 3px solid var(--ezy-blue); }
 .ezy-hero h1 { color: var(--ezy-blue); font-size: 44px; line-height: 1.05; }
 .ezy-hero__lead { font-size: 16px; line-height: 1.55; margin: 14px 0 16px !important; }
-.ezy-hero__rating { display: inline-flex; gap: 8px; align-items: center; border: 2px dashed var(--ezy-dark); border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 600; }
+.ezy-hero__rating { display: inline-flex; gap: 8px; align-items: center; color: var(--ezy-dark); text-decoration: underline; text-underline-offset: 3px; font-size: 14px; font-weight: 600; }
 .ezy-hero__rating b { color: var(--ezy-blue); letter-spacing: 1px; }
 .ezy-finder { background: #fff; border: 3px solid var(--ezy-blue); border-radius: 20px; padding: 20px 16px; margin-top: 24px; }
 .ezy-finder h3 { font-style: normal; font-weight: 700; font-size: 19px; margin-bottom: 16px; }
@@ -97,7 +97,7 @@
 /* Popular cars */
 .ezy-cars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .ezy-car { overflow: hidden; text-decoration: none; display: block; }
-.ezy-car img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.ezy-car img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: contain; background: #fff; display: block; }
 .ezy-car div { padding: 10px 12px 12px; }
 .ezy-car b { display: block; font-size: 14px; }
 .ezy-car small { color: var(--ezy-grey); font-size: 12px; }
@@ -132,7 +132,7 @@
 .ezy-types__unsure b { color: var(--ezy-blue); }
 
 /* Car shades */
-.ezy-shades img { width: 100%; border-radius: var(--ezy-radius); display: block; background: #fff; }
+.ezy-shades img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--ezy-radius); display: block; background: #fff; }
 .ezy-shades h2 { color: var(--ezy-yellow); font-size: 24px; margin: 20px 0 10px !important; }
 .ezy-shades p { font-size: 15px; line-height: 1.55; margin-bottom: 20px !important; }
 

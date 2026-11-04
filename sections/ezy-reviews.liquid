@@ -10,7 +10,7 @@
     endif
   endfor
 -%}
-<section class="ezy ezy-sec{% if section.settings.rule %} ezy-sec--rule{% endif %}">
+<section class="ezy ezy-sec{% if section.settings.rule %} ezy-sec--rule{% endif %}"{% if section.settings.style == 'loox' %} id="ezy-reviews"{% endif %}>
   <div class="ezy-wrap">
     <h2 class="ezy-h2">{{ section.settings.heading }}</h2>
     <p class="ezy-sub">{{ section.settings.sub }}</p>
@@ -55,7 +55,7 @@
     { "type": "url", "id": "all_link", "label": "All reviews link" },
     { "type": "text", "id": "all_text", "label": "All reviews button", "default": "Read all reviews" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "What drivers say" },
-    { "type": "text", "id": "sub", "label": "Subheading", "default": "Live reviews from Loox, filtered to your car." },
+    { "type": "text", "id": "sub", "label": "Subheading", "default": "Real reviews from verified buyers." },
     { "type": "checkbox", "id": "rule", "label": "Blue line on top", "default": false }
   ],
   "blocks": [{ "type": "@app" }]
