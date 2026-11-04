@@ -46,7 +46,7 @@
         {%- if section.settings.video_image != blank -%}
           {{ section.settings.video_image | image_url: width: 900 | image_tag: loading: 'lazy' }}
         {%- else -%}
-          <img src="{{ 'ezy-hero-video.png' | asset_url }}" alt="" loading="lazy">
+          <img src="{{ section.settings.video_asset | default: 'ezy-hero-video.png' | asset_url }}" alt="{{ section.settings.video_label | escape }}" loading="lazy">
         {%- endif -%}
         <span class="ezy-video__play" aria-hidden="true"></span>
         <span class="ezy-video__label">{{ section.settings.video_label }}</span>
@@ -135,7 +135,7 @@
   "name": "EZY hero and finder",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Wiper blades made for your exact car" },
-    { "type": "textarea", "id": "lead", "label": "Lead", "default": "Front pair from $69, was $89. 25% off is already in the price. Search your car, then watch its own 2 minute fitment video." },
+    { "type": "textarea", "id": "lead", "label": "Lead", "default": "Front pair from $59, was $79. 25% off is already in the price. Search your car, then watch its own 2 minute fitment video." },
     { "type": "text", "id": "rating_text", "label": "Rating text (fill from Loox)", "default": "[Loox rating] from [n] reviews" },
     { "type": "collection", "id": "collection", "label": "Wiper collection for the finder" },
     { "type": "text", "id": "finder_heading", "label": "Finder heading", "default": "Find your wipers" },
@@ -143,12 +143,13 @@
     { "type": "text", "id": "button", "label": "Button", "default": "Find my wipers" },
     { "type": "text", "id": "next_text", "label": "Text under button", "default": "Your car's blades and fitment video comes next." },
     { "type": "text", "id": "pack_heading", "label": "Pack heading", "default": "Your Exact Fit Pack" },
-    { "type": "text", "id": "pack_price", "label": "Pack price line", "default": "From $69 a front pair. 25% off already in." },
+    { "type": "text", "id": "pack_price", "label": "Pack price line", "default": "From $59 a front pair. 25% off already in." },
     { "type": "image_picker", "id": "video_image", "label": "Video image" },
     { "type": "url", "id": "video_url", "label": "Video link" },
+    { "type": "text", "id": "video_asset", "label": "Video image file (theme assets), used when no image is picked" },
     { "type": "text", "id": "video_label", "label": "Video label", "default": "Ford Ranger fitment, 1:52" },
     { "type": "checkbox", "id": "sticky", "label": "Sticky find bar on phones", "default": true },
-    { "type": "text", "id": "sticky_title", "label": "Sticky bar title", "default": "From $69 a front pair" },
+    { "type": "text", "id": "sticky_title", "label": "Sticky bar title", "default": "From $59 a front pair" },
     { "type": "text", "id": "sticky_sub", "label": "Sticky bar subtext", "default": "Exact fit or free swap" }
   ],
   "blocks": [

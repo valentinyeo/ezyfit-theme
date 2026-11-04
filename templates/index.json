@@ -3,7 +3,10 @@
     "hero": {
       "type": "ezy-hero",
       "settings": {
-        "collection": "wiper-blades"
+        "collection": "wiper-blades",
+        "video_asset": "cb-real-4.jpg",
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4",
+        "video_label": "Watch a real fit"
       },
       "blocks": {
         "p0": {
@@ -80,32 +83,36 @@
           "type": "car",
           "settings": {
             "title": "Ford Ranger",
-            "price": "From $69",
-            "fallback_asset": "ezy-car-ranger.png"
+            "price": "From $59",
+            "fallback_asset": "ezy-car-ranger.png",
+            "image": "shopify://shop_images/Ford_Ranger_1241128c-6bac-4b7d-815a-607e65bd8878.png"
           }
         },
         "c2": {
           "type": "car",
           "settings": {
             "title": "Toyota Hilux",
-            "price": "From $69",
-            "fallback_asset": "ezy-car-hilux.png"
+            "price": "From $59",
+            "fallback_asset": "ezy-car-hilux.png",
+            "image": "shopify://shop_images/Toyota_Hilux.png"
           }
         },
         "c3": {
           "type": "car",
           "settings": {
             "title": "Toyota RAV4",
-            "price": "From $69",
-            "fallback_asset": "ezy-car-rav4.png"
+            "price": "From $59",
+            "fallback_asset": "ezy-car-rav4.png",
+            "image": "shopify://shop_images/Toyota_RAV4_e2afb86e-46af-42db-ae69-e721c9cb28aa.png"
           }
         },
         "c4": {
           "type": "car",
           "settings": {
             "title": "Toyota Corolla",
-            "price": "From $69",
-            "fallback_asset": "ezy-car-corolla.png"
+            "price": "From $59",
+            "fallback_asset": "ezy-car-corolla.png",
+            "image": "shopify://shop_images/toyota_corlolla.png"
           }
         }
       },
@@ -149,8 +156,8 @@
             "for": "For everyday driving",
             "level": 2,
             "desc": "Exact-fit blade. Clear, quiet wipe. Washer jets stay on the bonnet.",
-            "price": "$69",
-            "was": "$89",
+            "price": "$59",
+            "was": "$79",
             "pay": "Front pair, 25% off already in. Or 4 payments of $17.25 with Afterpay.",
             "rear": "+ Add a rear blade: front pair + rear $89",
             "ticks": "Exact fit for your car\n2 minute fit, no tools\nRear blade available\nno: Water sprays from the blade",
@@ -167,12 +174,15 @@
     },
     "shades": {
       "type": "ezy-car-shades",
-      "settings": {}
+      "settings": {
+        "image": "shopify://shop_images/SideShade2.png"
+      }
     },
     "reviews": {
       "type": "ezy-reviews",
       "settings": {
-        "style": "cards"
+        "style": "loox",
+        "all_link": "/pages/happy-customers"
       }
     },
     "photos": {
@@ -227,7 +237,7 @@
           "type": "row",
           "settings": {
             "label": "Front pair",
-            "us": "From $69",
+            "us": "From $59",
             "v2": "Varies",
             "v3": "Varies"
           }
