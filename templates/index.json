@@ -60,7 +60,7 @@
         "t3": {
           "type": "tick",
           "settings": {
-            "text": "30 day returns"
+            "text": "Free shipping"
           }
         }
       },
@@ -83,9 +83,10 @@
           "type": "car",
           "settings": {
             "title": "Ford Ranger",
-            "price": "From $59",
+            "price": "See blades",
             "fallback_asset": "ezy-car-ranger.png",
-            "image": "shopify://shop_images/Ford_Ranger_1241128c-6bac-4b7d-815a-607e65bd8878.png"
+            "image": "shopify://shop_images/Ford_Ranger_1241128c-6bac-4b7d-815a-607e65bd8878.png",
+            "link": "/products/front-windscreen-wiper-ford-ranger-2021"
           }
         },
         "c2": {
@@ -94,7 +95,8 @@
             "title": "Toyota Hilux",
             "price": "From $59",
             "fallback_asset": "ezy-car-hilux.png",
-            "image": "shopify://shop_images/Toyota_Hilux.png"
+            "image": "shopify://shop_images/Toyota_Hilux.png",
+            "link": "/products/front-windscreen-wipers-for-toyota-hilux-2018"
           }
         },
         "c3": {
@@ -103,7 +105,8 @@
             "title": "Toyota RAV4",
             "price": "From $59",
             "fallback_asset": "ezy-car-rav4.png",
-            "image": "shopify://shop_images/Toyota_RAV4_e2afb86e-46af-42db-ae69-e721c9cb28aa.png"
+            "image": "shopify://shop_images/Toyota_RAV4_e2afb86e-46af-42db-ae69-e721c9cb28aa.png",
+            "link": "/products/front-windscreen-wipers-for-toyota-rav4-2018"
           }
         },
         "c4": {
@@ -112,7 +115,8 @@
             "title": "Toyota Corolla",
             "price": "From $59",
             "fallback_asset": "ezy-car-corolla.png",
-            "image": "shopify://shop_images/toyota_corlolla.png"
+            "image": "shopify://shop_images/toyota_corlolla.png",
+            "link": "/products/front-windscreen-wipers-for-toyota-corolla-2018"
           }
         }
       },
@@ -158,7 +162,7 @@
             "desc": "Exact-fit blade. Clear, quiet wipe. Washer jets stay on the bonnet.",
             "price": "$59",
             "was": "$79",
-            "pay": "Front pair, 25% off already in. Or 4 payments of $17.25 with Afterpay.",
+            "pay": "Front pair, 25% off already in. Or 4 payments of $14.75 with Afterpay.",
             "rear": "+ Add a rear blade: front pair + rear $89",
             "ticks": "Exact fit for your car\n2 minute fit, no tools\nRear blade available\nno: Water sprays from the blade",
             "button": "Choose Standard",
@@ -175,7 +179,8 @@
     "shades": {
       "type": "ezy-car-shades",
       "settings": {
-        "image": "shopify://shop_images/SideShade2.png"
+        "image": "shopify://shop_images/SideShade2.png",
+        "link": "/collections/car-window-shades"
       }
     },
     "reviews": {

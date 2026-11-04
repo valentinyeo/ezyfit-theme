@@ -87,13 +87,18 @@
     raw.forEach(function (p) {
       var m = p.t.match(/\bfor\s+(.+)$/i);
       if (!m) return;
-      var rest = m[1].replace(/\s*->\s*$/, '').replace(/\s+\d{4}(\s*-\s*\d{4})?\s*$/, '').trim();
+      var txt = document.createElement('textarea'); txt.innerHTML = m[1]; // decode &amp; and friends
+      // Model name stops at the first year, so "Mondeo Sedan Hatch 2007 2014 MA MB" becomes "Mondeo Sedan Hatch".
+      var rest = txt.value.replace(/\s*->\s*$/, '').split(/\s+(?:19|20)\d{2}\b/)[0].replace(/[\s\-–]+$/, '').trim();
       var words = rest.split(/\s+/);
       var make = words[0];
       if (TWO_WORD.indexOf((words[0] + ' ' + (words[1] || '')).replace('-', ' ')) > -1) make = words[0] + ' ' + words[1];
       var model = rest.slice(make.length).trim();
+      if (/^vw$/i.test(make)) make = 'Volkswagen';
       if (model) cars.push({ make: make, model: model, url: p.u });
     });
+    // "rav4", "RAV 4" and "Rav-4" all compare equal.
+    var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]/g, ''); };
     var makeSel = form.querySelector('[data-ezy-make]');
     var modelSel = form.querySelector('[data-ezy-model]');
     var q = form.querySelector('[data-ezy-q]');
@@ -111,14 +116,21 @@
     });
     form.addEventListener('submit', function (e) {
       var text = q.value.trim();
-      var hits = text
-        ? cars.filter(function (c) { return (c.make + ' ' + c.model).toLowerCase() === text.toLowerCase(); })
-        : cars.filter(function (c) { return c.make === makeSel.value && (!modelSel.value || c.model === modelSel.value); });
+      var hits;
+      if (text) {
+        // Every typed word must appear in make + model, so "hilux" and "toyota hilux" both find the Hilux.
+        var terms = text.split(/\s+/).map(norm).filter(Boolean);
+        hits = cars.filter(function (c) { var hay = norm(c.make + c.model); return terms.every(function (t) { return hay.indexOf(t) > -1; }); });
+      } else {
+        hits = cars.filter(function (c) { return c.make === makeSel.value && (!modelSel.value || c.model === modelSel.value); });
+      }
       if (hits.length === 1) { e.preventDefault(); window.location.href = hits[0].url; return; }
       if (!text) {
         if (!makeSel.value) { e.preventDefault(); q.focus(); return; }
-        q.value = (makeSel.value + ' ' + modelSel.value).trim();
+        text = (makeSel.value + ' ' + modelSel.value).trim();
       }
+      // Several or no matches: store search limited to wipers.
+      q.value = 'wipers ' + text.replace(/^wipers\s+/i, '');
     });
     var sticky = document.querySelector('[data-ezy-sticky]');
     if (sticky && 'IntersectionObserver' in window) {

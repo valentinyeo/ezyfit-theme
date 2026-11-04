@@ -68,7 +68,7 @@
 .ezy-finder { background: #fff; border: 3px solid var(--ezy-blue); border-radius: 20px; padding: 20px 16px; margin-top: 24px; }
 .ezy-finder h3 { font-style: normal; font-weight: 700; font-size: 19px; margin-bottom: 16px; }
 .ezy-finder__search { display: flex; align-items: center; gap: 10px; border: 2px solid var(--ezy-blue); border-radius: 12px; padding: 0 16px; height: 72px; }
-.ezy-finder__search input { border: 0; outline: 0; flex: 1; font: italic 14px Poppins, sans-serif; color: var(--ezy-dark); min-width: 0; background: transparent; }
+.ezy-finder__search input { border: 0; outline: 0; flex: 1; font: italic 16px Poppins, sans-serif; color: var(--ezy-dark); min-width: 0; background: transparent; }
 .ezy-finder__or { display: flex; align-items: center; gap: 10px; color: var(--ezy-grey); font-size: 13px; margin: 14px 0; }
 .ezy-finder__or::before, .ezy-finder__or::after { content: ""; flex: 1; height: 1px; background: var(--ezy-line); }
 .ezy-finder__sel { position: relative; display: flex; align-items: center; border: 2px solid var(--ezy-line); border-radius: 12px; height: 54px; padding: 0 16px; margin-bottom: 12px; }
