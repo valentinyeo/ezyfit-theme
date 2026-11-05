@@ -1,120 +1,59 @@
 {
   "sections": {
-    "main": {
-      "type": "main-product-v2",
-      "settings": {
-        "show_quantity": false
-      }
-    },
-    "cb-gallery": {
-      "type": "cb-gallery",
-      "settings": {
-        "heading": "Real Click Blades on real Aussie cars",
-        "subheading": "Fitted and photographed by actual customers"
-      }
-    },
-    "video-carousel": {
-      "type": "video-carousel",
+    "ezy-product": {
+      "type": "ezy-product",
       "blocks": {
-        "cb-vid-1": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/99b54df20fd4401eac093847ed32b01d.mp4" } },
-        "cb-vid-2": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4" } },
-        "cb-vid-3": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/30bc3aa912464145a5c46d9595f146ea.mp4" } }
-      },
-      "block_order": ["cb-vid-1", "cb-vid-2", "cb-vid-3"],
-      "settings": {}
-    },
-    "loox-reviews": {
-      "type": "reviews",
-      "settings": {
-        "heading": "What Our Customers Say",
-        "show_rating_summary": false,
-        "rating_text": "5.0 out of 5 based on 11 reviews",
-        "show_all_reviews_link": true,
-        "reviews_page_url": "/pages/happy-customers",
-        "cta_text": "Read All Reviews"
-      }
-    },
-    "faq": {
-      "type": "faq",
-      "blocks": {
-        "faq-1": {
-          "type": "faq_item",
+        "q0": {
+          "type": "question",
           "settings": {
-            "question": "How do I know which wiper blades fit my car?",
-            "answer": "<p>Every Click Blades set is matched to your exact make, model and year. The fitment is shown right on this page, and our Perfect Fit Guarantee has you covered.</p>"
+            "q": "Will these fit my car?",
+            "a": "Yes. This pair is made for the car and years shown above. Pick your year from the list to be sure."
           }
         },
-        "faq-2": {
-          "type": "faq_item",
+        "q1": {
+          "type": "question",
           "settings": {
-            "question": "Are Click Blades easy to install?",
-            "answer": "<p>Yes. They clip on in under 2 minutes with no tools. Remove your old blades and clip the new ones into place.</p>"
+            "q": "Standard or Spray, which one?",
+            "a": "Standard suits most drivers. Spray suits dust, bugs and long trips. Both fit your car exactly."
           }
         },
-        "faq-3": {
-          "type": "faq_item",
+        "q2": {
+          "type": "question",
           "settings": {
-            "question": "How long do Click Blades last?",
-            "answer": "<p>With normal use, 12 to 18 months depending on conditions. Replace them if you notice streaking or skipping.</p>"
+            "q": "How do I fit them?",
+            "a": "Lift the arm, press the tab and slide the old blade off, then click the new one on. About 2 minutes, no tools. The video above shows each step."
           }
         },
-        "faq-4": {
-          "type": "faq_item",
+        "q3": {
+          "type": "question",
           "settings": {
-            "question": "What's your return policy?",
-            "answer": "<p>30-day satisfaction guarantee with a full refund, no questions asked. If they don't fit or you're not happy, email sales@clickshades.com.au.</p>"
+            "q": "How fast is shipping?",
+            "a": "Order before 2pm and it ships the same day. Shipping is free."
           }
         },
-        "faq-5": {
-          "type": "faq_item",
+        "q4": {
+          "type": "question",
           "settings": {
-            "question": "When will my order be dispatched?",
-            "answer": "<p>Same-day despatch on orders placed before 2:00 PM (AWST), Monday to Friday. Orders after 2:00 PM or on weekends ship the next business day. Shipped from Bibra Lake, WA.</p>"
-          }
-        },
-        "faq-6": {
-          "type": "faq_item",
-          "settings": {
-            "question": "How much does shipping cost?",
-            "answer": "<p>Free standard shipping on all wiper blade orders across Australia. Express is available at checkout for an extra $10.</p>"
-          }
-        },
-        "faq-7": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Do you sell rear wiper blades too?",
-            "answer": "<p>Right now we focus on front windscreen wiper blades. Rear blades are coming soon.</p>"
-          }
-        },
-        "faq-8": {
-          "type": "faq_item",
-          "settings": {
-            "question": "What payment methods do you accept?",
-            "answer": "<p>Visa, Mastercard, American Express, UnionPay, Apple Pay, Google Pay, Shop Pay and Afterpay.</p>"
+            "q": "What if they don't fit?",
+            "a": "Tell us within 30 days and we send the right ones free."
           }
         }
       },
       "block_order": [
-        "faq-1",
-        "faq-2",
-        "faq-3",
-        "faq-4",
-        "faq-5",
-        "faq-6",
-        "faq-7",
-        "faq-8"
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4"
       ],
       "settings": {
-        "heading": "Frequently Asked Questions",
-        "subtitle": "Got questions about Click Blades? We've got answers."
+        "collection": "wiper-blades",
+        "store_rating": "4.8 from 49 reviews",
+        "fit_video": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4"
       }
     }
   },
   "order": [
-    "main",
-    "cb-gallery",
-    "video-carousel",
-    "loox-reviews",
-    "faq"
+    "ezy-product"
   ]
 }

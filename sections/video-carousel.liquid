@@ -1,3 +1,12 @@
+{%- liquid
+  assign ezy_skip = false
+  if template.name == 'product'
+    if product.title contains 'Wiper'
+      assign ezy_skip = true
+    endif
+  endif
+-%}
+{%- unless ezy_skip -%}
 <style>
   .video-carousel-section {
     padding: 0;
@@ -388,6 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
   updateArrowVisibility();
 });
 </script>
+{%- endunless -%}
 
 {% schema %}
 {

@@ -1,0 +1,298 @@
+{%- comment -%}
+  EZYFIT wiper product page. Renders only for wiper products; shade products keep main-product-v2.
+  Spray and rear blades switch on by themselves once a product sets these metafields:
+    custom.spray_product (product reference) and custom.rear_product (product reference).
+  Fitment video: custom.fit_video (URL) on the product, else the section default.
+{%- endcomment -%}
+{%- if product.title contains 'Wiper' -%}
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign spray = product.metafields.custom.spray_product.value
+  assign rear = product.metafields.custom.rear_product.value
+  assign is_spray = false
+  if product.title contains 'Spray'
+    assign is_spray = true
+  endif
+  assign fit_video = product.metafields.custom.fit_video.value | default: section.settings.fit_video
+  assign car = product.title | split: ' for ' | last
+  assign save = 0
+  if variant.compare_at_price > variant.price
+    assign save = variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price
+  endif
+  assign quarter = variant.price | divided_by: 4
+  assign wipers = section.settings.collection | default: collections['wiper-blades']
+-%}
+<section class="ezy ezy-pdp" data-ezy-pdp>
+  <div class="ezy-wrap ezy-pdp__grid">
+    <div class="ezy-pdp__media">
+      <div class="ezy-pdp__slides" data-ezy-slides>
+        {%- for media in product.media -%}
+          {%- if media.media_type == 'image' -%}
+            <div class="ezy-pdp__slide">
+              {%- if forloop.first -%}{%- assign load = 'eager' -%}{%- else -%}{%- assign load = 'lazy' -%}{%- endif -%}
+              {{ media | image_url: width: 900 | image_tag: loading: load, sizes: '(min-width: 768px) 50vw, 100vw', widths: '450, 700, 900', alt: product.title }}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="ezy-pdp__slide">{{ 'product-1' | placeholder_svg_tag }}</div>
+        {%- endfor -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="ezy-pdp__dots" aria-hidden="true">
+          {%- for media in product.media -%}<span{% if forloop.first %} class="is-on"{% endif %}></span>{%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="ezy-pdp__info">
+      {%- assign pr = product.metafields.loox.num_reviews | plus: 0 -%}
+      <a class="ezy-pdp__rating" href="#ezy-pdp-reviews">
+        <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        {%- if pr > 0 -%}
+          {{ product.metafields.loox.avg_rating | round: 1 }} from {{ pr }} review{% if pr != 1 %}s{% endif %}
+        {%- else -%}
+          {{ section.settings.store_rating }}
+        {%- endif -%}
+      </a>
+      <h1 class="ezy-pdp__title">{{ product.title | split: ' ->' | first }}</h1>
+
+      <div class="ezy-pdp__price">
+        <strong data-ezy-price>{{ variant.price | money }}</strong>
+        {%- if save > 0 -%}
+          <s>{{ variant.compare_at_price | money }}</s>
+          <span class="ezy-pdp__save">{{ save }}% off, already applied</span>
+        {%- endif -%}
+      </div>
+      <p class="ezy-pdp__pay">or 4 payments of {{ quarter | money }} with Afterpay</p>
+
+      <div class="ezy-pdp__opt">
+        <label class="ezy-pdp__label" for="ezy-year">Your car's year</label>
+        <select id="ezy-year" class="ezy-pdp__select" data-ezy-year>
+          <option value="{{ product.url }}" selected>{{ car | split: ' ->' | first }}</option>
+        </select>
+        <a class="ezy-pdp__other" href="/#ezy-finder">Different car? Find your blades</a>
+      </div>
+
+      <fieldset class="ezy-pdp__opt" data-ezy-type>
+        <legend class="ezy-pdp__label">Blade type</legend>
+        <div class="ezy-pdp__choices">
+          {%- if is_spray -%}
+            {%- assign std = product.metafields.custom.standard_product.value -%}
+            <a class="ezy-pdp__choice" href="{{ std.url | default: '#' }}"><strong>Standard</strong><small>Clean, quiet wipe</small></a>
+            <span class="ezy-pdp__choice is-on" aria-current="true"><strong>Spray</strong><small>Water sprays from the blade</small></span>
+          {%- else -%}
+            <span class="ezy-pdp__choice is-on" aria-current="true"><strong>Standard</strong><small>Clean, quiet wipe</small></span>
+            {%- if spray -%}
+              <a class="ezy-pdp__choice" href="{{ spray.url }}"><strong>Spray</strong><small>Water sprays from the blade</small></a>
+            {%- else -%}
+              <span class="ezy-pdp__choice is-off" aria-disabled="true"><strong>Spray</strong><small>Coming soon</small></span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      </fieldset>
+
+      <fieldset class="ezy-pdp__opt" data-ezy-position>
+        <legend class="ezy-pdp__label">Which blades</legend>
+        <div class="ezy-pdp__choices">
+          <label class="ezy-pdp__choice is-on">
+            <input type="radio" name="ezy-pos" value="front" checked>
+            <strong>Front pair</strong><small>Driver and passenger</small>
+          </label>
+          {%- if rear and rear.selected_or_first_available_variant.available -%}
+            <label class="ezy-pdp__choice">
+              <input type="radio" name="ezy-pos" value="rear" data-rear-id="{{ rear.selected_or_first_available_variant.id }}" data-rear-price="{{ rear.selected_or_first_available_variant.price }}">
+              <strong>Front and rear</strong><small>+{{ rear.selected_or_first_available_variant.price | money }}</small>
+            </label>
+          {%- endif -%}
+        </div>
+      </fieldset>
+
+      {%- if variant.available -%}
+        <button class="ezy-btn ezy-pdp__add" type="button" data-ezy-add data-variant-id="{{ variant.id }}" data-price="{{ variant.price }}">
+          Add to cart, <span data-ezy-total>{{ variant.price | money }}</span>
+        </button>
+      {%- else -%}
+        <button class="ezy-btn ezy-pdp__add" type="button" disabled>Sold out</button>
+      {%- endif -%}
+      <p class="ezy-pdp__msg" role="status" aria-live="polite" data-ezy-msg></p>
+
+      <ul class="ezy-ticks ezy-pdp__ticks">
+        {%- assign ticks = section.settings.ticks | newline_to_br | split: '<br />' -%}
+        {%- for t in ticks -%}{%- assign tt = t | strip -%}{%- if tt != blank -%}<li>{{ tt }}</li>{%- endif -%}{%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="ezy ezy-sec ezy-sec--tint" id="ezy-pdp-video">
+  <div class="ezy-wrap ezy-pdp__video">
+    <div>
+      <h2 class="ezy-h2">Watch it fit</h2>
+      <p class="ezy-sub">Lift the arm, press the tab, click the new blade on. About 2 minutes, no tools.</p>
+    </div>
+    <div class="ezy-pdp__player" data-ezy-fit-video>
+      {%- if fit_video contains 'youtu' -%}
+        {%- assign yt = fit_video | split: 'v=' | last | split: '/' | last | split: '&' | first | split: '?' | first -%}
+        <iframe src="https://www.youtube-nocookie.com/embed/{{ yt }}" title="How to fit wiper blades" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      {%- elsif fit_video != blank -%}
+        <video src="{{ fit_video }}" poster="{{ 'cb-real-4.jpg' | asset_url }}" controls playsinline preload="none" aria-label="How to fit wiper blades"></video>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<section class="ezy ezy-sec" id="ezy-pdp-reviews">
+  <div class="ezy-wrap">
+    <h2 class="ezy-h2">What buyers say</h2>
+    <p class="ezy-sub">Real reviews from verified buyers.</p>
+    <div class="ezy-loox"><div id="looxReviews" data-product-id="{{ product.id }}" class="loox-reviews-default">{{ product.metafields.loox.reviews }}</div></div>
+  </div>
+</section>
+
+{%- if section.blocks.size > 0 -%}
+<section class="ezy ezy-sec ezy-sec--rule" id="ezy-faq">
+  <div class="ezy-wrap">
+    <h2 class="ezy-h2" style="margin-bottom: 20px !important">Questions drivers ask</h2>
+    <div class="ezy-faq">
+      {%- for block in section.blocks -%}
+        <details {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.q }}</summary>
+          <p>{{ block.settings.a }}</p>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<div class="ezy ezy-pdp__sticky" data-ezy-sticky hidden>
+  <div><strong>{{ variant.price | money }}</strong>{% if save > 0 %} <s>{{ variant.compare_at_price | money }}</s>{% endif %}</div>
+  <button class="ezy-btn" type="button" data-ezy-add-proxy>Add to cart</button>
+</div>
+
+<script type="application/json" data-ezy-wipers>
+  [
+  {%- paginate wipers.products by 250 -%}
+    {%- for p in wipers.products -%}
+      {"t": {{ p.title | json }}, "u": {{ p.url | json }}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  {%- endpaginate -%}
+  ]
+</script>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-ezy-pdp]');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+
+    // Year dropdown: every wiper product for the same car, one option per year range.
+    function carKey(title) {
+      var s = String(title).split(' for ').pop().replace(/\s*->.*$/, '');
+      var m = s.match(/^(.*?)\s+\b(19|20)\d{2}\b/);
+      var name = (m ? m[1] : s).replace(/\s+T\d{2}$/i, '').replace(/^VW\b/, 'Volkswagen');
+      return name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+    function yearText(title) {
+      var s = String(title).split(' for ').pop().replace(/\s*->.*$/, '');
+      var m = s.match(/\b((19|20)\d{2}\b.*)$/);
+      return m ? m[1].replace(/\s*[-–]\s*/g, ' to ') : s;
+    }
+    var select = root.querySelector('[data-ezy-year]');
+    var here = {{ product.title | json }};
+    var hereUrl = {{ product.url | json }};
+    try {
+      var all = JSON.parse(document.querySelector('[data-ezy-wipers]').textContent);
+      var key = carKey(here);
+      var mine = all.filter(function (p) { return carKey(p.t) === key; });
+      if (!mine.some(function (p) { return p.u === hereUrl; })) mine.push({ t: here, u: hereUrl });
+      mine.sort(function (a, b) { return yearText(a.t).localeCompare(yearText(b.t)); });
+      select.innerHTML = '';
+      mine.forEach(function (p) {
+        var o = document.createElement('option');
+        o.value = p.u; o.textContent = yearText(p.t); o.selected = p.u === hereUrl;
+        select.appendChild(o);
+      });
+      select.disabled = mine.length < 2;
+    } catch (e) {}
+    select.addEventListener('change', function () { if (select.value !== hereUrl) window.location.href = select.value; });
+
+    // Gallery dots.
+    var slides = root.querySelector('[data-ezy-slides]');
+    var dots = root.querySelectorAll('.ezy-pdp__dots span');
+    if (slides && dots.length) slides.addEventListener('scroll', function () {
+      var i = Math.round(slides.scrollLeft / slides.clientWidth);
+      dots.forEach(function (d, j) { d.classList.toggle('is-on', i === j); });
+    }, { passive: true });
+
+    // Front or front and rear.
+    var add = root.querySelector('[data-ezy-add]');
+    var total = root.querySelector('[data-ezy-total]');
+    function money(cents) { return '$' + (cents / 100).toFixed(2); }
+    root.querySelectorAll('input[name=ezy-pos]').forEach(function (r) {
+      r.addEventListener('change', function () {
+        root.querySelectorAll('input[name=ezy-pos]').forEach(function (x) { x.closest('.ezy-pdp__choice').classList.toggle('is-on', x.checked); });
+        var extra = r.value === 'rear' ? Number(r.dataset.rearPrice) : 0;
+        if (add && total) total.textContent = money(Number(add.dataset.price) + extra);
+      });
+    });
+
+    // Add to cart.
+    var msg = root.querySelector('[data-ezy-msg]');
+    function openDrawer() {
+      return fetch('{{ routes.cart_url }}?section_id=cart-drawer').then(function (r) { return r.text(); }).then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var fresh = doc.querySelector('.drawer__inner');
+        var drawer = document.querySelector('cart-drawer');
+        var cur = document.querySelector('#CartDrawer .drawer__inner');
+        if (!drawer || !fresh || !cur) return false;
+        cur.innerHTML = fresh.innerHTML;
+        drawer.classList.remove('is-empty');
+        if (typeof drawer.open === 'function') { drawer.open(); return true; }
+        return false;
+      }).catch(function () { return false; });
+    }
+    if (add) add.addEventListener('click', function () {
+      var items = [{ id: Number(add.dataset.variantId), quantity: 1 }];
+      var rearPick = root.querySelector('input[name=ezy-pos][value=rear]:checked');
+      if (rearPick) items.push({ id: Number(rearPick.dataset.rearId), quantity: 1 });
+      add.disabled = true; msg.textContent = 'Adding...';
+      fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
+        .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
+        .then(function () {
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+          if (window.matchMedia('(min-width: 768px)').matches) {
+            return openDrawer().then(function (ok) { msg.innerHTML = ok ? 'Added to your cart.' : 'Added. <a href="{{ routes.cart_url }}">View cart</a>'; });
+          }
+          msg.innerHTML = 'Added. <a href="{{ routes.cart_url }}">View cart and check out</a>';
+        })
+        .catch(function () { msg.textContent = 'Could not add to cart. Please try again.'; })
+        .then(function () { add.disabled = false; });
+    });
+
+    // Sticky add bar on phones once the main button scrolls away.
+    var sticky = document.querySelector('[data-ezy-sticky]');
+    var proxy = sticky && sticky.querySelector('[data-ezy-add-proxy]');
+    if (add && sticky && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { sticky.hidden = e[0].isIntersecting || e[0].boundingClientRect.top > 0; }).observe(add);
+      proxy.addEventListener('click', function () { add.scrollIntoView({ behavior: 'smooth', block: 'center' }); add.click(); });
+    }
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "EZY wiper product",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Wiper collection (for the year list)" },
+    { "type": "text", "id": "store_rating", "label": "Rating text when the product has no reviews yet", "default": "4.8 from 49 reviews" },
+    { "type": "url", "id": "fit_video", "label": "Default fitment video (mp4 or YouTube)" },
+    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Made for your exact car\n2 minute fit, no tools\nWrong fit? We swap it free within 30 days\nOrder before 2pm, ships the same day\nFree shipping" }
+  ],
+  "blocks": [
+    { "type": "question", "name": "Question", "settings": [{ "type": "text", "id": "q", "label": "Question" }, { "type": "textarea", "id": "a", "label": "Answer" }] }
+  ]
+}
+{% endschema %}

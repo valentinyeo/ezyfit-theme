@@ -167,9 +167,62 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "ezy-product": {
+      "type": "ezy-product",
+      "blocks": {
+        "q0": {
+          "type": "question",
+          "settings": {
+            "q": "Will these fit my car?",
+            "a": "Yes. This pair is made for the car and years shown above. Pick your year from the list to be sure."
+          }
+        },
+        "q1": {
+          "type": "question",
+          "settings": {
+            "q": "Standard or Spray, which one?",
+            "a": "Standard suits most drivers. Spray suits dust, bugs and long trips. Both fit your car exactly."
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "q": "How do I fit them?",
+            "a": "Lift the arm, press the tab and slide the old blade off, then click the new one on. About 2 minutes, no tools. The video above shows each step."
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "q": "How fast is shipping?",
+            "a": "Order before 2pm and it ships the same day. Shipping is free."
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "q": "What if they don't fit?",
+            "a": "Tell us within 30 days and we send the right ones free."
+          }
+        }
+      },
+      "block_order": [
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "collection": "wiper-blades",
+        "store_rating": "4.8 from 49 reviews",
+        "fit_video": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4"
+      }
     }
   },
   "order": [
+    "ezy-product",
     "main",
     "177303894803bfa24f",
     "video-carousel",

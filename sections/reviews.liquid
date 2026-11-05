@@ -1,3 +1,12 @@
+{%- liquid
+  assign ezy_skip = false
+  if template.name == 'product'
+    if product.title contains 'Wiper'
+      assign ezy_skip = true
+    endif
+  endif
+-%}
+{%- unless ezy_skip -%}
 {% comment %}
   Loox Product Reviews Widget
   Displays customer photo reviews from the Loox app
@@ -237,7 +246,7 @@
   </div>
   {% endif %}
 </section>
-
+{%- endunless -%}
 
 {% schema %}
 {

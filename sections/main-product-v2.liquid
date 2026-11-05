@@ -1,3 +1,12 @@
+{%- liquid
+  assign ezy_skip = false
+  if template.name == 'product'
+    if product.title contains 'Wiper'
+      assign ezy_skip = true
+    endif
+  endif
+-%}
+{%- unless ezy_skip -%}
 <style>
   /* ========== PRODUCT PAGE V2 STYLES ========== */
 
@@ -2255,6 +2264,7 @@
     }
   });
 </script>
+{%- endunless -%}
 
 {% schema %}
 {
