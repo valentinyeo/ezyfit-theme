@@ -1,6 +1,9 @@
 // Deep-work gates for the EZYFIT draft theme. Each gate prints PASS or FAIL with evidence.
-// Usage: PLAYWRIGHT_PATH=... node _preview/gates.mjs [themeId]
+// Usage: PLAYWRIGHT_PATH=$HOME/.npm-global/lib/node_modules/playwright node .claude/skills/verify-ezyfit/scripts/gates.mjs [themeId]
+// Evidence: _preview/evidence/<timestamp>/ (gates.json plus screenshots). _preview/ is git- and shopify-ignored.
 import { createRequire } from 'node:module';
+import fs from 'node:fs';
+import path from 'node:path';
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || 'playwright');
 
@@ -9,6 +12,10 @@ const BASE = 'https://easy-fit-store1.myshopify.com';
 const pv = (path) => `${BASE}${path}${path.includes('?') ? '&' : '?'}preview_theme_id=${THEME}`;
 const WIPER = '/products/front-windscreen-wipers-for-toyota-hilux-2018';
 const results = [];
+const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
+const OUT = path.join(ROOT, '_preview/evidence', new Date().toISOString().replace(/[:.]/g, '-'));
+fs.mkdirSync(OUT, { recursive: true });
+const snap = async (p, name) => { try { await p.screenshot({ path: path.join(OUT, name + '.png') }); } catch (e) {} };
 const gate = (id, name, pass, evidence) => { results.push({ id, name, pass, evidence }); console.log(`${pass ? 'PASS' : 'FAIL'}  ${id}  ${name}  | ${evidence}`); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -42,6 +49,7 @@ try {
   const menu = await p.$('.ezy-head__menu');
   if (menu) { await menu.click(); await p.waitForTimeout(600); }
   const navLinks = await p.evaluate(() => { const n = document.querySelector('[data-ezy-drawer]'); if (!n || n.hidden || getComputedStyle(n).display === 'none') return 0; return [...n.querySelectorAll('a[href]')].filter((a) => a.getBoundingClientRect().height > 0).length; });
+  await snap(p, 'G7-phone-menu');
   gate('G7', 'phone menu opens with links', navLinks >= 3, `visible drawer links after tap: ${navLinks}`);
   const search = await p.$('.ezy-head [type=search], .ezy-head a[href*="/search"], .ezy-head [data-ezy-search]');
   gate('G8', 'header has search', !!search, search ? 'found' : 'missing');
@@ -54,6 +62,7 @@ try {
   if (addBtn) { await addBtn.click(); await p.waitForTimeout(4000); }
   const after = await p.evaluate(async () => (await (await fetch('/cart.js')).json()).item_count);
   const badge = await p.evaluate(() => { const e = document.querySelector('.ezy-head [data-cart-count]'); return e ? e.textContent.trim() : 'none'; });
+  await snap(p, 'G9-after-add-desktop');
   gate('G9', 'header cart count matches cart after add', String(after) === badge && after > before, `cart ${before}->${after}, badge=${badge}`);
   await ctx.close(); await sleep(1500);
 
@@ -75,6 +84,7 @@ try {
   // Collection page styled.
   ({ p, ctx, bad } = await open('/collections/wiper-blades'));
   const collEzy = await p.evaluate(() => !!document.querySelector('main .ezy'));
+  await snap(p, 'G13-collection');
   gate('G13', 'wiper collection uses EZYFIT design', collEzy, `main .ezy ${collEzy ? 'present' : 'absent'}`);
   const typed = await p.$('[data-ezy-coll-q]');
   if (typed) { await typed.fill('hilux'); await p.waitForTimeout(300); }
@@ -102,3 +112,6 @@ try {
 await b.close();
 const passed = results.filter((r) => r.pass).length;
 console.log(`\n${passed}/${results.length} gates pass`);
+fs.writeFileSync(path.join(OUT, 'gates.json'), JSON.stringify({ theme: THEME, at: new Date().toISOString(), passed, total: results.length, results }, null, 2));
+console.log(`evidence: ${OUT}`);
+process.exitCode = passed === results.length ? 0 : 1;
