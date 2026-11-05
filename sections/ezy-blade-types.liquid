@@ -6,8 +6,10 @@
     <div class="ezy-types">
       {%- for block in section.blocks -%}
         {%- assign best = block.settings.badge | strip -%}
-        <div class="ezy-card ezy-type{% if best != blank %} ezy-type--best{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.coming_soon -%}{%- assign best = '' -%}{%- endif -%}
+        <div class="ezy-card ezy-type{% if best != blank %} ezy-type--best{% endif %}{% if block.settings.coming_soon %} ezy-type--soon{% endif %}" {{ block.shopify_attributes }}>
           {%- if best != blank -%}<span class="ezy-type__badge">{{ best }}</span>{%- endif -%}
+          {%- if block.settings.coming_soon -%}<span class="ezy-type__badge ezy-type__badge--soon">Coming soon</span>{%- endif -%}
           <div class="ezy-type__top">
             {%- if block.settings.image != blank -%}
               {{ block.settings.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: block.settings.name }}
@@ -23,8 +25,8 @@
             </div>
           </div>
           <p class="ezy-type__desc">{{ block.settings.desc }}</p>
-          <div class="ezy-type__price"><b>{{ block.settings.price }}</b>{% if block.settings.was != blank %}<s>{{ block.settings.was }}</s>{% endif %}</div>
-          <p class="ezy-type__pay">{{ block.settings.pay }}</p>
+          {%- if block.settings.price != blank -%}<div class="ezy-type__price"><b>{{ block.settings.price }}</b>{% if block.settings.was != blank %}<s>{{ block.settings.was }}</s>{% endif %}</div>{%- endif -%}
+          {%- if block.settings.pay != blank -%}<p class="ezy-type__pay">{{ block.settings.pay }}</p>{%- endif -%}
           {%- if block.settings.rear != blank -%}<div class="ezy-type__rear">{{ block.settings.rear }}</div>{%- endif -%}
           <hr>
           <ul class="ezy-ticks ezy-ticks--green">
@@ -36,7 +38,7 @@
             {%- endfor -%}
           </ul>
           <a class="ezy-btn{% if best == blank %} ezy-btn--ghost{% endif %}" href="{{ block.settings.link | default: '#find' }}">
-            {{ block.settings.button }}<small>{{ section.settings.next_text }}</small>
+            {{ block.settings.button }}{% unless block.settings.coming_soon %}<small>{{ section.settings.next_text }}</small>{% endunless %}
           </a>
         </div>
       {%- endfor -%}
@@ -61,6 +63,7 @@
       "type": "type",
       "name": "Blade type",
       "settings": [
+        { "type": "checkbox", "id": "coming_soon", "label": "Coming soon (not for sale yet)", "default": false },
         { "type": "text", "id": "badge", "label": "Badge (makes it the highlighted card)" },
         { "type": "text", "id": "name", "label": "Name", "default": "Standard" },
         { "type": "text", "id": "for", "label": "Best for", "default": "For everyday driving" },

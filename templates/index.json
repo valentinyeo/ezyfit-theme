@@ -6,7 +6,8 @@
         "collection": "wiper-blades",
         "video_asset": "cb-real-4.jpg",
         "video_url": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4",
-        "video_label": "Watch a real fit"
+        "video_label": "Watch a real fit",
+        "search_placeholder": "Your make or model"
       },
       "blocks": {
         "p0": {
@@ -138,24 +139,26 @@
         "spray": {
           "type": "type",
           "settings": {
-            "badge": "Best for long trips",
+            "badge": "",
             "name": "Spray",
             "for": "For dust, bugs and long trips",
             "level": 3,
             "desc": "Water comes out of the blade, straight onto the glass as it wipes.",
-            "price": "$99",
-            "was": "$129",
-            "pay": "Front pair, 25% off already in. Or 4 payments of $24.75 with Afterpay.",
-            "rear": "+ Add a Standard rear: front pair + rear $124",
-            "ticks": "Exact fit for your car\n2 minute fit, no tools\nRear blade available (Standard)\nWater sprays from the blade",
-            "button": "Choose Spray",
-            "fallback_asset": "ezy-blade-spray.png"
+            "price": "",
+            "was": "",
+            "pay": "Not for sale yet. Leave your email below and we tell you when it lands.",
+            "rear": "",
+            "ticks": "Exact fit for your car\n2 minute fit, no tools\nWater sprays from the blade",
+            "button": "Tell me when it lands",
+            "fallback_asset": "ezy-blade-spray.png",
+            "coming_soon": true,
+            "link": "/#ezy-lead"
           }
         },
         "standard": {
           "type": "type",
           "settings": {
-            "badge": "",
+            "badge": "Available now",
             "name": "Standard",
             "for": "For everyday driving",
             "level": 2,
@@ -163,16 +166,16 @@
             "price": "$59",
             "was": "$79",
             "pay": "Front pair, 25% off already in. Or 4 payments of $14.75 with Afterpay.",
-            "rear": "+ Add a rear blade: front pair + rear $89",
-            "ticks": "Exact fit for your car\n2 minute fit, no tools\nRear blade available\nno: Water sprays from the blade",
+            "rear": "",
+            "ticks": "Exact fit for your car\n2 minute fit, no tools\nClear, quiet wipe\nno: Water sprays from the blade",
             "button": "Choose Standard",
             "fallback_asset": "ezy-blade-standard.png"
           }
         }
       },
       "block_order": [
-        "spray",
-        "standard"
+        "standard",
+        "spray"
       ],
       "settings": {}
     },

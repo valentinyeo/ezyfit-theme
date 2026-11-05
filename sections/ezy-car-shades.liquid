@@ -2,9 +2,9 @@
 <section class="ezy ezy-sec ezy-sec--blue ezy-shades">
   <div class="ezy-wrap ezy-shades__grid">
     {%- if section.settings.image != blank -%}
-      {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'lazy' }}
+      {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: 'Click Shades fitted to a car side window' }}
     {%- else -%}
-      <img src="{{ 'ezy-shade-ranger.png' | asset_url }}" alt="" loading="lazy">
+      <img src="{{ 'ezy-shade-ranger.png' | asset_url }}" alt="Click Shades fitted to a car side window" loading="lazy" width="900" height="675">
     {%- endif -%}
     <div>
       <h2>{{ section.settings.heading }}</h2>

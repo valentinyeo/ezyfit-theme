@@ -12,7 +12,7 @@
       {%- endif -%}
 
       <form class="ezy-finder" action="{{ routes.search_url }}" method="get" data-ezy-finder>
-        <h3>{{ section.settings.finder_heading }}</h3>
+        <h2 class="ezy-hero__h">{{ section.settings.finder_heading }}</h2>
         <input type="hidden" name="type" value="product">
         <label class="ezy-finder__search">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0135af" stroke-width="3" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
@@ -33,7 +33,7 @@
 
     <div>
       <div class="ezy-pack">
-        <h3>{{ section.settings.pack_heading }}</h3>
+        <h2 class="ezy-hero__h">{{ section.settings.pack_heading }}</h2>
         <ul class="ezy-ticks">
           {%- for block in section.blocks -%}
             {%- if block.type == 'pack_item' -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endif -%}
@@ -151,9 +151,9 @@
     { "type": "text", "id": "rating_text", "label": "Rating text (fill from Loox)", "default": "4.8 from 49 reviews" },
     { "type": "collection", "id": "collection", "label": "Wiper collection for the finder" },
     { "type": "text", "id": "finder_heading", "label": "Finder heading", "default": "Find your wipers" },
-    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search make and model, e.g. Ford Ranger" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Your car, for example Ranger" },
     { "type": "text", "id": "button", "label": "Button", "default": "Find my wipers" },
-    { "type": "text", "id": "next_text", "label": "Text under button", "default": "Your car's blades and fitment video comes next." },
+    { "type": "text", "id": "next_text", "label": "Text under button", "default": "Your car's blades and fitment video come next." },
     { "type": "text", "id": "pack_heading", "label": "Pack heading", "default": "Your Exact Fit Pack" },
     { "type": "text", "id": "pack_price", "label": "Pack price line", "default": "From $59 a front pair. 25% off already in." },
     { "type": "image_picker", "id": "video_image", "label": "Video image" },
