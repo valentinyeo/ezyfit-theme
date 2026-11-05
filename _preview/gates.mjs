@@ -76,6 +76,25 @@ try {
   ({ p, ctx, bad } = await open('/collections/wiper-blades'));
   const collEzy = await p.evaluate(() => !!document.querySelector('main .ezy'));
   gate('G13', 'wiper collection uses EZYFIT design', collEzy, `main .ezy ${collEzy ? 'present' : 'absent'}`);
+  const typed = await p.$('[data-ezy-coll-q]');
+  if (typed) { await typed.fill('hilux'); await p.waitForTimeout(300); }
+  const shown = await p.$$eval('.ezy-coll__item', (li) => li.filter((x) => !x.hidden).map((x) => x.dataset.search));
+  gate('G13b', 'collection car filter narrows to Hilux', shown.length >= 1 && shown.every((s) => s.includes('hilux')), `${shown.length} shown: ${shown.join(', ')}`);
+  await ctx.close(); await sleep(1500);
+
+  // Shade product page keeps the Click Shades design under the new header.
+  ({ p, ctx, bad } = await open('/collections/car-window-shades'));
+  const SHADE = await p.evaluate(() => { const a = document.querySelector('main a[href*="/products/"]'); return a ? new URL(a.href).pathname : null; });
+  await ctx.close(); await sleep(1000);
+  ({ p, ctx, bad } = await open(SHADE || '/'));
+  const shade = await p.evaluate(() => ({ old: !!document.querySelector('.product-page-v2'), pdp: !!document.querySelector('.ezy-pdp'), head: !!document.querySelector('.ezy-head') }));
+  gate('G16', 'shade product keeps old page, new header', shade.old && !shade.pdp && shade.head, JSON.stringify(shade));
+  await ctx.close(); await sleep(1500);
+
+  // Search results page.
+  ({ p, ctx, bad } = await open('/search?q=hilux&type=product'));
+  const srch = await p.evaluate(() => ({ ezy: !!document.querySelector('main .ezy-coll'), cards: document.querySelectorAll('.ezy-coll__card').length }));
+  gate('G17', 'search page uses EZYFIT cards', srch.ezy && srch.cards > 0, JSON.stringify(srch));
   await ctx.close();
 } catch (e) {
   console.log('ERROR', e.message);

@@ -10,7 +10,7 @@
 {
   "sections": {
     "main": {
-      "type": "main-search-v2",
+      "type": "ezy-search",
       "settings": {}
     }
   },

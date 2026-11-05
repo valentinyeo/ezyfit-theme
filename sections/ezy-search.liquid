@@ -1,0 +1,45 @@
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<section class="ezy ezy-sec ezy-coll">
+  <div class="ezy-wrap">
+    <h1 class="ezy-h2">{% if search.performed %}Results for "{{ search.terms | escape }}"{% else %}Search{% endif %}</h1>
+    <form class="ezy-coll__find" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="ezy-search-page-q">Search</label>
+      <input id="ezy-search-page-q" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Type your car, for example Hilux" autocomplete="off">
+      <input type="hidden" name="type" value="product">
+    </form>
+    {%- if search.performed -%}
+      {%- paginate search.results by 48 -%}
+        {%- assign found = 0 -%}
+        {%- for r in search.results -%}{%- if r.object_type == 'product' -%}{%- assign found = found | plus: 1 -%}{%- endif -%}{%- endfor -%}
+        <p class="ezy-coll__count">{{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %}</p>
+        {%- if found > 0 -%}
+          <ul class="ezy-coll__grid" role="list">
+            {%- for r in search.results -%}
+              {%- if r.object_type == 'product' -%}
+                {%- assign eager = false -%}{%- if forloop.index < 5 -%}{%- assign eager = true -%}{%- endif -%}
+                {%- render 'ezy-product-card', p: r, eager: eager, show_kind: true -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- else -%}
+          <div class="ezy-coll__empty">
+            <p>No blades listed for that car yet.</p>
+            <a class="ezy-btn" href="{{ routes.collections_url }}/wiper-blades">See every car we fit</a>
+            <a class="ezy-btn ezy-btn--ghost" href="/pages/request-your-car">Request your car</a>
+          </div>
+        {%- endif -%}
+        {%- if paginate.pages > 1 -%}
+          <nav class="ezy-coll__pages" aria-label="Pages">
+            {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}
+            <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {%- if paginate.next -%}<a href="{{ paginate.next.url }}">Next</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "EZY search results", "settings": [] }
+{% endschema %}

@@ -1,0 +1,23 @@
+{%- comment -%} EZYFIT product card. Params: p (product), eager (boolean). {%- endcomment -%}
+{%- assign car = p.title | split: ' for ' | last | split: ' ->' | first -%}
+{%- if p.title contains 'Wiper' -%}{%- assign kind = 'Wiper blades' -%}{%- else -%}{%- assign kind = 'Car shades' -%}{%- endif -%}
+{%- if eager -%}{%- assign load = 'eager' -%}{%- else -%}{%- assign load = 'lazy' -%}{%- endif -%}
+<li class="ezy-coll__item" data-search="{{ car | downcase | replace: 'vw ', 'volkswagen vw ' | escape }}">
+  <a class="ezy-card ezy-coll__card" href="{{ p.url }}">
+    <span class="ezy-coll__img">
+      {%- if p.featured_image -%}
+        {{ p.featured_image | image_url: width: 500 | image_tag: loading: load, sizes: '(min-width: 1024px) 270px, (min-width: 768px) 33vw, 50vw', widths: '250, 360, 500', alt: car }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </span>
+    {%- if show_kind -%}<span class="ezy-coll__kind">{{ kind }}</span>{%- endif -%}
+    <span class="ezy-coll__name">{{ car }}</span>
+    <span class="ezy-coll__price">
+      {%- if p.price_varies -%}From {% endif -%}
+      <strong>{{ p.price | money }}</strong>
+      {%- if p.compare_at_price > p.price %} <s>{{ p.compare_at_price | money }}</s>{%- endif -%}
+    </span>
+    {%- unless p.available -%}<span class="ezy-coll__out">Sold out</span>{%- endunless -%}
+  </a>
+</li>

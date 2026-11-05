@@ -14,9 +14,16 @@
       "settings": {
         "products_per_page": 16
       }
+    },
+    "ezy-collection": {
+      "type": "ezy-collection",
+      "settings": {
+        "heading": "Wiper blades for your car"
+      }
     }
   },
   "order": [
+    "ezy-collection",
     "product-grid"
   ]
 }

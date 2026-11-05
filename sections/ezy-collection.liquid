@@ -1,0 +1,70 @@
+{%- comment -%}
+  EZYFIT wiper collection grid. Renders only for wiper collections; other collections keep collection-product-grid-v7.
+{%- endcomment -%}
+{%- if collection.handle contains 'wiper' -%}
+{{ 'ezy.css' | asset_url | stylesheet_tag }}
+<section class="ezy ezy-sec ezy-coll">
+  <div class="ezy-wrap">
+    <h1 class="ezy-h2">{{ section.settings.heading | default: collection.title }}</h1>
+    <p class="ezy-sub">{{ section.settings.sub }}</p>
+    <div class="ezy-coll__find">
+      <label class="visually-hidden" for="ezy-coll-q">Find your car</label>
+      <input id="ezy-coll-q" type="search" placeholder="Type your car, for example Hilux" autocomplete="off" data-ezy-coll-q>
+    </div>
+    {%- paginate collection.products by 96 -%}
+      <p class="ezy-coll__count" aria-live="polite" data-ezy-coll-count>{{ collection.products_count }} cars</p>
+      <ul class="ezy-coll__grid" role="list">
+        {%- for p in collection.products -%}
+          {%- assign eager = false -%}{%- if forloop.index < 5 -%}{%- assign eager = true -%}{%- endif -%}
+          {%- render 'ezy-product-card', p: p, eager: eager -%}
+        {%- endfor -%}
+      </ul>
+      <div class="ezy-coll__empty" data-ezy-coll-empty hidden>
+        <p>No blades listed for that car yet.</p>
+        <a class="ezy-btn ezy-btn--ghost" href="/pages/request-your-car">Request your car</a>
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="ezy-coll__pages" aria-label="Pages">
+          {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}
+          <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}">Next</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+<script>
+  (function () {
+    var q = document.querySelector('[data-ezy-coll-q]');
+    if (!q) return;
+    var items = [].slice.call(document.querySelectorAll('.ezy-coll__item'));
+    var count = document.querySelector('[data-ezy-coll-count]');
+    var empty = document.querySelector('[data-ezy-coll-empty]');
+    function norm(s) { return String(s).toLowerCase().replace(/[^a-z0-9 ]/g, ''); }
+    function run() {
+      var terms = norm(q.value).split(/\s+/).filter(Boolean);
+      var shown = 0;
+      items.forEach(function (li) {
+        var hay = norm(li.dataset.search).replace(/ /g, '') + ' ' + norm(li.dataset.search);
+        var ok = terms.every(function (t) { return hay.indexOf(t) > -1; });
+        li.hidden = !ok; if (ok) shown++;
+      });
+      count.textContent = shown + (shown === 1 ? ' car' : ' cars');
+      empty.hidden = shown > 0;
+    }
+    q.addEventListener('input', run);
+    var pre = new URLSearchParams(location.search).get('car');
+    if (pre) { q.value = pre; run(); }
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "EZY collection",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading (blank uses the collection title)" },
+    { "type": "text", "id": "sub", "label": "Subheading", "default": "Pick your car. Every pair is made for that exact car and fits in 2 minutes." }
+  ]
+}
+{% endschema %}

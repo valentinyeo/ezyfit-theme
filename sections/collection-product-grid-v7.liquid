@@ -1,3 +1,10 @@
+{%- liquid
+  assign ezy_skip = false
+  if collection.handle contains 'wiper'
+    assign ezy_skip = true
+  endif
+-%}
+{%- unless ezy_skip -%}
 {% comment %}
   V7 Collection Product Grid - Inline Filters
   Desktop: In Stock toggle + Sort by inline (no sidebar)
@@ -1448,7 +1455,7 @@
   })();
   </script>
 {% endcomment %}
-
+{%- endunless -%}
 
 {% schema %}
 {
