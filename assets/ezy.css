@@ -355,3 +355,7 @@
 .ezy-faq details p { padding-bottom: 12px; }
 .ezy-hero__ticks span::before, .ezy-types__unsure::before { content: ""; display: inline-block; vertical-align: -2px; width: 14px; height: 14px; margin-right: 6px; background: var(--ezy-green); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat; }
 .ezy-types__unsure::before { flex: 0 0 16px; width: 16px; height: 16px; margin-top: 3px; }
+
+/* Cart drawer in EZYFIT colours */
+.cart-drawer__success-banner { background: var(--ezy-green) !important; font-family: Poppins, sans-serif; }
+cart-drawer .cart__checkout-button { background: var(--ezy-blue) !important; border-radius: 12px !important; font-family: Poppins, sans-serif; }
