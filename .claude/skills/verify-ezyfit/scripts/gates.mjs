@@ -63,6 +63,8 @@ try {
   const after = await p.evaluate(async () => (await (await fetch('/cart.js')).json()).item_count);
   const badge = await p.evaluate(() => { const e = document.querySelector('.ezy-head [data-cart-count]'); return e ? e.textContent.trim() : 'none'; });
   await snap(p, 'G9-after-add-desktop');
+  const objD = bad.filter((x) => x.includes('object'));
+  gate('G5d', 'wiper page desktop: no broken [object Object] requests', objD.length === 0, objD.join(', ') || 'none');
   gate('G9', 'header cart count matches cart after add', String(after) === badge && after > before, `cart ${before}->${after}, badge=${badge}`);
   await ctx.close(); await sleep(1500);
 
@@ -98,6 +100,9 @@ try {
   await ctx.close(); await sleep(1000);
   ({ p, ctx, bad } = await open(SHADE || '/'));
   const shade = await p.evaluate(() => ({ old: !!document.querySelector('.product-page-v2'), pdp: !!document.querySelector('.ezy-pdp'), head: !!document.querySelector('.ezy-head') }));
+  await p.waitForTimeout(2000);
+  const objS = bad.filter((x) => x.includes('object'));
+  gate('G16b', 'shade page: no broken [object Object] requests', objS.length === 0, objS.join(', ') || 'none');
   gate('G16', 'shade product keeps old page, new header', shade.old && !shade.pdp && shade.head, JSON.stringify(shade));
   await ctx.close(); await sleep(1500);
 

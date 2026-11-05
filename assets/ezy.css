@@ -359,3 +359,4 @@
 /* Cart drawer in EZYFIT colours */
 .cart-drawer__success-banner { background: var(--ezy-green) !important; font-family: Poppins, sans-serif; }
 cart-drawer .cart__checkout-button { background: var(--ezy-blue) !important; border-radius: 12px !important; font-family: Poppins, sans-serif; }
+#CartDrawer #CartDrawer-Checkout.cart__checkout-button, #CartDrawer-Checkout { background: var(--ezy-blue) !important; background-color: var(--ezy-blue) !important; }

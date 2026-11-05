@@ -146,13 +146,13 @@
             "desc": "Water comes out of the blade, straight onto the glass as it wipes.",
             "price": "",
             "was": "",
-            "pay": "Not for sale yet. Leave your email below and we tell you when it lands.",
+            "pay": "Not for sale yet.",
             "rear": "",
             "ticks": "Exact fit for your car\n2 minute fit, no tools\nWater sprays from the blade",
-            "button": "Tell me when it lands",
+            "button": "Ask about Spray for your car",
             "fallback_asset": "ezy-blade-spray.png",
             "coming_soon": true,
-            "link": "/#ezy-lead"
+            "link": "/pages/request-your-car"
           }
         },
         "standard": {
