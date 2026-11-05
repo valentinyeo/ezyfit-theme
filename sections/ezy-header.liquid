@@ -1,32 +1,137 @@
 {{ 'ezy.css' | asset_url | stylesheet_tag }}
-<header class="ezy ezy-head">
+{%- assign brand = section.settings.brand_name | default: shop.name -%}
+<header class="ezy ezy-head" data-ezy-head>
   <div class="ezy-wrap ezy-head__in">
-    <button class="ezy-head__menu" type="button" aria-label="Menu" data-ezy-menu><span></span><span></span><span></span></button>
-    <a class="ezy-head__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+    <button class="ezy-head__menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="ezy-drawer" data-ezy-menu><span></span><span></span><span></span></button>
+    <a class="ezy-head__logo" href="{{ routes.root_url }}" aria-label="{{ brand }} home">
       {%- if section.settings.logo != blank -%}
-        {{ section.settings.logo | image_url: width: 480 | image_tag: alt: shop.name, height: 38 }}
+        {{ section.settings.logo | image_url: width: 480 | image_tag: alt: brand, height: 38, width: 120 }}
       {%- else -%}
-        <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ shop.name }}" height="38">
+        <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="120" height="38">
       {%- endif -%}
     </a>
-    <nav class="ezy-head__nav">
+    <nav class="ezy-head__nav" aria-label="Main">
       {%- for link in linklists[section.settings.menu].links -%}
-        <a href="{{ link.url }}">{{ link.title }}</a>
+        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
       {%- endfor -%}
     </nav>
-    <a class="ezy-head__cart" href="{{ routes.cart_url }}" aria-label="Cart">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 8h12l-1 13H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-      <span data-cart-count>{{ cart.item_count }}</span>
-    </a>
+    <div class="ezy-head__tools">
+      <button class="ezy-head__icon" type="button" aria-label="Search" aria-expanded="false" aria-controls="ezy-search" data-ezy-search>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </button>
+      <a class="ezy-head__icon ezy-head__account" href="{{ routes.account_url }}" aria-label="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      </a>
+      <a class="ezy-head__cart" id="ezy-cart-link" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items" data-ezy-cart>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 8h12l-1 13H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span data-cart-count>{{ cart.item_count }}</span>
+      </a>
+    </div>
   </div>
+  <form class="ezy-head__search" id="ezy-search" action="{{ routes.search_url }}" method="get" role="search" hidden>
+    <div class="ezy-wrap">
+      <label class="visually-hidden" for="ezy-search-q">Search</label>
+      <input id="ezy-search-q" type="search" name="q" placeholder="{{ section.settings.search_placeholder }}" autocomplete="off">
+      <input type="hidden" name="type" value="product">
+      <button class="ezy-btn" type="submit">Search</button>
+    </div>
+  </form>
 </header>
+
+<div class="ezy ezy-drawer" id="ezy-drawer" data-ezy-drawer hidden>
+  <div class="ezy-drawer__overlay" data-ezy-close></div>
+  <div class="ezy-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="ezy-drawer__top">
+      <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="120" height="38">
+      <button class="ezy-drawer__close" type="button" aria-label="Close menu" data-ezy-close>&times;</button>
+    </div>
+    <form class="ezy-drawer__search" action="{{ routes.search_url }}" method="get" role="search">
+      <input type="search" name="q" placeholder="{{ section.settings.search_placeholder }}" aria-label="Search" autocomplete="off">
+      <input type="hidden" name="type" value="product">
+    </form>
+    <nav class="ezy-drawer__nav" aria-label="Menu">
+      {%- for link in linklists[section.settings.menu].links -%}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- for child in link.links -%}<a class="ezy-drawer__sub" href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
+      {%- endfor -%}
+      <a href="{{ routes.account_url }}">Account</a>
+    </nav>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var head = document.querySelector('[data-ezy-head]');
+    if (!head || head.dataset.ready) return;
+    head.dataset.ready = '1';
+
+    // Phone menu.
+    var drawer = document.querySelector('[data-ezy-drawer]');
+    var menuBtn = head.querySelector('[data-ezy-menu]');
+    function setMenu(open) {
+      drawer.hidden = !open;
+      menuBtn.setAttribute('aria-expanded', String(open));
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) drawer.querySelector('.ezy-drawer__close').focus(); else menuBtn.focus();
+    }
+    menuBtn.addEventListener('click', function () { setMenu(true); });
+    drawer.querySelectorAll('[data-ezy-close]').forEach(function (el) { el.addEventListener('click', function () { setMenu(false); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !drawer.hidden) setMenu(false); });
+
+    // Search bar under the header.
+    var searchBtn = head.querySelector('[data-ezy-search]');
+    var searchForm = head.querySelector('#ezy-search');
+    searchBtn.addEventListener('click', function () {
+      var open = searchForm.hidden;
+      searchForm.hidden = !open;
+      searchBtn.setAttribute('aria-expanded', String(open));
+      if (open) searchForm.querySelector('input[type=search]').focus();
+    });
+
+    // Cart count: refresh after any cart change made through fetch, from any section or app.
+    function refreshCount() {
+      fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (c) {
+          document.querySelectorAll('[data-cart-count]').forEach(function (el) { el.textContent = c.item_count; });
+          var link = document.querySelector('[data-ezy-cart]');
+          if (link) link.setAttribute('aria-label', 'Cart, ' + c.item_count + ' items');
+        })
+        .catch(function () {});
+    }
+    if (!window.__ezyFetchWrapped) {
+      window.__ezyFetchWrapped = true;
+      var orig = window.fetch;
+      window.fetch = function (input, init) {
+        var url = typeof input === 'string' ? input : (input && input.url) || '';
+        var p = orig.apply(this, arguments);
+        if (/\/cart\/(add|change|update|clear)/.test(url)) p.then(function () { setTimeout(refreshCount, 150); }, function () {});
+        return p;
+      };
+    }
+    document.addEventListener('cart:updated', refreshCount);
+    window.addEventListener('pageshow', function (e) { if (e.persisted) refreshCount(); });
+
+    // Cart icon opens the slide-out cart on desktop when the theme uses one.
+    var cartLink = head.querySelector('[data-ezy-cart]');
+    cartLink.addEventListener('click', function (e) {
+      var cd = document.querySelector('cart-drawer');
+      if (cd && typeof cd.open === 'function' && window.matchMedia('(min-width: 768px)').matches) {
+        e.preventDefault();
+        cd.open(cartLink);
+      }
+    });
+  })();
+</script>
 
 {% schema %}
 {
   "name": "EZY header",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+    { "type": "text", "id": "brand_name", "label": "Brand name (logo alt text)", "default": "1300 EZYFIT" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search your car or a product" }
   ]
 }
 {% endschema %}

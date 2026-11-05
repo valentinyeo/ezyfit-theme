@@ -3,9 +3,11 @@
   "type": "footer",
   "sections": {
     "footer": {
-      "type": "footer-v7",
+      "type": "ezy-footer",
       "settings": {}
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

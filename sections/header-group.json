@@ -13,20 +13,23 @@
           "settings": {
             "text": "25% off every wiper, already in the price.",
             "link_text": "Shop",
-            "link": "shopify://collections/all"
+            "link": "shopify://collections/wiper-blades"
           }
         },
         "m2": {
           "type": "message",
           "settings": {
-            "text": "Free shipping. Ships same day before 2pm."
+            "text": "Free shipping. Ships same day before 2pm.",
+            "link_text": "Shop wipers",
+            "link": "shopify://collections/wiper-blades"
           }
         },
         "m3": {
           "type": "message",
           "settings": {
             "text": "Wrong fit? Free swap within 30 days.",
-            "link_text": "How it works"
+            "link_text": "How it works",
+            "link": "/#ezy-faq"
           }
         }
       },
