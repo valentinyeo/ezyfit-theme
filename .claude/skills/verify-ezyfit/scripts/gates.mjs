@@ -19,7 +19,7 @@ const snap = async (p, name) => { try { await p.screenshot({ path: path.join(OUT
 const gate = (id, name, pass, evidence) => { results.push({ id, name, pass, evidence }); console.log(`${pass ? 'PASS' : 'FAIL'}  ${id}  ${name}  | ${evidence}`); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const b = await chromium.launch();
+const b = await chromium.launch(process.env.PW_EXEC ? { executablePath: process.env.PW_EXEC } : {});
 async function open(path, w = 390, h = 844) {
   const ctx = await b.newContext({ viewport: { width: w, height: h } });
   const p = await ctx.newPage();
@@ -110,6 +110,23 @@ try {
   ({ p, ctx, bad } = await open('/search?q=hilux&type=product'));
   const srch = await p.evaluate(() => ({ ezy: !!document.querySelector('main .ezy-coll'), cards: document.querySelectorAll('.ezy-coll__card').length }));
   gate('G17', 'search page uses EZYFIT cards', srch.ezy && srch.cards > 0, JSON.stringify(srch));
+  await ctx.close(); await sleep(1500);
+
+  // Homepage finder: left-aligned dropdowns, Make search, Make > Model > Year lands on the product.
+  ({ p, ctx, bad } = await open('/'));
+  await p.click('[data-ezy-dd=make] .ezy-dd__btn');
+  await p.keyboard.type('toyota'); await p.keyboard.press('Enter');
+  await p.click('[data-ezy-dd=model] .ezy-dd__btn');
+  await p.click('[data-ezy-dd=model] li:text-is("Hilux")');
+  const fin = await p.evaluate(() => ({
+    native: document.querySelectorAll('[data-ezy-finder] select, [data-ezy-finder] datalist').length,
+    align: getComputedStyle(document.querySelector('.ezy-dd__btn')).textAlign,
+    year: document.querySelector('[data-ezy-dd=year] .ezy-dd__val').textContent.trim(),
+  }));
+  await snap(p, 'G18-finder-filled');
+  await Promise.all([p.waitForNavigation({ timeout: 30000 }), p.click('[data-ezy-finder] button[type=submit]')]);
+  fin.landed = new URL(p.url()).pathname;
+  gate('G18', 'homepage finder: normal dropdowns, Toyota > Hilux > year opens the product', fin.native === 0 && fin.align === 'left' && /\d{4}/.test(fin.year) && fin.landed === WIPER, JSON.stringify(fin));
   await ctx.close();
 } catch (e) {
   console.log('ERROR', e.message);

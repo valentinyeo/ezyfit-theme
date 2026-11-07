@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_PATH);
 const [path, out, w = '390', full = '1'] = process.argv.slice(2);
-const b = await chromium.launch();
+const b = await chromium.launch(process.env.PW_EXEC ? { executablePath: process.env.PW_EXEC } : {});
 const p = await b.newPage({ viewport: { width: Number(w), height: Number(w) > 600 ? 900 : 844 } });
 const errs = [];
 p.on('pageerror', (e) => errs.push(e.message));

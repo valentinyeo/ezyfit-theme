@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || 'playwright');
 const THEME = process.argv[2] || '158148984988';
-const b = await chromium.launch();
+const b = await chromium.launch(process.env.PW_EXEC ? { executablePath: process.env.PW_EXEC } : {});
 const p = await b.newPage();
 let ok = true;
 const res = await p.goto(`https://easy-fit-store1.myshopify.com/?preview_theme_id=${THEME}`, { waitUntil: 'load', timeout: 90000 });

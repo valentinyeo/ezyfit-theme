@@ -14,18 +14,34 @@
       <form class="ezy-finder" action="{{ routes.search_url }}" method="get" data-ezy-finder>
         <h2 class="ezy-hero__h">{{ section.settings.finder_heading }}</h2>
         <input type="hidden" name="type" value="product">
-        <label class="ezy-finder__search">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0135af" stroke-width="3" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
-          <input type="search" name="q" list="ezy-cars-list" placeholder="{{ section.settings.search_placeholder }}" autocomplete="off" data-ezy-q>
-          <datalist id="ezy-cars-list"></datalist>
-        </label>
-        <div class="ezy-finder__or">or pick</div>
-        <label class="ezy-finder__sel"><span>Make</span>
-          <select data-ezy-make aria-label="Make"><option value="">Choose</option></select>
-        </label>
-        <label class="ezy-finder__sel"><span>Model</span>
-          <select data-ezy-model aria-label="Model" disabled><option value="">Choose</option></select>
-        </label>
+        <input type="hidden" name="q" data-ezy-q>
+        <div class="ezy-dd" data-ezy-dd="make">
+          <button type="button" class="ezy-dd__btn" aria-haspopup="listbox" aria-expanded="false">
+            <span class="ezy-dd__val" data-placeholder="Select Make">Select Make</span>
+          </button>
+          <div class="ezy-dd__menu" hidden>
+            <input type="text" class="ezy-dd__search" placeholder="Search make..." aria-label="Search make" autocomplete="off">
+            <ul class="ezy-dd__list" role="listbox" aria-label="Make"></ul>
+          </div>
+        </div>
+        <div class="ezy-dd" data-ezy-dd="model">
+          <button type="button" class="ezy-dd__btn" aria-haspopup="listbox" aria-expanded="false" disabled>
+            <span class="ezy-dd__val" data-placeholder="Select Model">Select Model</span>
+          </button>
+          <div class="ezy-dd__menu" hidden>
+            <input type="text" class="ezy-dd__search" placeholder="Search model..." aria-label="Search model" autocomplete="off">
+            <ul class="ezy-dd__list" role="listbox" aria-label="Model"></ul>
+          </div>
+        </div>
+        <div class="ezy-dd" data-ezy-dd="year">
+          <button type="button" class="ezy-dd__btn" aria-haspopup="listbox" aria-expanded="false" disabled>
+            <span class="ezy-dd__val" data-placeholder="Select Year">Select Year</span>
+          </button>
+          <div class="ezy-dd__menu" hidden>
+            <input type="text" class="ezy-dd__search" placeholder="Search year..." aria-label="Search year" autocomplete="off">
+            <ul class="ezy-dd__list" role="listbox" aria-label="Year"></ul>
+          </div>
+        </div>
         <button class="ezy-btn" type="submit">{{ section.settings.button }}</button>
         <p class="ezy-finder__next">{{ section.settings.next_text }}</p>
       </form>
@@ -95,42 +111,93 @@
       if (TWO_WORD.indexOf((words[0] + ' ' + (words[1] || '')).replace('-', ' ')) > -1) make = words[0] + ' ' + words[1];
       var model = rest.slice(make.length).trim();
       if (/^vw$/i.test(make)) make = 'Volkswagen';
-      if (model) cars.push({ make: make, model: model, url: p.u });
+      var yrs = (txt.value.match(/\b(?:19|20)\d{2}\b/g) || []).slice(0, 2);
+      var year = yrs.length === 2 ? yrs[0] + ' to ' + yrs[1] : (yrs[0] || '');
+      if (model) cars.push({ make: make, model: model, year: year, url: p.u });
     });
     // "rav4", "RAV 4" and "Rav-4" all compare equal.
     var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]/g, ''); };
-    var makeSel = form.querySelector('[data-ezy-make]');
-    var modelSel = form.querySelector('[data-ezy-model]');
     var q = form.querySelector('[data-ezy-q]');
-    var list = form.querySelector('datalist');
-    var makes = Array.from(new Set(cars.map(function (c) { return c.make; }))).sort();
-    makes.forEach(function (mk) { makeSel.add(new Option(mk, mk)); });
-    Array.from(new Set(cars.map(function (c) { return c.make + ' ' + c.model; }))).sort().forEach(function (s) {
-      var o = document.createElement('option'); o.value = s; list.appendChild(o);
+    var uniq = function (xs) { return Array.from(new Set(xs)); };
+    var pick = { make: '', model: '', year: '' };
+    var dds = {};
+    function closeAll(except) {
+      Object.keys(dds).forEach(function (k) { if (dds[k] !== except) dds[k].close(); });
+    }
+    function Dropdown(el, onPick) {
+      var btn = el.querySelector('.ezy-dd__btn'), val = el.querySelector('.ezy-dd__val');
+      var menu = el.querySelector('.ezy-dd__menu'), search = el.querySelector('.ezy-dd__search');
+      var list = el.querySelector('.ezy-dd__list');
+      var items = [];
+      var self = {
+        set: function (opts) {
+          items = opts; list.innerHTML = '';
+          opts.forEach(function (o) {
+            var li = document.createElement('li');
+            li.setAttribute('role', 'option'); li.tabIndex = -1; li.textContent = o;
+            li.addEventListener('click', function () { self.choose(o); });
+            li.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); self.choose(o); }
+              if (e.key === 'ArrowDown' && li.nextElementSibling) { e.preventDefault(); li.nextElementSibling.focus(); }
+              if (e.key === 'ArrowUp') { e.preventDefault(); (li.previousElementSibling || search).focus(); }
+            });
+            list.appendChild(li);
+          });
+          btn.disabled = !opts.length;
+          self.reset();
+          if (opts.length === 1) self.choose(opts[0]);
+        },
+        reset: function () { val.textContent = val.dataset.placeholder; el.classList.remove('is-set'); },
+        choose: function (o) {
+          val.textContent = o; el.classList.add('is-set'); self.close(); btn.focus(); onPick(o);
+        },
+        open: function () {
+          closeAll(self); menu.hidden = false; el.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true');
+          search.value = ''; self.filter(''); search.focus();
+        },
+        close: function () { menu.hidden = true; el.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); },
+        filter: function (t) {
+          var n = norm(t);
+          Array.from(list.children).forEach(function (li) { li.hidden = n && norm(li.textContent).indexOf(n) < 0; });
+        }
+      };
+      // Few options need no search box.
+      self.searchable = function (on) { search.hidden = !on; };
+      btn.addEventListener('click', function () { menu.hidden ? self.open() : self.close(); });
+      search.addEventListener('input', function () { self.filter(search.value); });
+      search.addEventListener('keydown', function (e) {
+        var first = Array.from(list.children).find(function (li) { return !li.hidden; });
+        if (e.key === 'ArrowDown' && first) { e.preventDefault(); first.focus(); }
+        if (e.key === 'Enter') { e.preventDefault(); if (first) self.choose(first.textContent); }
+      });
+      el.addEventListener('keydown', function (e) { if (e.key === 'Escape') { self.close(); btn.focus(); } });
+      return self;
+    }
+    var yearOf = function (c) { return c.year; };
+    dds.make = Dropdown(form.querySelector('[data-ezy-dd=make]'), function (mk) {
+      pick.make = mk; pick.model = ''; pick.year = '';
+      dds.year.set([]);
+      dds.model.set(uniq(cars.filter(function (c) { return c.make === mk; }).map(function (c) { return c.model; })).sort());
     });
-    makeSel.addEventListener('change', function () {
-      modelSel.length = 1;
-      var models = Array.from(new Set(cars.filter(function (c) { return c.make === makeSel.value; }).map(function (c) { return c.model; }))).sort();
-      models.forEach(function (md) { modelSel.add(new Option(md, md)); });
-      modelSel.disabled = !models.length;
+    dds.model = Dropdown(form.querySelector('[data-ezy-dd=model]'), function (md) {
+      pick.model = md; pick.year = '';
+      var years = uniq(cars.filter(function (c) { return c.make === pick.make && c.model === md; }).map(yearOf).filter(Boolean)).sort();
+      dds.year.set(years);
     });
+    dds.year = Dropdown(form.querySelector('[data-ezy-dd=year]'), function (y) { pick.year = y; });
+    var makes = uniq(cars.map(function (c) { return c.make; })).sort();
+    dds.make.set(makes);
+    dds.model.searchable(false); dds.year.searchable(false);
+    dds.model.set([]); dds.year.set([]);
+    document.addEventListener('click', function (e) { if (!form.contains(e.target)) closeAll(null); });
     form.addEventListener('submit', function (e) {
-      var text = q.value.trim();
-      var hits;
-      if (text) {
-        // Every typed word must appear in make + model, so "hilux" and "toyota hilux" both find the Hilux.
-        var terms = text.split(/\s+/).map(norm).filter(Boolean);
-        hits = cars.filter(function (c) { var hay = norm(c.make + c.model); return terms.every(function (t) { return hay.indexOf(t) > -1; }); });
-      } else {
-        hits = cars.filter(function (c) { return c.make === makeSel.value && (!modelSel.value || c.model === modelSel.value); });
-      }
+      if (!pick.make) { e.preventDefault(); dds.make.open(); return; }
+      var hits = cars.filter(function (c) {
+        return c.make === pick.make && (!pick.model || c.model === pick.model) && (!pick.year || c.year === pick.year);
+      });
       if (hits.length === 1) { e.preventDefault(); window.location.href = hits[0].url; return; }
-      if (!text) {
-        if (!makeSel.value) { e.preventDefault(); q.focus(); return; }
-        text = (makeSel.value + ' ' + modelSel.value).trim();
-      }
       // Several or no matches: store search limited to wipers.
-      q.value = 'wipers ' + text.replace(/^wipers\s+/i, '');
+      q.value = 'wipers ' + (pick.make + ' ' + pick.model).trim();
     });
     var sticky = document.querySelector('[data-ezy-sticky]');
     if (sticky && 'IntersectionObserver' in window) {

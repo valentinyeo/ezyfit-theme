@@ -6,7 +6,7 @@ import path from 'node:path';
 const OUTDIR = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../../_preview/evidence/dom');
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_PATH);
-const b = await chromium.launch();
+const b = await chromium.launch(process.env.PW_EXEC ? { executablePath: process.env.PW_EXEC } : {});
 const pages = { home: '/', pdp: '/products/front-windscreen-wipers-for-toyota-hilux-2018', coll: '/collections/wiper-blades' };
 fs.mkdirSync(OUTDIR, { recursive: true });
 for (const [k, route] of Object.entries(pages)) {
