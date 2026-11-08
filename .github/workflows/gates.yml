@@ -1,0 +1,68 @@
+name: gates
+
+# Browser checks for the EZYFIT theme. They run only here, on GitHub-hosted runners.
+# House rule: no CI, builds or tests on the VPS. The preview URL is public, so no secrets are needed.
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme_id:
+        description: Theme id to check (draft 158148984988, QA instance in the verify-ezyfit skill)
+        required: false
+        default: '158148984988'
+  push:
+    branches: [main]
+
+concurrency:
+  group: gates-${{ github.ref }}-${{ github.event.inputs.theme_id || 'draft' }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      THEME_ID: ${{ github.event.inputs.theme_id || '158148984988' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Refuse the live theme
+        run: |
+          if [ "$THEME_ID" = "149894070428" ]; then echo "Refusing: 149894070428 is the live ClickShades theme." >&2; exit 2; fi
+
+      - name: Install Playwright and Chromium
+        run: |
+          npm i --no-save --no-package-lock playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run every gates*.mjs
+        run: |
+          set -u
+          shopt -s nullglob
+          files=(.claude/skills/verify-ezyfit/scripts/gates*.mjs)
+          echo "Theme $THEME_ID, ${#files[@]} gate files: ${files[*]}"
+          failed=()
+          for f in "${files[@]}"; do
+            echo "::group::$f"
+            if ! node "$f" "$THEME_ID"; then failed+=("$f"); fi
+            echo "::endgroup::"
+          done
+          if [ "${#files[@]}" -eq 0 ]; then echo "No gate files found" >&2; exit 1; fi
+          if [ "${#failed[@]}" -gt 0 ]; then echo "FAILED files: ${failed[*]}" >&2; exit 1; fi
+          echo "All ${#files[@]} gate files passed"
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gates-evidence-${{ github.run_id }}
+          path: _preview/evidence/**
+          if-no-files-found: ignore
+          retention-days: 14
