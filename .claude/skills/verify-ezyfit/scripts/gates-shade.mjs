@@ -21,6 +21,7 @@ const SHADES = [
 ];
 // The Add All button only shows when the product has add-ons. This RAV4 gets a matching wiper from the store recommendations (checked on live), the 2013-2019 RAV4 gets none.
 const ADDALL = '/products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025';
+const ADDALL_ID = '8569631703196';
 const WIPER = '/products/front-windscreen-wipers-for-toyota-hilux-2018';
 const PARTS = '/pages/find-my-car?view=ezy-parts-home';
 const results = [];
@@ -33,8 +34,9 @@ const info = (id, name, evidence) => console.log(`INFO  ${id}  ${name}  | ${evid
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const b = await chromium.launch(process.env.PW_EXEC ? { executablePath: process.env.PW_EXEC } : {});
-async function open(url, w = 1280, h = 900) {
+async function open(url, w = 1280, h = 900, pre = null) {
   const ctx = await b.newContext({ viewport: { width: w, height: h } });
+  if (pre) await pre(ctx);
   const p = await ctx.newPage();
   const bad = [];
   p.on('response', (r) => { if (r.status() >= 400 && r.url().includes('easy-fit-store1')) bad.push(`${r.status()} ${r.url().replace(BASE, '').slice(0, 80)}`); });
@@ -48,6 +50,23 @@ const setIds = async (p) => {
   try { await p.waitForFunction(() => { const e = document.querySelector('#add-complete-set'); return !!(e && e.dataset.variantIds); }, null, { timeout: 25000 }); } catch (e) {}
   return (await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); return (e && e.dataset.variantIds) || ''; })) || '';
 };
+// Shade add-ons come only from the store's recommendations API, which answers 429 or empty to a busy GitHub runner IP.
+// Same API answer for live and draft: read it once from live (slowly, with retries), and replay it when the page's own call came back empty.
+let recStub = null;
+async function recJson() {
+  if (recStub) return recStub;
+  for (let n = 0; n < 6; n++) {
+    try {
+      const r = await fetch(`${LIVE}/recommendations/products.json?product_id=${ADDALL_ID}&limit=3&intent=complementary`, { headers: { Accept: 'application/json' } });
+      const t = await r.text();
+      const j = JSON.parse(t);
+      if (j.products && j.products.length) return (recStub = t);
+    } catch (e) {}
+    await sleep(20000);
+  }
+  return null;
+}
+const replayRecs = async (ctx) => { const body = await recJson(); if (body) await ctx.route('**/recommendations/products.json*', (r) => r.fulfill({ status: 200, contentType: 'application/json', body })); return !!body; };
 // Headings inside main only, so the live ClickShades header and the EZYFIT header never enter the comparison.
 const headings = (p) => p.evaluate(() => [...document.querySelectorAll('main h1, main h2, main h3')]
   .filter((h) => !h.closest('[class*="ezy-"]'))
@@ -122,14 +141,16 @@ try {
     try {
     // The store answers 429 to busy runner IPs, so cool down first and retry a throttled attempt.
     await sleep(40000);
-    const live = await open(LIVE + ADDALL, w, h);
-    const liveIds = await setIds(live.p);
+    let live = await open(LIVE + ADDALL, w, h);
+    let liveIds = await setIds(live.p);
     await live.ctx.close();
+    if (!liveIds) { live = await open(LIVE + ADDALL, w, h, replayRecs); liveIds = await setIds(live.p); await live.ctx.close(); }
     const liveExpected = [...new Set(liveIds.split(',').map((x) => x.trim()).filter(Boolean))];
     let last = null;
     for (let attempt = 1; attempt <= 3; attempt++) {
       await sleep(attempt === 1 ? 5000 : 45000);
-      const { p, ctx } = await open(pv(ADDALL), w, h);
+      let replay = false;
+      const { p, ctx } = await open(pv(ADDALL), w, h, attempt > 1 ? async (c) => { replay = await replayRecs(c); } : null);
       const net = [];
       p.on('response', (r) => { if (/\/cart[/.]/.test(r.url()) || r.url().includes('/recommendations/')) net.push(`${r.request().method()} ${new URL(r.url()).pathname} ${r.status()}`); });
       const ids = await setIds(p);
@@ -153,7 +174,7 @@ try {
       const allIn = expected.every((x) => cart.ids.includes(x)) && cart.lines === expected.length;
       gate(id, `Add All to Cart ${label}: main plus every add-on lands in cart, same set as live`,
         allIn && liveExpected.length === expected.length && stayed,
-        `attempt ${attempt}: button holds ${expected.length} variants (live ${liveExpected.length}), cart lines ${cart.lines}, qty ${cart.qty}, header count "${count}", still on product page: ${stayed}; drawer: ${drawer}`);
+        `attempt ${attempt}${replay ? ' (recommendations replayed from live because the runner was throttled)' : ''}: button holds ${expected.length} variants (live ${liveExpected.length}), cart lines ${cart.lines}, qty ${cart.qty}, header count "${count}", still on product page: ${stayed}; drawer: ${drawer}`);
       if (expected.length < 4) info(id, 'fewer than 4 items in this set', `${expected.length} variants; this product has ${expected.length - 1} add-ons on live too`);
       await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
       await ctx.close();
