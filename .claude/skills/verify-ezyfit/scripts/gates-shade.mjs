@@ -128,20 +128,22 @@ try {
     const expected = [...new Set(ids.split(',').map((x) => x.trim()).filter(Boolean))];
     const liveExpected = [...new Set(liveIds.split(',').map((x) => x.trim()).filter(Boolean))];
     const startPath = new URL(p.url()).pathname;
+    const net = [];
+    p.on('response', (r) => { if (/\/cart[/.]/.test(r.url()) || r.url().includes('/recommendations/')) net.push(`${r.request().method()} ${new URL(r.url()).pathname} ${r.status()} ${(r.headers()['content-type'] || '').split(';')[0]}`); });
     await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
     const btn = await p.$('#add-complete-set');
-    const diag = await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); if (!e) return 'button missing'; const r = e.getBoundingClientRect(); const cs = getComputedStyle(e); return `rect ${Math.round(r.width)}x${Math.round(r.height)} at y ${Math.round(r.top + scrollY)}, display ${cs.display}, visibility ${cs.visibility}, disabled ${e.disabled}`; });
+    const diag = await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); if (!e) return 'button missing'; const r = e.getBoundingClientRect(); const cs = getComputedStyle(e); let hid = ''; for (let a = e; a; a = a.parentElement) { if (getComputedStyle(a).display === 'none') { hid = ` hidden by ${a.tagName.toLowerCase()}#${a.id}.${String(a.className).slice(0, 40)}`; break; } } return `rect ${Math.round(r.width)}x${Math.round(r.height)} at y ${Math.round(r.top + scrollY)}, display ${cs.display}, visibility ${cs.visibility}, disabled ${e.disabled},${hid || ' no hidden ancestor'}; ids ${(e.dataset.variantIds || '').split(',').length}`; });
     console.log(`INFO  ${id}  add-all button  | ${diag}`);
     if (btn) { await p.evaluate(() => document.querySelector('#add-complete-set').scrollIntoView({ block: 'center' })); await p.waitForTimeout(800); await btn.click({ timeout: 15000 }); }
     await p.waitForTimeout(7000);
-    const cart = await p.evaluate(async () => { for (let n = 0; n < 4; n++) { const r = await fetch('/cart.js', { headers: { Accept: 'application/json' } }); const t = await r.text(); try { const c = JSON.parse(t); return { lines: c.items.length, qty: c.item_count, ids: c.items.map((i) => String(i.variant_id)) }; } catch (e) { await new Promise((x) => setTimeout(x, 3000)); } } return { lines: -1, qty: -1, ids: [] }; });
+    const cart = await p.evaluate(async () => { let head = ''; for (let n = 0; n < 4; n++) { const r = await fetch('/cart.js', { headers: { Accept: 'application/json' } }); const t = await r.text(); try { const c = JSON.parse(t); return { lines: c.items.length, qty: c.item_count, ids: c.items.map((i) => String(i.variant_id)), head }; } catch (e) { head = `${r.status} ${r.url.slice(0, 80)} ${t.replace(/\s+/g, ' ').slice(0, 100)}`; await new Promise((x) => setTimeout(x, 5000)); } } return { lines: -1, qty: -1, ids: [], head }; });
     const drawer = await p.evaluate(() => { const d = document.querySelector('cart-drawer'); if (!d) return 'no cart-drawer'; const r = document.querySelector('#CartDrawer .drawer__inner')?.getBoundingClientRect(); return `class="${d.className}" panel ${r ? Math.round(r.width) + 'px wide, left ' + Math.round(r.left) : 'none'}`; });
     const stayed = new URL(p.url()).pathname === startPath;
     const allIn = expected.length >= 2 && expected.every((x) => cart.ids.includes(x)) && cart.lines === expected.length;
     await snap(p, `${id}-after-add-all-${label}`);
     gate(id, `Add All to Cart ${label}: main plus every add-on lands in cart, same set as live`,
       allIn && liveExpected.length === expected.length && stayed,
-      `button holds ${expected.length} variants (live ${liveExpected.length}), cart lines ${cart.lines}, qty ${cart.qty}, still on product page: ${stayed}; drawer: ${drawer}`);
+      `button holds ${expected.length} variants (live ${liveExpected.length}), cart lines ${cart.lines}, qty ${cart.qty}, still on product page: ${stayed}; drawer: ${drawer}; network: ${net.join(' | ')}; cart read: ${cart.head || 'ok'}`);
     if (expected.length < 4) info(id, 'fewer than 4 items in this set', `${expected.length} variants; the product has ${expected.length - 1} add-ons`);
     await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
     await ctx.close(); await sleep(1200);
