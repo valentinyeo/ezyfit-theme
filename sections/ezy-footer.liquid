@@ -9,6 +9,16 @@
         <a class="ezy-foot__contact" href="/pages/contact">Contact us</a>
         {%- if section.settings.phone != blank -%}<a class="ezy-foot__contact" href="tel:{{ section.settings.phone | remove: ' ' }}">{{ section.settings.phone }}</a>{%- endif -%}
         {%- if section.settings.email != blank -%}<a class="ezy-foot__contact" href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>{%- endif -%}
+        {%- if section.settings.facebook_url != blank or section.settings.instagram_url != blank -%}
+          <div class="ezy-foot__social">
+            {%- if section.settings.facebook_url != blank -%}
+              <a href="{{ section.settings.facebook_url }}" rel="noopener" target="_blank" aria-label="Facebook" data-ezy-social="facebook"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg></a>
+            {%- endif -%}
+            {%- if section.settings.instagram_url != blank -%}
+              <a href="{{ section.settings.instagram_url }}" rel="noopener" target="_blank" aria-label="Instagram" data-ezy-social="instagram"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       </div>
       <nav class="ezy-foot__col" aria-label="Shop">
         <h2 class="ezy-foot__h">Shop</h2>
@@ -30,6 +40,8 @@
         <a href="/pages/payment-policy">Payments</a>
         <a href="/pages/order-cancellation-policy">Order cancellation</a>
         <a href="/pages/accessibility-statement">Accessibility</a>
+        <a href="/pages/cookie-policy">Cookie policy</a>
+        <a href="/pages/legal-disclaimer">Legal disclaimer</a>
       </nav>
       <div class="ezy-foot__col">
         <h2 class="ezy-foot__h">Business details</h2>
@@ -54,6 +66,8 @@
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "Wiper blades made for your exact car. Fits in 2 minutes." },
     { "type": "text", "id": "phone", "label": "Phone (hidden when empty)" },
     { "type": "text", "id": "email", "label": "Email (hidden when empty)" },
+    { "type": "text", "id": "facebook_url", "label": "Facebook page (hidden when empty)", "default": "https://www.facebook.com/profile.php?id=61580829655005" },
+    { "type": "text", "id": "instagram_url", "label": "Instagram profile (hidden when empty)", "default": "https://www.instagram.com/clickshades" },
     { "type": "text", "id": "abn", "label": "ABN", "default": "24 127 742 441" },
     { "type": "text", "id": "address", "label": "Address", "default": "21 Discovery Drive, Bibra Lake WA 6163, Australia" },
     { "type": "text", "id": "hours", "label": "Hours", "default": "Monday to Friday, 9am to 5pm AWST" }

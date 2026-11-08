@@ -22,6 +22,43 @@
   endif
   assign quarter = variant.price | divided_by: 4
   assign wipers = section.settings.collection | default: collections['wiper-blades']
+  assign now_s = 'now' | date: '%s'
+  assign free_eta = now_s | plus: 518400
+  assign express_eta = now_s | plus: 172800
+
+  assign upsells = '' | split: ','
+  assign up_src = 'none'
+  assign manual = product.metafields.custom.upsell_products.value
+  if manual != blank
+    for up in manual
+      if up.id != product.id and up.available and upsells.size < 3
+        assign upsells = upsells | push: up
+      endif
+    endfor
+  endif
+  if upsells.size > 0
+    assign up_src = 'metafield'
+  else
+    assign car_make = product.metafields.custom.vehicles_make.value | first
+    assign car_model = product.metafields.custom.vehicles_model.value | first
+    if car_make != blank and car_model != blank
+      for p in collections['all'].products limit: 100
+        if p.id != product.id and p.available and upsells.size < 3
+          unless p.title contains 'Wiper'
+            assign p_make = p.metafields.custom.vehicles_make.value | first
+            assign p_model = p.metafields.custom.vehicles_model.value | first
+            if p_make == car_make and p_model == car_model
+              assign upsells = upsells | push: p
+            endif
+          endunless
+        endif
+      endfor
+    endif
+    if upsells.size > 0
+      assign up_src = 'vehicle'
+    endif
+  endif
+  assign perm = all_products['windscreen-water-repellent']
 -%}
 <section class="ezy ezy-pdp" data-ezy-pdp>
   <div class="ezy-wrap ezy-pdp__grid">
@@ -79,6 +116,9 @@
         {%- endif -%}
       </div>
       <p class="ezy-pdp__pay">or 4 payments of {{ quarter | money }} with Afterpay</p>
+      <p class="ezy-pdp__stock{% unless variant.available %} is-out{% endunless %}" data-ezy-stock>
+        {%- if variant.available -%}In stock. Ships today if you order before 2pm AWST.{%- else -%}Sold out{%- endif -%}
+      </p>
 
       <div class="ezy-pdp__opt">
         <label class="ezy-pdp__label" for="ezy-year">Your car's year</label>
@@ -123,6 +163,14 @@
       </fieldset>
 
       {%- if variant.available -%}
+        <div class="ezy-pdp__opt">
+          <label class="ezy-pdp__label" for="ezy-qty">Quantity</label>
+          <div class="ezy-qty">
+            <button type="button" aria-label="Fewer" data-ezy-qty-step="-1">&minus;</button>
+            <input id="ezy-qty" type="number" inputmode="numeric" min="1" max="10" value="1" data-ezy-qty>
+            <button type="button" aria-label="More" data-ezy-qty-step="1">+</button>
+          </div>
+        </div>
         <button class="ezy-btn ezy-pdp__add" type="button" data-ezy-add data-variant-id="{{ variant.id }}" data-price="{{ variant.price }}">
           Add to cart, <span data-ezy-total>{{ variant.price | money }}</span>
         </button>
@@ -131,13 +179,53 @@
       {%- endif -%}
       <p class="ezy-pdp__msg" role="status" aria-live="polite" data-ezy-msg></p>
 
+      <div class="ezy-pdp__ship" data-ezy-ship>
+        <p><strong>Free delivery</strong> by {{ free_eta | date: '%a %-d %b' }}</p>
+        <p><strong>Express delivery</strong> by {{ express_eta | date: '%a %-d %b' }}, $10 at checkout</p>
+        <small>Delivery times are estimates and may vary.</small>
+      </div>
+
       <ul class="ezy-ticks ezy-pdp__ticks">
         {%- assign ticks = section.settings.ticks | newline_to_br | split: '<br />' -%}
         {%- for t in ticks -%}{%- assign tt = t | strip -%}{%- if tt != blank -%}<li>{{ tt }}</li>{%- endif -%}{%- endfor -%}
       </ul>
+
+      {%- if section.settings.pickup_address != blank -%}
+        <details class="ezy-pdp__pickup" data-ezy-pickup>
+          <summary><strong>{{ section.settings.pickup_title }}</strong><small>{{ section.settings.pickup_note }}</small></summary>
+          <p>{{ section.settings.pickup_address }}</p>
+        </details>
+      {%- endif -%}
     </div>
   </div>
 </section>
+
+<section class="ezy ezy-sec" id="ezy-pdp-addons" data-ezy-addons-wrap hidden>
+  <div class="ezy-wrap">
+    <h2 class="ezy-h2">Select add-ons</h2>
+    <p class="ezy-sub">Popular with this fit.</p>
+    <div class="ezy-addons" data-ezy-addons-list></div>
+    <div class="ezy-addons__all" data-ezy-addall-bar hidden>
+      <div><small>Add all items</small><strong data-ezy-addall-total></strong></div>
+      <button class="ezy-btn" type="button" id="add-complete-set" data-variant-ids="">Add All to Cart</button>
+    </div>
+    <p class="ezy-pdp__msg" role="status" aria-live="polite" data-ezy-addons-msg></p>
+  </div>
+</section>
+
+<script type="application/json" data-ezy-addons-seed>
+  {
+    "src": {{ up_src | json }},
+    "items": [
+      {%- for u in upsells -%}
+        {%- assign uv = u.selected_or_first_available_variant -%}
+        {"v": {{ uv.id }}, "t": {{ u.title | json }}, "u": {{ u.url | json }}, "i": {{ u.featured_image | image_url: width: 200 | json }}, "p": {{ uv.price }}, "c": {{ uv.compare_at_price | default: 0 }}}{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ],
+    "perm": {%- if perm and perm.available -%}{%- assign pv = perm.selected_or_first_available_variant -%}{"v": {{ pv.id }}, "t": {{ perm.title | json }}, "u": {{ perm.url | json }}, "i": {{ perm.featured_image | image_url: width: 200 | json }}, "p": {{ pv.price }}, "c": {{ pv.compare_at_price | default: 0 }}}{%- else -%}null{%- endif -%},
+    "pid": {{ product.id }}
+  }
+</script>
 
 <section class="ezy ezy-sec ezy-sec--tint" id="ezy-pdp-video">
   <div class="ezy-wrap ezy-pdp__video">
@@ -178,6 +266,13 @@
     </div>
   </div>
 </section>
+<script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+    {%- for block in section.blocks -%}
+      {"@type": "Question", "name": {{ block.settings.q | json }}, "acceptedAnswer": {"@type": "Answer", "text": {{ block.settings.a | json }}}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]}
+</script>
 {%- endif -%}
 
 <div class="ezy ezy-pdp__sticky" data-ezy-sticky>
@@ -244,23 +339,42 @@
       dots.forEach(function (d, j) { d.classList.toggle('is-on', i === j); });
     }, { passive: true });
 
-    // Front or front and rear.
+    // Totals, quantity, front or front and rear.
     var add = root.querySelector('[data-ezy-add]');
     var total = root.querySelector('[data-ezy-total]');
+    var qtyIn = root.querySelector('[data-ezy-qty]');
     function money(cents) { return '$' + (cents / 100).toFixed(2); }
+    function qty() { var n = parseInt(qtyIn && qtyIn.value, 10); return n > 0 ? Math.min(n, 10) : 1; }
+    function mainSum() {
+      var rear = root.querySelector('input[name=ezy-pos][value=rear]:checked');
+      return (Number(add.dataset.price) + (rear ? Number(rear.dataset.rearPrice) : 0)) * qty();
+    }
+    function updateTotals() {
+      if (!add) return;
+      var rear = root.querySelector('input[name=ezy-pos][value=rear]:checked');
+      var sum = money(mainSum());
+      if (total) total.textContent = sum;
+      var sp = document.querySelector('[data-ezy-sticky-price]');
+      if (sp) sp.textContent = sum;
+      var sw = document.querySelector('[data-ezy-sticky-what]');
+      if (sw) sw.textContent = rear ? 'front and rear' : 'front pair';
+      refreshAll();
+    }
     root.querySelectorAll('input[name=ezy-pos]').forEach(function (r) {
       r.addEventListener('change', function () {
         root.querySelectorAll('input[name=ezy-pos]').forEach(function (x) { x.closest('.ezy-pdp__choice').classList.toggle('is-on', x.checked); });
-        var extra = r.value === 'rear' ? Number(r.dataset.rearPrice) : 0;
-        if (add && total) total.textContent = money(Number(add.dataset.price) + extra);
-        var sp = document.querySelector('[data-ezy-sticky-price]'), sw = document.querySelector('[data-ezy-sticky-what]');
-        if (add && sp) sp.textContent = money(Number(add.dataset.price) + extra);
-        if (sw) sw.textContent = r.value === 'rear' ? 'front and rear' : 'front pair';
+        updateTotals();
       });
     });
+    root.querySelectorAll('[data-ezy-qty-step]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        qtyIn.value = Math.max(1, Math.min(10, qty() + Number(b.dataset.ezyQtyStep)));
+        updateTotals();
+      });
+    });
+    if (qtyIn) qtyIn.addEventListener('change', function () { qtyIn.value = qty(); updateTotals(); });
 
-    // Add to cart.
-    var msg = root.querySelector('[data-ezy-msg]');
+    // Cart helpers. One /cart/add.js call per click.
     function openDrawer() {
       return fetch('{{ routes.cart_url }}?section_id=cart-drawer').then(function (r) { return r.text(); }).then(function (html) {
         var doc = new DOMParser().parseFromString(html, 'text/html');
@@ -274,12 +388,16 @@
         return false;
       }).catch(function () { return false; });
     }
-    if (add) add.addEventListener('click', function () {
-      var items = [{ id: Number(add.dataset.variantId), quantity: 1 }];
+    function mainItems() {
+      var items = [{ id: Number(add.dataset.variantId), quantity: qty() }];
       var rearPick = root.querySelector('input[name=ezy-pos][value=rear]:checked');
-      if (rearPick) items.push({ id: Number(rearPick.dataset.rearId), quantity: 1 });
-      add.disabled = true; msg.textContent = 'Adding...';
-      fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
+      if (rearPick) items.push({ id: Number(rearPick.dataset.rearId), quantity: qty() });
+      return items;
+    }
+    function addToCart(items, msg, buttons) {
+      buttons.forEach(function (b) { b.disabled = true; });
+      msg.textContent = 'Adding...';
+      return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
         .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
         .then(function () {
           document.dispatchEvent(new CustomEvent('cart:updated'));
@@ -289,8 +407,83 @@
           msg.innerHTML = 'Added. <a href="{{ routes.cart_url }}">View cart and check out</a>';
         })
         .catch(function () { msg.textContent = 'Could not add to cart. Please try again.'; })
-        .then(function () { add.disabled = false; });
+        .then(function () { buttons.forEach(function (b) { b.disabled = false; }); });
+    }
+    var msg = root.querySelector('[data-ezy-msg]');
+    if (add) add.addEventListener('click', function () { addToCart(mainItems(), msg, [add]); });
+
+    // Add-ons: metafield, then same-car match (both seeded by Liquid), then Shopify's complementary products.
+    var wrap = document.querySelector('[data-ezy-addons-wrap]');
+    var listEl = document.querySelector('[data-ezy-addons-list]');
+    var bar = document.querySelector('[data-ezy-addall-bar]');
+    var allBtn = document.getElementById('add-complete-set');
+    var amsg = document.querySelector('[data-ezy-addons-msg]');
+    var addons = [];
+    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+    function priceHtml(a) { return '<strong>' + money(a.p) + '</strong>' + (a.c > a.p ? ' <s>' + money(a.c) + '</s>' : ''); }
+    function cents(v) { var s = String(v == null ? 0 : v); return s.indexOf('.') > -1 ? Math.round(parseFloat(s) * 100) : Number(s) || 0; }
+    function refreshAll() {
+      if (!allBtn || !add) return;
+      var sum = mainSum();
+      var ids = mainItems().map(function (i) { return i.id; });
+      addons.forEach(function (a) { sum += a.p; ids.push(a.v); });
+      allBtn.dataset.variantIds = ids.join(',');
+      var t = document.querySelector('[data-ezy-addall-total]');
+      if (t) t.textContent = money(sum);
+    }
+    function renderAddons() {
+      if (!wrap || !addons.length || !add) return;
+      listEl.innerHTML = addons.map(function (a, n) {
+        return '<article class="ezy-addon">' +
+          (a.i ? '<a href="' + esc(a.u) + '"><img src="' + esc(a.i) + '" alt="" width="72" height="72" loading="lazy"></a>' : '') +
+          '<div><a class="ezy-addon__t" href="' + esc(a.u) + '">' + esc(a.t) + '</a><div class="ezy-addon__p">' + priceHtml(a) + '</div></div>' +
+          '<button class="ezy-btn ezy-btn--ghost" type="button" data-addon-add="' + n + '">Add to Cart</button></article>';
+      }).join('');
+      listEl.querySelectorAll('[data-addon-add]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var a = addons[Number(b.dataset.addonAdd)];
+          addToCart([{ id: a.v, quantity: 1 }], amsg, [b]);
+        });
+      });
+      bar.hidden = false;
+      wrap.hidden = false;
+      refreshAll();
+    }
+    if (allBtn) allBtn.addEventListener('click', function () {
+      var items = mainItems().concat(addons.map(function (a) { return { id: a.v, quantity: 1 }; }));
+      addToCart(items, amsg, [allBtn, add].filter(Boolean));
     });
+    function words(title) {
+      return String(title).split(' for ').pop().replace(/\s*->.*$/, '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean);
+    }
+    function finish(items, perm) {
+      addons = items.slice(0, 3);
+      if (perm && !addons.some(function (a) { return a.v === perm.v; })) addons.push(perm);
+      renderAddons();
+    }
+    try {
+      var seed = JSON.parse(document.querySelector('[data-ezy-addons-seed]').textContent);
+      if (seed.items.length) {
+        finish(seed.items, seed.perm);
+      } else {
+        var cw = words(here).slice(0, 2);
+        fetch('/recommendations/products.json?product_id=' + seed.pid + '&limit=6&intent=complementary')
+          .then(function (r) { return r.ok ? r.json() : { products: [] }; })
+          .then(function (d) {
+            var items = (d.products || []).filter(function (p) {
+              var t = String(p.title).toLowerCase();
+              return !/wiper/.test(t) && p.available !== false && p.variants && p.variants.length && cw.every(function (w) { return t.indexOf(w) > -1; });
+            }).map(function (p) {
+              var v = p.variants[0];
+              var img = p.featured_image && (p.featured_image.url || p.featured_image);
+              return { v: v.id, t: p.title, u: p.url, i: img || '', p: cents(v.price), c: cents(v.compare_at_price) };
+            });
+            finish(items, seed.perm);
+          })
+          .catch(function () { finish([], seed.perm); });
+      }
+    } catch (e) {}
+    updateTotals();
 
     // Sticky add bar on phones: shown from page load, hidden only while the main button is on screen.
     var sticky = document.querySelector('[data-ezy-sticky]');
@@ -312,7 +505,10 @@
     { "type": "collection", "id": "collection", "label": "Wiper collection (for the year list)" },
     { "type": "text", "id": "store_rating", "label": "Store rating text (used when product has no reviews)", "default": "4.8 from 49 store reviews" },
     { "type": "url", "id": "fit_video", "label": "Default fitment video (mp4 or YouTube)" },
-    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Made for your exact car\n2 minute fit, no tools\nWrong fit? We swap it free within 30 days\nOrder before 2pm AWST, ships the same day\nFree shipping" }
+    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Made for your exact car\n2 minute fit, no tools\nWrong fit? We swap it free within 30 days\nOrder before 2pm AWST, ships the same day\nFree shipping\n12-month warranty included" },
+    { "type": "text", "id": "pickup_title", "label": "Pickup title", "default": "Pickup available at 21 Discovery Drive" },
+    { "type": "text", "id": "pickup_note", "label": "Pickup note", "default": "Usually ready in 24 hours" },
+    { "type": "textarea", "id": "pickup_address", "label": "Pickup address (empty hides pickup)", "default": "21 Discovery Drive, Bibra Lake WA 6163, Australia" }
   ],
   "blocks": [
     { "type": "question", "name": "Question", "settings": [{ "type": "text", "id": "q", "label": "Question" }, { "type": "textarea", "id": "a", "label": "Answer" }] }
