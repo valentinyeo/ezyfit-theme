@@ -19,6 +19,8 @@ const SHADES = [
   { id: 'S2', label: 'side shade, Prado older title style', path: '/products/car-side-windows-sun-shades-for-toyota-land-cruiser-prado-150-2009-2023' },
   { id: 'S3', label: 'side shade, Tesla Model Y', path: '/products/rear-side-windows-click-shades-for-tesla-model-y-2020' },
 ];
+// The Add All button only shows when the product has add-ons. This RAV4 gets a matching wiper from the store recommendations (checked on live), the 2013-2019 RAV4 gets none.
+const ADDALL = '/products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025';
 const WIPER = '/products/front-windscreen-wipers-for-toyota-hilux-2018';
 const PARTS = '/pages/find-my-car?view=ezy-parts-home';
 const results = [];
@@ -118,10 +120,10 @@ try {
   // Add All to Cart: main product plus every visible add-on lands in the cart.
   for (const [id, w, h, label] of [['S6', 1280, 900, 'desktop'], ['S7', 390, 844, 'phone']]) {
     try {
-    const live = await open(LIVE + SHADES[0].path, w, h);
+    const live = await open(LIVE + ADDALL, w, h);
     const liveIds = await setIds(live.p);
     await live.ctx.close(); await sleep(1200);
-    const { p, ctx } = await open(pv(SHADES[0].path), w, h);
+    const { p, ctx } = await open(pv(ADDALL), w, h);
     const ids = await setIds(p);
     const expected = [...new Set(ids.split(',').map((x) => x.trim()).filter(Boolean))];
     const liveExpected = [...new Set(liveIds.split(',').map((x) => x.trim()).filter(Boolean))];
