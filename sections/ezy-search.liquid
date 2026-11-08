@@ -8,17 +8,40 @@
       <input type="hidden" name="type" value="product">
     </form>
     {%- if search.performed -%}
-      {%- paginate search.results by 48 -%}
+      {%- paginate search.results by 96 -%}
+        {%- comment -%}
+          Order: products whose title holds every search word first, wiper blades before car shades when tied,
+          then the rest in Shopify's own order. Tier 1 = all words + wiper, 2 = all words, 3 = wiper, 4 = other.
+        {%- endcomment -%}
+        {%- assign q_words = search.terms | downcase | strip | split: ' ' -%}
+        {%- assign tiers = '' -%}
         {%- assign found = 0 -%}
-        {%- for r in search.results -%}{%- if r.object_type == 'product' -%}{%- assign found = found | plus: 1 -%}{%- endif -%}{%- endfor -%}
+        {%- for r in search.results -%}
+          {%- assign tier = 4 -%}
+          {%- if r.object_type == 'product' -%}
+            {%- assign found = found | plus: 1 -%}
+            {%- assign tl = r.title | downcase -%}
+            {%- assign all_words = true -%}
+            {%- for w in q_words -%}{%- unless tl contains w -%}{%- assign all_words = false -%}{%- endunless -%}{%- endfor -%}
+            {%- assign is_wiper = false -%}{%- if tl contains 'wiper' -%}{%- assign is_wiper = true -%}{%- endif -%}
+            {%- if all_words and is_wiper -%}{%- assign tier = 1 -%}{%- elsif all_words -%}{%- assign tier = 2 -%}{%- elsif is_wiper -%}{%- assign tier = 3 -%}{%- endif -%}
+          {%- endif -%}
+          {%- assign tiers = tiers | append: tier | append: ',' -%}
+        {%- endfor -%}
+        {%- assign tier_list = tiers | split: ',' -%}
         <p class="ezy-coll__count">{{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %}</p>
         {%- if found > 0 -%}
           <ul class="ezy-coll__grid" role="list">
-            {%- for r in search.results -%}
-              {%- if r.object_type == 'product' -%}
-                {%- assign eager = false -%}{%- if forloop.index < 5 -%}{%- assign eager = true -%}{%- endif -%}
-                {%- render 'ezy-product-card', p: r, eager: eager, show_kind: true -%}
-              {%- endif -%}
+            {%- assign shown = 0 -%}
+            {%- for n in (1..4) -%}
+              {%- assign n_s = n | append: '' -%}
+              {%- for r in search.results -%}
+                {%- if r.object_type == 'product' and tier_list[forloop.index0] == n_s -%}
+                  {%- assign shown = shown | plus: 1 -%}
+                  {%- assign eager = false -%}{%- if shown < 5 -%}{%- assign eager = true -%}{%- endif -%}
+                  {%- render 'ezy-product-card', p: r, eager: eager, show_kind: true -%}
+                {%- endif -%}
+              {%- endfor -%}
             {%- endfor -%}
           </ul>
         {%- else -%}

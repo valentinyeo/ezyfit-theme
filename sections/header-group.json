@@ -19,7 +19,7 @@
         "m2": {
           "type": "message",
           "settings": {
-            "text": "Free shipping. Ships same day before 2pm.",
+            "text": "Free shipping. Ships same day before 2pm AWST.",
             "link_text": "Shop wipers",
             "link": "shopify://collections/wiper-blades"
           }

@@ -87,9 +87,12 @@
 <script type="application/json" data-ezy-products>
   [
   {%- if finder_collection != blank -%}
-    {%- for product in finder_collection.products limit: 250 -%}
-      {"t": {{ product.title | json }}, "u": {{ product.url | json }}}{% unless forloop.last %},{% endunless %}
-    {%- endfor -%}
+    {%- comment -%} collection.products returns 50 without paginate, even with limit: 250. Paginate by 250 so every wiper is listed. {%- endcomment -%}
+    {%- paginate finder_collection.products by 250 -%}
+      {%- for product in finder_collection.products -%}
+        {"t": {{ product.title | json }}, "u": {{ product.url | json }}}{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    {%- endpaginate -%}
   {%- endif -%}
   ]
 </script>
@@ -97,15 +100,16 @@
   (function () {
     var form = document.querySelector('[data-ezy-finder]');
     if (!form) return;
-    var TWO_WORD = ['Mercedes Benz', 'Land Rover', 'Alfa Romeo', 'Aston Martin', 'Great Wall', 'Rolls Royce'];
     var raw = JSON.parse(document.querySelector('[data-ezy-products]').textContent || '[]');
-    var cars = [];
+    // EZY-PARSE-START
+    var TWO_WORD = ['Mercedes Benz', 'Land Rover', 'Alfa Romeo', 'Aston Martin', 'Great Wall', 'Rolls Royce'];
+    var cars = [], rejected = [];
     raw.forEach(function (p) {
       var m = p.t.match(/\bfor\s+(.+)$/i);
-      if (!m) return;
+      if (!m) { rejected.push(p.t); return; }
       var txt = document.createElement('textarea'); txt.innerHTML = m[1]; // decode &amp; and friends
       // Model name stops at the first year, so "Mondeo Sedan Hatch 2007 2014 MA MB" becomes "Mondeo Sedan Hatch".
-      var rest = txt.value.replace(/\s*->\s*$/, '').split(/\s+(?:19|20)\d{2}\b/)[0].replace(/[\s\-–]+$/, '').trim();
+      var rest = txt.value.replace(/\s*->\s*$/, '').split(/\s+(?:19|20)\d{2}\b/)[0].replace(/[\s\-\u2013]+$/, '').trim();
       var words = rest.split(/\s+/);
       var make = words[0];
       if (TWO_WORD.indexOf((words[0] + ' ' + (words[1] || '')).replace('-', ' ')) > -1) make = words[0] + ' ' + words[1];
@@ -113,8 +117,9 @@
       if (/^vw$/i.test(make)) make = 'Volkswagen';
       var yrs = (txt.value.match(/\b(?:19|20)\d{2}\b/g) || []).slice(0, 2);
       var year = yrs.length === 2 ? yrs[0] + ' to ' + yrs[1] : (yrs[0] || '');
-      if (model) cars.push({ make: make, model: model, year: year, url: p.u });
+      if (model) cars.push({ make: make, model: model, year: year, url: p.u }); else rejected.push(p.t);
     });
+    // EZY-PARSE-END
     // "rav4", "RAV 4" and "Rav-4" all compare equal.
     var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]/g, ''); };
     var q = form.querySelector('[data-ezy-q]');
@@ -215,7 +220,7 @@
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Wiper blades made for your exact car" },
     { "type": "textarea", "id": "lead", "label": "Lead", "default": "Front pair from $59, was $79. 25% off is already in the price. Search your car, then watch its own 2 minute fitment video." },
-    { "type": "text", "id": "rating_text", "label": "Rating text (fill from Loox)", "default": "4.8 from 49 reviews" },
+    { "type": "text", "id": "rating_text", "label": "Store rating text (fill from Loox)", "default": "4.8 from 49 store reviews" },
     { "type": "collection", "id": "collection", "label": "Wiper collection for the finder" },
     { "type": "text", "id": "finder_heading", "label": "Finder heading", "default": "Find your wipers" },
     { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Your car, for example Ranger" },

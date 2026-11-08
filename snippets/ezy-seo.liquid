@@ -1,0 +1,87 @@
+{%- comment -%}
+  EZYFIT title, description, Open Graph and Twitter tags in one place.
+  Replaces the old Click Shades wording (store name and Shopify SEO fields) with 1300 EZYFIT.
+  Used by layout/theme.liquid and layout/theme.cart.liquid.
+{%- endcomment -%}
+{%- liquid
+  assign ezy_brand = '1300 EZYFIT'
+  assign ezy_store_description = 'Premium wiper blades made for your exact car. Under $60, free shipping, 30-day fit guarantee. Australian owned, shipped from WA.'
+
+  comment
+    Title: home gets its own, everything else drops "Click Shades" and ends with the brand once.
+  endcomment
+  if template.name == 'index'
+    assign ezy_title = 'Wiper blades made for your exact car'
+  else
+    assign ezy_title = page_title | replace: ' | Click Shades Australia', '' | replace: ' | Click Shades', '' | replace: ' - Click Shades', '' | replace: 'Click Shades', ezy_brand | replace: 'ClickShades', ezy_brand | strip
+  endif
+  if current_tags
+    assign ezy_tags = current_tags | join: ', '
+    assign ezy_title = ezy_title | append: ' – tagged "' | append: ezy_tags | append: '"'
+  endif
+  if current_page != 1
+    assign ezy_title = ezy_title | append: ' – Page ' | append: current_page
+  endif
+  assign ezy_og_title = ezy_title
+  unless ezy_title contains ezy_brand
+    assign ezy_title = ezy_title | append: ' | ' | append: ezy_brand
+  endunless
+
+  comment
+    Description: wiper pages and the landing page use the wiper copy. Other pages keep their own SEO text
+    with the brand fixed; pages with none (search, cart) fall back to the store line.
+  endcomment
+  assign ezy_desc = page_description | strip_html | strip
+  if template.name == 'index' or template.suffix == 'clickblades'
+    assign ezy_desc = ezy_store_description
+  elsif template.name == 'product' and product.title contains 'Wiper'
+    assign ezy_desc = product.title | append: '. Precision-fit wiper blades for your exact vehicle. Free shipping, 30-day fit guarantee. Australian owned.'
+  elsif ezy_desc == blank or ezy_desc == shop.description
+    if template.name != 'product'
+      assign ezy_desc = ezy_store_description
+    endif
+  endif
+  assign ezy_desc = ezy_desc | replace: 'Click Shades', ezy_brand | replace: 'ClickShades', ezy_brand
+
+  assign og_url = canonical_url | default: request.origin
+  assign og_type = 'website'
+  if request.page_type == 'product'
+    assign og_type = 'product'
+  elsif request.page_type == 'article'
+    assign og_type = 'article'
+  elsif request.page_type == 'password'
+    assign og_url = request.origin
+  endif
+-%}
+<title>{{ ezy_title }}</title>
+{%- if ezy_desc != blank %}
+<meta name="description" content="{{ ezy_desc | escape_once }}">
+{%- endif %}
+<meta property="og:site_name" content="{{ ezy_brand }}">
+<meta property="og:url" content="{{ og_url }}">
+<meta property="og:title" content="{{ ezy_og_title | escape_once }}">
+<meta property="og:type" content="{{ og_type }}">
+{%- if ezy_desc != blank %}
+<meta property="og:description" content="{{ ezy_desc | escape_once }}">
+{%- endif %}
+
+{%- if page_image -%}
+  <meta property="og:image" content="http:{{ page_image | image_url }}">
+  <meta property="og:image:secure_url" content="https:{{ page_image | image_url }}">
+  <meta property="og:image:width" content="{{ page_image.width }}">
+  <meta property="og:image:height" content="{{ page_image.height }}">
+{%- endif -%}
+
+{%- if request.page_type == 'product' -%}
+  <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+  <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+{%- endif -%}
+
+{%- if settings.social_twitter_link != blank -%}
+  <meta name="twitter:site" content="{{ settings.social_twitter_link | split: 'twitter.com/' | last | prepend: '@' }}">
+{%- endif -%}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ ezy_og_title | escape_once }}">
+{%- if ezy_desc != blank %}
+<meta name="twitter:description" content="{{ ezy_desc | escape_once }}">
+{%- endif %}

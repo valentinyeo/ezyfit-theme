@@ -46,15 +46,29 @@
     </div>
 
     <div class="ezy-pdp__info">
+      {%- comment -%}
+        Show a product-level count only when this product has its own reviews (Loox, or the Shopify reviews metafields).
+        Otherwise show the store rating, labelled as store reviews, and link to the store reviews on the home page.
+      {%- endcomment -%}
       {%- assign pr = product.metafields.loox.num_reviews | plus: 0 -%}
-      <a class="ezy-pdp__rating" href="#ezy-pdp-reviews">
-        <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-        {%- if pr > 0 -%}
-          {{ product.metafields.loox.avg_rating | round: 1 }} from {{ pr }} review{% if pr != 1 %}s{% endif %}
-        {%- else -%}
-          {{ section.settings.store_rating }}
-        {%- endif -%}
-      </a>
+      {%- assign pr_avg = product.metafields.loox.avg_rating -%}
+      {%- if pr < 1 -%}
+        {%- assign pr = product.metafields.reviews.rating_count | plus: 0 -%}
+        {%- assign pr_avg = product.metafields.reviews.rating.value.rating -%}
+      {%- endif -%}
+      {%- assign store_label = section.settings.store_rating -%}
+      {%- unless store_label contains 'store' -%}{%- assign store_label = store_label | replace: ' reviews', ' store reviews' -%}{%- endunless -%}
+      {%- if pr > 0 and pr_avg != blank -%}
+        <a class="ezy-pdp__rating" href="#ezy-pdp-reviews" data-ezy-rating="product">
+          <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          {{ pr_avg | round: 1 }} from {{ pr }} review{% if pr != 1 %}s{% endif %}
+        </a>
+      {%- elsif store_label != blank -%}
+        <a class="ezy-pdp__rating" href="{{ routes.root_url }}#ezy-reviews" data-ezy-rating="store">
+          <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          {{ store_label }}
+        </a>
+      {%- endif -%}
       <h1 class="ezy-pdp__title">{{ product.title | split: ' ->' | first }}</h1>
 
       <div class="ezy-pdp__price">
@@ -166,9 +180,13 @@
 </section>
 {%- endif -%}
 
-<div class="ezy ezy-pdp__sticky" data-ezy-sticky hidden>
-  <div><strong>{{ variant.price | money }}</strong>{% if save > 0 %} <s>{{ variant.compare_at_price | money }}</s>{% endif %}</div>
-  <button class="ezy-btn" type="button" data-ezy-add-proxy>Add to cart</button>
+<div class="ezy ezy-pdp__sticky" data-ezy-sticky>
+  <div><strong data-ezy-sticky-price>{{ variant.price | money }}</strong>{% if save > 0 %} <s>{{ variant.compare_at_price | money }}</s>{% endif %}</div>
+  {%- if variant.available -%}
+    <button class="ezy-btn" type="button" data-ezy-add-proxy>Add <span data-ezy-sticky-what>front pair</span> to cart</button>
+  {%- else -%}
+    <button class="ezy-btn" type="button" disabled>Sold out</button>
+  {%- endif -%}
 </div>
 
 <script type="application/json" data-ezy-wipers>
@@ -235,6 +253,9 @@
         root.querySelectorAll('input[name=ezy-pos]').forEach(function (x) { x.closest('.ezy-pdp__choice').classList.toggle('is-on', x.checked); });
         var extra = r.value === 'rear' ? Number(r.dataset.rearPrice) : 0;
         if (add && total) total.textContent = money(Number(add.dataset.price) + extra);
+        var sp = document.querySelector('[data-ezy-sticky-price]'), sw = document.querySelector('[data-ezy-sticky-what]');
+        if (add && sp) sp.textContent = money(Number(add.dataset.price) + extra);
+        if (sw) sw.textContent = r.value === 'rear' ? 'front and rear' : 'front pair';
       });
     });
 
@@ -271,12 +292,14 @@
         .then(function () { add.disabled = false; });
     });
 
-    // Sticky add bar on phones once the main button scrolls away.
+    // Sticky add bar on phones: shown from page load, hidden only while the main button is on screen.
     var sticky = document.querySelector('[data-ezy-sticky]');
     var proxy = sticky && sticky.querySelector('[data-ezy-add-proxy]');
-    if (add && sticky && 'IntersectionObserver' in window) {
-      new IntersectionObserver(function (e) { sticky.hidden = e[0].isIntersecting || e[0].boundingClientRect.top > 0; }).observe(add);
-      proxy.addEventListener('click', function () { add.scrollIntoView({ behavior: 'smooth', block: 'center' }); add.click(); });
+    if (add && sticky && proxy) {
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (e) { sticky.hidden = e[0].isIntersecting; }).observe(add);
+      }
+      proxy.addEventListener('click', function () { add.click(); });
     }
   })();
 </script>
@@ -287,9 +310,9 @@
   "name": "EZY wiper product",
   "settings": [
     { "type": "collection", "id": "collection", "label": "Wiper collection (for the year list)" },
-    { "type": "text", "id": "store_rating", "label": "Rating text when the product has no reviews yet", "default": "4.8 from 49 reviews" },
+    { "type": "text", "id": "store_rating", "label": "Store rating text (used when product has no reviews)", "default": "4.8 from 49 store reviews" },
     { "type": "url", "id": "fit_video", "label": "Default fitment video (mp4 or YouTube)" },
-    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Made for your exact car\n2 minute fit, no tools\nWrong fit? We swap it free within 30 days\nOrder before 2pm, ships the same day\nFree shipping" }
+    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Made for your exact car\n2 minute fit, no tools\nWrong fit? We swap it free within 30 days\nOrder before 2pm AWST, ships the same day\nFree shipping" }
   ],
   "blocks": [
     { "type": "question", "name": "Question", "settings": [{ "type": "text", "id": "q", "label": "Question" }, { "type": "textarea", "id": "a", "label": "Answer" }] }

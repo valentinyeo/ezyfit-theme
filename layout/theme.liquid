@@ -22,30 +22,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
      <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
-    <title>
-      {{ page_title }}
-      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-      {%- unless page_title contains '1300 EZYFIT' %} &ndash; 1300 EZYFIT{% endunless -%}
-    </title>
-
-    {% assign custom_description = nil %}
-    {% if template.suffix == 'clickblades' %}
-      {% assign custom_description = "Premium wiper blades made for your exact car. Under $60, free shipping, 30-day fit guarantee. Australian owned, shipped from WA." %}
-    {% elsif template.name == 'product' and product.title contains 'Wiper' %}
-      {% assign custom_description = product.title | append: ". Precision-fit wiper blades for your exact vehicle. Free shipping, 30-day fit guarantee. Australian owned." %}
-    {% endif %}
-
-    {% if custom_description %}
-      <meta name="description" content="{{ custom_description | escape }}">
-    {% elsif page_description %}
-      <meta name="description" content="{{ page_description | escape }}">
-    {% endif %}
-
-    {% if custom_description %}
-      {% assign page_description = custom_description %}
-    {% endif %}
-    {% render 'meta-tags' %}
+    {% render 'ezy-seo' %}
 
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>

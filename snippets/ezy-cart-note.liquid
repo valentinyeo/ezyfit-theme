@@ -1,0 +1,5 @@
+{%- comment -%}
+  One shipping and tax line for the cart page and the cart drawer.
+  Free standard shipping is stated in the header, product FAQ and wiper FAQ; GST is only named when the store prices include tax.
+{%- endcomment -%}
+Free standard shipping.{% if cart.taxes_included %} GST included.{% endif %}

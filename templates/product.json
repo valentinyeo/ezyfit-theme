@@ -196,7 +196,7 @@
           "type": "question",
           "settings": {
             "q": "How fast is shipping?",
-            "a": "Order before 2pm and it ships the same day. Shipping is free."
+            "a": "Order before 2pm AWST and it ships the same day. Shipping is free."
           }
         },
         "q4": {

@@ -743,7 +743,7 @@
       </div>
 
       <!-- Disclaimer -->
-      <p class="cart-v7__disclaimer">{{ section.settings.disclaimer_text }}</p>
+      <p class="cart-v7__disclaimer">{% render 'ezy-cart-note' %}</p>
     </div>
 
     <!-- Footer (Sticky - Checkout + Payments only) -->
@@ -936,12 +936,6 @@
       "id": "checkout_text",
       "label": "Checkout button text",
       "default": "Go to checkout"
-    },
-    {
-      "type": "textarea",
-      "id": "disclaimer_text",
-      "label": "Disclaimer text",
-      "default": "Shipping fee and taxes will be calculated at checkout"
     }
   ],
   "presets": [

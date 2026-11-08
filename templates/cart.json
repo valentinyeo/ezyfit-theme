@@ -11,8 +11,7 @@
         "upsell_title": "Others also bought",
         "upsell_collection": "all",
         "shipping_text": "FREE",
-        "checkout_text": "Go to checkout",
-        "disclaimer_text": "Shipping fee and taxes will be calculated at checkout"
+        "checkout_text": "Go to checkout"
       }
     }
   },
