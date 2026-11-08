@@ -11,7 +11,7 @@ Files: `sections/ezy-footer.liquid`, `sections/footer-group.json`; shade guards 
 
 Scroll to the bottom of any page. For shades: header "Shop Shades", then any product.
 
-## Driving it with Playwright
+## Driving it with Playwright (GitHub only)
 
 - Homepage footer text has no "Click Shades" and does contain "EZYFIT" (G12).
 - First product link on `/collections/car-window-shades` opens a page with `.product-page-v2`, no `.ezy-pdp`, and `.ezy-head` (G16).

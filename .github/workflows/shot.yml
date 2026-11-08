@@ -1,0 +1,53 @@
+name: shot
+
+# One page as a picture, taken on a GitHub-hosted runner (the VPS never runs a browser).
+# Download with: gh run download <run id> -n shot-<run id>
+
+on:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: Storefront path, e.g. /products/front-windscreen-wipers-for-toyota-hilux-2018
+        required: true
+        default: /
+      width:
+        description: Viewport width (390 phone, 1280 desktop)
+        required: false
+        default: '390'
+      theme_id:
+        description: Theme id (draft 158148984988, QA instance in the verify-ezyfit skill)
+        required: false
+        default: '158148984988'
+
+permissions:
+  contents: read
+
+jobs:
+  shot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SHOT_PATH: ${{ github.event.inputs.path }}
+      SHOT_WIDTH: ${{ github.event.inputs.width }}
+      THEME_ID: ${{ github.event.inputs.theme_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Refuse the live theme
+        run: |
+          if [ "$THEME_ID" = "149894070428" ]; then echo "Refusing: live theme." >&2; exit 2; fi
+      - name: Install Playwright and Chromium
+        run: |
+          npm i --no-save --no-package-lock playwright
+          npx playwright install --with-deps chromium
+      - name: Take the picture
+        run: |
+          mkdir -p _preview/evidence/shot
+          node .claude/skills/verify-ezyfit/scripts/shot.mjs "$SHOT_PATH" _preview/evidence/shot/shot.png "$SHOT_WIDTH" 1 "$THEME_ID"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shot-${{ github.run_id }}
+          path: _preview/evidence/shot/**
+          retention-days: 7

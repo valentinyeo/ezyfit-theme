@@ -12,7 +12,7 @@ Files: `sections/ezy-collection.liquid`, `sections/ezy-search.liquid`, `snippets
 
 Header menu "Shop Blades", footer "Wiper blades", `/collections/wiper-blades`. Search from the header magnifier or the homepage finder when several cars match.
 
-## Driving it with Playwright
+## Driving it with Playwright (GitHub only)
 
 - `/collections/wiper-blades`: `main .ezy` present (G13). Fill `[data-ezy-coll-q]` with `hilux`; every visible `.ezy-coll__item` must have `hilux` in `data-search`, and at least one is visible (G13b).
 - `/search?q=hilux&type=product`: `main .ezy-coll` present with at least one `.ezy-coll__card` (G17).

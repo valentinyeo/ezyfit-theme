@@ -11,9 +11,9 @@ Checks that the EZYFIT sections stay free of the patterns impeccable flags (low 
 
 Homepage, a wiper product page and the wiper collection.
 
-## Driving it with Playwright
+## Driving it with Playwright (GitHub only)
 
-Save the rendered `.ezy` sections with the theme CSS, then run the detector on the saved files:
+Needs a browser, so it runs on a GitHub runner only (no workflow wires it yet; add one before relying on it). Save the rendered `.ezy` sections with the theme CSS, then run the detector on the saved files:
 
 ```bash
 PLAYWRIGHT_PATH=$HOME/.npm-global/lib/node_modules/playwright node .claude/skills/verify-ezyfit/scripts/dump-ezy.mjs

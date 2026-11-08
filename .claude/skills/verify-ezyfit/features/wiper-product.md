@@ -16,7 +16,7 @@ Files: `sections/ezy-product.liquid`, `templates/product.json`, `templates/produ
 
 Homepage finder, a popular car tile, the wiper collection, or search. Example: `/products/front-windscreen-wipers-for-toyota-hilux-2018`. A car with two year ranges: `/products/front-windscreen-wipers-for-toyota-rav4-2018`.
 
-## Driving it with Playwright
+## Driving it with Playwright (GitHub only)
 
 - Presence: `[data-ezy-type]` (G1), `[data-ezy-position]` (G2), `[data-ezy-year]` (G3), `[data-ezy-fit-video]` (G4), `main .ezy` (G6).
 - No failed request containing "object" (G5). This was an inherited `[object Object]` 404 on the old page.

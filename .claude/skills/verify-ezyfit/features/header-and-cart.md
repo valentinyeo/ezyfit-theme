@@ -15,7 +15,7 @@ Files: `sections/ezy-header.liquid`, `sections/ezy-announcement.liquid`, `sectio
 
 Any page. Tap the three-line icon on a phone. Tap the magnifier. Add a wiper to the cart and watch the number on the cart pill.
 
-## Driving it with Playwright
+## Driving it with Playwright (GitHub only)
 
 - Menu: click `.ezy-head__menu`, then `[data-ezy-drawer]` must not be `hidden` and must show at least 3 visible links (G7).
 - Search: `[data-ezy-search]` toggles `#ezy-search` (G8).
