@@ -13,7 +13,14 @@
   if template.name == 'index'
     assign ezy_title = 'Wiper blades made for your exact car'
   else
-    assign ezy_title = page_title | replace: ' | Click Shades Australia', '' | replace: ' | Click Shades', '' | replace: ' - Click Shades', '' | replace: 'Click Shades', ezy_brand | replace: 'ClickShades', ezy_brand | strip
+    assign ezy_title = page_title | replace: ' | Click Shades Australia', '' | replace: ' | Click Shades', '' | replace: ' - Click Shades', '' | strip
+    comment
+      Product names such as "Rear Side Windows Click Shades for ..." are real product titles: keep them.
+      Everywhere else a leftover Click Shades becomes the brand.
+    endcomment
+    if template.name != 'product'
+      assign ezy_title = ezy_title | replace: 'Click Shades', ezy_brand | replace: 'ClickShades', ezy_brand
+    endif
   endif
   if current_tags
     assign ezy_tags = current_tags | join: ', '

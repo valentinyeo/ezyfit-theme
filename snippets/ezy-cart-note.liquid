@@ -1,5 +1,6 @@
 {%- comment -%}
   One shipping and tax line for the cart page and the cart drawer.
-  Free standard shipping is stated in the header, product FAQ and wiper FAQ; GST is only named when the store prices include tax.
+  Standard shipping read as $0.00 at checkout for wipers and shades to WA, NSW, QLD, TAS and NT (checked 2026-11-08).
+  Express costs extra and is chosen at checkout. Tax: the store does not price tax in, so say it is shown at checkout.
 {%- endcomment -%}
-Free standard shipping.{% if cart.taxes_included %} GST included.{% endif %}
+Free standard shipping.{% if cart.taxes_included %} GST included.{% else %} Taxes shown at checkout.{% endif %}
