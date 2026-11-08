@@ -1,0 +1,416 @@
+{
+  "sections": {
+    "hero": {
+      "type": "ezy-hero",
+      "settings": {
+        "collection": "wiper-blades",
+        "video_asset": "cb-real-4.jpg",
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4",
+        "video_label": "Watch a real fit",
+        "search_placeholder": "Your make or model",
+        "heading": "Parts made for your exact car",
+        "lead": "Wipers from $59 a front pair, 25% off already in the price. Search your car to see the blades made for it. Click-in sun shades are further down.",
+        "finder_heading": "Find your car",
+        "button": "Find my wipers",
+        "next_text": "Your car's blades and fitment video come next.",
+        "pack_heading": "Wipers: your Exact Fit Pack"
+      },
+      "blocks": {
+        "p0": {
+          "type": "pack_item",
+          "settings": {
+            "text": "Blades made for your car, with the right clip"
+          }
+        },
+        "p1": {
+          "type": "pack_item",
+          "settings": {
+            "text": "Your car's own fitment video"
+          }
+        },
+        "p2": {
+          "type": "pack_item",
+          "settings": {
+            "text": "2 minute fit, no tools"
+          }
+        },
+        "p3": {
+          "type": "pack_item",
+          "settings": {
+            "text": "Free shipping, ships today if you order by 2pm"
+          }
+        },
+        "p4": {
+          "type": "pack_item",
+          "settings": {
+            "text": "Exact fit, or we swap it free within 30 days"
+          }
+        },
+        "t0": {
+          "type": "tick",
+          "settings": {
+            "text": "Exact fit or free swap"
+          }
+        },
+        "t1": {
+          "type": "tick",
+          "settings": {
+            "text": "2 minute fit, no tools"
+          }
+        },
+        "t2": {
+          "type": "tick",
+          "settings": {
+            "text": "Ships same day before 2pm"
+          }
+        },
+        "t3": {
+          "type": "tick",
+          "settings": {
+            "text": "Free shipping"
+          }
+        }
+      },
+      "block_order": [
+        "p0",
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "t0",
+        "t1",
+        "t2",
+        "t3"
+      ]
+    },
+    "shop": {
+      "type": "ezy-shop-by-part",
+      "blocks": {
+        "wipers": {
+          "type": "tile",
+          "settings": {
+            "title": "Wipers",
+            "text": "Blades made for your exact car, each with its own fitment video.",
+            "price": "From $59 a front pair",
+            "button": "Shop wipers",
+            "link": "/collections/wiper-blades",
+            "fallback_asset": "ezy-blade-standard.png",
+            "alt": "An EZYFIT wiper blade"
+          }
+        },
+        "shades": {
+          "type": "tile",
+          "settings": {
+            "title": "Sun shades",
+            "text": "Click-in rear side window shades with a magnetic fit, made for your exact car.",
+            "price": "From $89",
+            "button": "Shop sun shades",
+            "link": "/collections/car-window-shades",
+            "fallback_asset": "ezy-shade-ranger.png",
+            "alt": "Click Shades fitted to a car side window"
+          }
+        }
+      },
+      "block_order": [
+        "wipers",
+        "shades"
+      ],
+      "settings": {
+        "heading": "Shop by part",
+        "sub": "Pick the part, then pick your car."
+      }
+    },
+    "popular": {
+      "type": "ezy-popular-cars",
+      "blocks": {
+        "c1": {
+          "type": "car",
+          "settings": {
+            "title": "Ford Ranger",
+            "price": "See blades",
+            "fallback_asset": "ezy-car-ranger.png",
+            "image": "shopify://shop_images/Ford_Ranger_1241128c-6bac-4b7d-815a-607e65bd8878.png",
+            "link": "/products/front-windscreen-wiper-ford-ranger-2021"
+          }
+        },
+        "c2": {
+          "type": "car",
+          "settings": {
+            "title": "Toyota Hilux",
+            "price": "From $59",
+            "fallback_asset": "ezy-car-hilux.png",
+            "image": "shopify://shop_images/Toyota_Hilux.png",
+            "link": "/products/front-windscreen-wipers-for-toyota-hilux-2018"
+          }
+        },
+        "c3": {
+          "type": "car",
+          "settings": {
+            "title": "Toyota RAV4",
+            "price": "From $59",
+            "fallback_asset": "ezy-car-rav4.png",
+            "image": "shopify://shop_images/Toyota_RAV4_e2afb86e-46af-42db-ae69-e721c9cb28aa.png",
+            "link": "/products/front-windscreen-wipers-for-toyota-rav4-2018"
+          }
+        },
+        "c4": {
+          "type": "car",
+          "settings": {
+            "title": "Toyota Corolla",
+            "price": "From $59",
+            "fallback_asset": "ezy-car-corolla.png",
+            "image": "shopify://shop_images/toyota_corlolla.png",
+            "link": "/products/front-windscreen-wipers-for-toyota-corolla-2018"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "heading": "Popular cars for wipers",
+        "sub": "Each car has its own fitment video and photos."
+      }
+    },
+    "guarantee": {
+      "type": "ezy-guarantee",
+      "settings": {
+        "kicker": "Perfect fit promise",
+        "heading": "Wipers fit your car, or we swap them free",
+        "text": "Pick your car and we send blades made for it. If they don't fit, tell us within 30 days and we send the right ones free.",
+        "button": "Find my wipers",
+        "link": "#find"
+      }
+    },
+    "reviews": {
+      "type": "ezy-reviews",
+      "settings": {
+        "style": "loox",
+        "all_link": "/pages/happy-customers"
+      }
+    },
+    "types": {
+      "type": "ezy-blade-types",
+      "blocks": {
+        "spray": {
+          "type": "type",
+          "settings": {
+            "badge": "",
+            "name": "Spray",
+            "for": "For dust, bugs and long trips",
+            "level": 3,
+            "desc": "Water comes out of the blade, straight onto the glass as it wipes.",
+            "price": "",
+            "was": "",
+            "pay": "Not for sale yet.",
+            "rear": "",
+            "ticks": "Exact fit for your car\n2 minute fit, no tools\nWater sprays from the blade",
+            "button": "Ask about Spray for your car",
+            "fallback_asset": "ezy-blade-spray.png",
+            "coming_soon": true,
+            "link": "/pages/request-your-car"
+          }
+        },
+        "standard": {
+          "type": "type",
+          "settings": {
+            "badge": "Available now",
+            "name": "Standard",
+            "for": "For everyday driving",
+            "level": 2,
+            "desc": "Exact-fit blade. Clear, quiet wipe. Washer jets stay on the bonnet.",
+            "price": "$59",
+            "was": "$79",
+            "pay": "Front pair, 25% off already in. Or 4 payments of $14.75 with Afterpay.",
+            "rear": "",
+            "ticks": "Exact fit for your car\n2 minute fit, no tools\nClear, quiet wipe\nno: Water sprays from the blade",
+            "button": "Choose Standard",
+            "fallback_asset": "ezy-blade-standard.png"
+          }
+        }
+      },
+      "block_order": [
+        "standard",
+        "spray"
+      ],
+      "settings": {
+        "heading": "The wipers: Standard or Spray"
+      }
+    },
+    "fit": {
+      "type": "ezy-how-to-fit",
+      "blocks": {
+        "s0": {
+          "type": "step",
+          "settings": {
+            "title": "Lift the arm",
+            "text": "Pull the wiper arm off the glass."
+          }
+        },
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Press and slide",
+            "text": "Press the tab and slide the old blade off."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Click it on",
+            "text": "Push the new blade on until it clicks."
+          }
+        }
+      },
+      "block_order": [
+        "s0",
+        "s1",
+        "s2"
+      ],
+      "settings": {
+        "heading": "Fitting wipers takes 2 minutes"
+      }
+    },
+    "compare": {
+      "type": "ezy-comparison",
+      "blocks": {
+        "r0": {
+          "type": "row",
+          "settings": {
+            "label": "Made for your exact car",
+            "us": "Yes",
+            "v2": "No",
+            "v3": "Yes"
+          }
+        },
+        "r1": {
+          "type": "row",
+          "settings": {
+            "label": "Fitment video for your car",
+            "us": "Yes",
+            "v2": "No",
+            "v3": "No"
+          }
+        },
+        "r2": {
+          "type": "row",
+          "settings": {
+            "label": "Fit at home in 2 minutes",
+            "us": "Yes",
+            "v2": "Adaptors",
+            "v3": "Book a visit"
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "label": "Free swap within 30 days",
+            "us": "Yes",
+            "v2": "Varies",
+            "v3": "Varies"
+          }
+        },
+        "r4": {
+          "type": "row",
+          "settings": {
+            "label": "Front pair",
+            "us": "From $59",
+            "v2": "Varies",
+            "v3": "Varies"
+          }
+        }
+      },
+      "block_order": [
+        "r0",
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "settings": {}
+    },
+    "photos": {
+      "type": "ezy-reviews",
+      "settings": {
+        "style": "photos",
+        "heading": "Fitted by drivers like you",
+        "sub": "Real photos sent in by customers.",
+        "rule": true
+      }
+    },
+    "faq": {
+      "type": "ezy-faq",
+      "blocks": {
+        "q0": {
+          "type": "question",
+          "settings": {
+            "q": "Which wipers fit my car?",
+            "a": "Search your make and model above. We only show blades made for your car, with its own fitment video."
+          }
+        },
+        "q1": {
+          "type": "question",
+          "settings": {
+            "q": "How fast is wiper shipping?",
+            "a": "Order before 2pm and it ships the same day. Shipping is free."
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "q": "What if my wipers do not fit?",
+            "a": "Tell us within 30 days and we send the right ones free."
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "q": "Standard or Spray wipers, which one?",
+            "a": "Standard suits most drivers and is available now. Spray is for dust, bugs and long trips, and is not for sale yet."
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "q": "How do I fit wipers?",
+            "a": "Lift the arm, press the tab and slide the old blade off, then click the new one on. About 2 minutes, no tools. Your car's video shows each step."
+          }
+        }
+      },
+      "block_order": [
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "heading": "Questions drivers ask"
+      }
+    },
+    "final": {
+      "type": "ezy-final-cta",
+      "settings": {
+        "heading": "Find the part for your car",
+        "text": "Search your car and get wipers made for it. 25% off is already in the price.",
+        "button": "Find my wipers"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "shop",
+    "popular",
+    "guarantee",
+    "reviews",
+    "types",
+    "fit",
+    "compare",
+    "photos",
+    "faq",
+    "final"
+  ]
+}
