@@ -27,15 +27,35 @@ async function open(p0, w = 390, h = 844) {
   await p.waitForTimeout(3000);
   return { p, ctx };
 }
-const cart = (p) => p.evaluate(async () => { const c = await (await fetch('/cart.js')).json(); return { n: c.item_count, lines: c.items.map((i) => ({ v: i.variant_id, q: i.quantity, t: i.product_title })) }; });
-const badge = (p) => p.evaluate(() => { const e = document.querySelector('.ezy-head [data-cart-count]'); return e ? e.textContent.trim() : 'none'; });
+// The store throttles the runner and then answers with an HTML page. Every in-page fetch checks ok and
+// content-type, and retries with a growing cool-down. Never JSON.parse an unchecked body.
+const rawFetch = (p, url, method = 'GET') => p.evaluate(async ([u, m]) => {
+  const r = await fetch(u, { method: m, headers: { Accept: 'application/json' } });
+  return { status: r.status, ct: r.headers.get('content-type') || '', text: await r.text() };
+}, [url, method]);
+async function jfetch(p, url, method = 'GET', tries = 5) {
+  let last = null;
+  for (let i = 0; i < tries; i++) {
+    last = await rawFetch(p, url, method).catch((e) => ({ status: 0, ct: '', text: String(e) }));
+    if (last.status >= 200 && last.status < 300 && /json/.test(last.ct)) { try { return JSON.parse(last.text); } catch (e) {} }
+    console.log(`  retry ${i + 1}/${tries} ${method} ${url}: status ${last.status} ${last.ct} ${last.text.slice(0, 40).replace(/\s+/g, ' ')}`);
+    await sleep(4000 * (i + 1));
+  }
+  throw new Error(`${method} ${url} never returned JSON (last status ${last && last.status})`);
+}
+const clearCart = (p) => jfetch(p, '/cart/clear.js', 'POST');
+const cart = async (p) => { const c = await jfetch(p, '/cart.js'); return { n: c.item_count, lines: c.items.map((i) => ({ v: i.variant_id, q: i.quantity, t: i.product_title })) }; };
+const readBadge = (p) => p.evaluate(() => { const e = document.querySelector('.ezy-head [data-cart-count]'); return e ? e.textContent.trim() : 'none'; });
+const badge = async (p, want) => { let v = await readBadge(p); for (let i = 0; i < 8 && String(v) !== String(want); i++) { await sleep(1000); v = await readBadge(p); } return v; };
 
 try {
+  // The files before this one hammer the store; let it settle before the first request.
+  await sleep(30000);
   for (const [tag, w, h] of [['phone', 390, 844], ['desktop', 1280, 900]]) {
     const W = tag === 'phone' ? 'a' : 'b';
     const { p, ctx } = await open(WIPER, w, h);
     const calls = [];
-    p.on('request', (r) => { if (r.url().includes('/cart/add.js') && r.method() === 'POST') calls.push(r.postData()); });
+    p.on('response', (r) => { const q = r.request(); if (r.url().includes('/cart/add.js') && q.method() === 'POST') calls.push({ body: q.postData(), status: r.status() }); });
 
     // W1. Add-on cards render with EZYFIT classes.
     try { await p.waitForSelector('.ezy-addon', { timeout: 15000 }); } catch (e) {}
@@ -46,6 +66,7 @@ try {
         src: seed.src, seedItems: (seed.items || []).length, perm: !!seed.perm,
         cards: [...document.querySelectorAll('.ezy-addon')].map((c) => c.querySelector('.ezy-addon__t')?.textContent.trim()),
         shown: !!wrap && !wrap.hidden && getComputedStyle(wrap).display !== 'none',
+        recs: performance.getEntriesByType('resource').filter((e) => e.name.includes('/recommendations/products.json')).map((e) => e.responseStatus),
         imgs: [...document.querySelectorAll('.ezy-addon img')].filter((i) => i.complete && i.naturalWidth > 0).length,
       };
     });
@@ -55,25 +76,31 @@ try {
     await snap(p, `W1-${tag}-addons`);
 
     // W2. Add All is one /cart/add.js call: main + every visible add-on.
-    await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
+    await clearCart(p);
     const startUrl = p.url();
     const ids = await p.evaluate(() => document.getElementById('add-complete-set')?.dataset.variantIds || '');
     const expectIds = ids.split(',').filter(Boolean).map(Number);
-    const btn = await p.$('#add-complete-set');
-    if (btn) await btn.click();
-    await p.waitForTimeout(5000);
+    // A click the store throttles (non-200) is retried after a cool-down; only a 200 call counts as the add.
+    let ok = [];
+    for (let attempt = 1; attempt <= 3 && ok.length === 0; attempt++) {
+      const btn = await p.$('#add-complete-set');
+      if (btn) await btn.click();
+      await p.waitForTimeout(5000);
+      ok = calls.filter((x) => x.status === 200);
+      if (ok.length === 0) { console.log(`  Add All attempt ${attempt} (${tag}) got statuses ${calls.map((x) => x.status)}; cooling down`); await sleep(15000 * attempt); }
+    }
     const c = await cart(p);
-    const body = calls[0] ? JSON.parse(calls[0]) : null;
+    const body = ok[0] ? JSON.parse(ok[0].body) : null;
     const sent = body ? (body.items || []).map((i) => i.id) : [];
     const lineIds = c.lines.map((l) => l.v).sort();
     const same = sent.length === expectIds.length && expectIds.every((x) => sent.includes(x)) && JSON.stringify(lineIds) === JSON.stringify([...sent].sort());
-    const bg = await badge(p);
+    const bg = await badge(p, c.n);
     const drawerOpen = await p.evaluate(() => { const d = document.querySelector('cart-drawer'); return !!d && (d.classList.contains('active') || d.classList.contains('animate')) && getComputedStyle(document.querySelector('#CartDrawer') || d).visibility !== 'hidden'; });
     await snap(p, `W2-${tag}-after-add-all`);
-    gate(`W2${W}`, `${tag}: Add All is one add.js call, main + all add-ons, cart and badge match`, calls.length === 1 && expectIds.length >= 2 && same && String(c.n) === bg, JSON.stringify({ calls: calls.length, sent, expectIds, cartLines: c.lines, count: c.n, badge: bg }));
+    gate(`W2${W}`, `${tag}: Add All is one add.js call, main + all add-ons, cart and badge match`, ok.length === 1 && expectIds.length >= 2 && same && String(c.n) === bg, JSON.stringify({ okCalls: ok.length, statuses: calls.map((x) => x.status), sent, expectIds, cartLines: c.lines, count: c.n, badge: bg }));
     if (tag === 'desktop') gate('W2c', 'desktop: Add All opens the cart drawer', drawerOpen, `drawerOpen=${drawerOpen}`);
     else gate('W2d', 'phone: Add All stays on the product page and the count updates', p.url() === startUrl && c.n >= 2 && String(c.n) === bg, `same url=${p.url() === startUrl}, count=${c.n}, badge=${bg}`);
-    await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
+    await clearCart(p);
     await ctx.close(); await sleep(1200);
   }
 
@@ -121,16 +148,20 @@ try {
   gate('W5c', 'pickup block states the Discovery Drive address', /21 Discovery Drive/.test(info.pickup) && /Bibra Lake/.test(info.pickup), info.pickup);
   gate('W5d', 'warranty tick present', info.ticks.some((x) => /12-month warranty/i.test(x)), JSON.stringify(info.ticks));
   // Quantity stepper: 2 gives a cart line of 2.
-  await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
+  await clearCart(p);
   await p.click('[data-ezy-qty-step="1"]');
   const qv = await p.inputValue('[data-ezy-qty]');
   const tot = await p.evaluate(() => document.querySelector('[data-ezy-total]')?.textContent.trim());
-  await p.click('[data-ezy-add]');
-  await p.waitForTimeout(5000);
-  const qc = await cart(p);
+  let qc = { n: 0, lines: [] };
+  for (let attempt = 1; attempt <= 3 && qc.n === 0; attempt++) {
+    await p.click('[data-ezy-add]');
+    await p.waitForTimeout(5000);
+    qc = await cart(p);
+    if (qc.n === 0) { console.log(`  qty add attempt ${attempt} left the cart empty; cooling down`); await sleep(15000 * attempt); }
+  }
   await snap(p, 'W5-desktop-qty-added');
   gate('W5e', 'quantity stepper: qty 2 gives cart line of 2 and the total follows', qv === '2' && qc.lines.length >= 1 && qc.lines[0].q === 2, JSON.stringify({ qty: qv, total: tot, cart: qc }));
-  await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
+  await clearCart(p);
   await p.evaluate(() => window.scrollTo(0, 0));
   await snap(p, 'W5-desktop-top');
   // W7. Favicon: report what it is. Parked unless an EZYFIT asset exists.
@@ -150,7 +181,9 @@ try {
   await snap(p, 'W6-phone-footer');
   const codes = {};
   for (const h of [...fl.cookie, ...fl.legal]) {
-    codes[h] = await p.evaluate(async (u) => (await fetch(u)).status, h);
+    let st = 0;
+    for (let i = 0; i < 4 && st !== 200; i++) { st = (await rawFetch(p, h).catch(() => ({ status: 0 }))).status; if (st !== 200) await sleep(4000 * (i + 1)); }
+    codes[h] = st;
   }
   gate('W6', 'footer has cookie policy, legal disclaimer, Facebook and Instagram links; policy pages answer 200',
     fl.cookie.length >= 1 && fl.legal.length >= 1 && fl.fb.length >= 1 && fl.ig.length >= 1 && Object.values(codes).every((s) => s === 200), JSON.stringify({ ...fl, codes }));
