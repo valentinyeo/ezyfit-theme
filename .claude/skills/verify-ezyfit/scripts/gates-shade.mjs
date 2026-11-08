@@ -55,6 +55,7 @@ const headings = (p) => p.evaluate(() => [...document.querySelectorAll('main h1,
 try {
   // S0 and parity of headings, three shade products.
   for (const s of SHADES) {
+    try {
     let live = await open(LIVE + s.path);
     const lh = await headings(live.p);
     if (s.id === 'S1') await snap(live.p, 'S1-live-shade-desktop');
@@ -101,18 +102,22 @@ try {
       await snap(dr.p, 'S4-draft-shade-full', true);
     }
     await dr.ctx.close(); await sleep(1200);
+    } catch (e) { gate(s.id, 'step failed', false, String(e.message).split('\n')[0]); }
   }
 
   // The wiper page must not load the shade overrides.
   {
+    try {
     const w = await open(pv(WIPER));
     const has = await w.p.evaluate(() => [...document.querySelectorAll('link[rel=stylesheet]')].some((l) => l.href.includes('ezy-shade.css')));
     gate('S5b', 'wiper page does not load ezy-shade.css', !has, `ezy-shade.css link ${has ? 'present' : 'absent'}`);
     await w.ctx.close(); await sleep(1200);
+    } catch (e) { gate('S5b', 'step failed', false, String(e.message).split('\n')[0]); }
   }
 
   // Add All to Cart: main product plus every visible add-on lands in the cart.
   for (const [id, w, h, label] of [['S6', 1280, 900, 'desktop'], ['S7', 390, 844, 'phone']]) {
+    try {
     const live = await open(LIVE + SHADES[0].path, w, h);
     const liveIds = await setIds(live.p);
     await live.ctx.close(); await sleep(1200);
@@ -123,9 +128,11 @@ try {
     const startPath = new URL(p.url()).pathname;
     await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
     const btn = await p.$('#add-complete-set');
-    if (btn) { await btn.scrollIntoViewIfNeeded(); await btn.click(); }
+    const diag = await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); if (!e) return 'button missing'; const r = e.getBoundingClientRect(); const cs = getComputedStyle(e); return `rect ${Math.round(r.width)}x${Math.round(r.height)} at y ${Math.round(r.top + scrollY)}, display ${cs.display}, visibility ${cs.visibility}, disabled ${e.disabled}`; });
+    console.log(`INFO  ${id}  add-all button  | ${diag}`);
+    if (btn) { await p.evaluate(() => document.querySelector('#add-complete-set').scrollIntoView({ block: 'center' })); await p.waitForTimeout(800); await btn.click({ timeout: 15000 }); }
     await p.waitForTimeout(7000);
-    const cart = await p.evaluate(async () => { const c = await (await fetch('/cart.js')).json(); return { lines: c.items.length, qty: c.item_count, ids: c.items.map((i) => String(i.variant_id)) }; });
+    const cart = await p.evaluate(async () => { for (let n = 0; n < 4; n++) { const r = await fetch('/cart.js', { headers: { Accept: 'application/json' } }); const t = await r.text(); try { const c = JSON.parse(t); return { lines: c.items.length, qty: c.item_count, ids: c.items.map((i) => String(i.variant_id)) }; } catch (e) { await new Promise((x) => setTimeout(x, 3000)); } } return { lines: -1, qty: -1, ids: [] }; });
     const drawer = await p.evaluate(() => { const d = document.querySelector('cart-drawer'); if (!d) return 'no cart-drawer'; const r = document.querySelector('#CartDrawer .drawer__inner')?.getBoundingClientRect(); return `class="${d.className}" panel ${r ? Math.round(r.width) + 'px wide, left ' + Math.round(r.left) : 'none'}`; });
     const stayed = new URL(p.url()).pathname === startPath;
     const allIn = expected.length >= 2 && expected.every((x) => cart.ids.includes(x)) && cart.lines === expected.length;
@@ -136,10 +143,12 @@ try {
     if (expected.length < 4) info(id, 'fewer than 4 items in this set', `${expected.length} variants; the product has ${expected.length - 1} add-ons`);
     await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
     await ctx.close(); await sleep(1200);
+    } catch (e) { gate(id, 'step failed', false, String(e.message).split('\n')[0]); }
   }
 
   // Shade collection (informational plus a render check).
   {
+    try {
     const { p, ctx } = await open(pv('/collections/car-window-shades'));
     const c = await p.evaluate(() => {
       const cards = document.querySelectorAll('main a[href*="/products/"]').length;
@@ -150,10 +159,12 @@ try {
     gate('S8', 'shade collection renders products under the EZYFIT header', c.cards > 0 && c.head, JSON.stringify(c));
     info('S8b', 'shade collection still shows ClickShades blue until ezy-shade.css is also loaded there', `${c.blue} elements use #2463af`);
     await ctx.close(); await sleep(1200);
+    } catch (e) { gate('S8', 'step failed', false, String(e.message).split('\n')[0]); }
   }
 
   // Parts homepage, separate page, both viewports.
   for (const [id, w, h, label] of [['P1', 390, 844, 'phone'], ['P1d', 1280, 900, 'desktop']]) {
+    try {
     const { p, ctx, bad } = await open(pv(PARTS), w, h);
     const d = await p.evaluate(() => ({
       h1: document.querySelector('main h1')?.textContent.trim(),
@@ -177,15 +188,18 @@ try {
       gate('P4', 'parts homepage finder lists makes', makes > 0, `${makes} makes`);
     }
     await ctx.close(); await sleep(1200);
+    } catch (e) { gate(id, 'step failed', false, String(e.message).split('\n')[0]); }
   }
 
   // The current homepage is unchanged.
   {
+    try {
     const { p, ctx } = await open(pv('/'));
     const d = await p.evaluate(() => ({ h1: document.querySelector('main h1')?.textContent.trim(), hero: !!document.querySelector('main .ezy-hero [data-ezy-finder]'), parts: !!document.querySelector('.ezy-parts') }));
     await snap(p, 'P5-current-homepage');
     gate('P5', 'current homepage still renders ezy-hero (not the parts heading) and has no parts tiles', d.hero && !!d.h1 && d.h1 !== 'Parts made for your exact car' && !d.parts, JSON.stringify(d));
     await ctx.close();
+    } catch (e) { gate('P5', 'step failed', false, String(e.message).split('\n')[0]); }
   }
 } catch (e) {
   console.log('ERROR', e.message);
