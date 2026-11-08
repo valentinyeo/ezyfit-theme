@@ -41,6 +41,11 @@ async function open(url, w = 1280, h = 900) {
   await p.evaluate(() => document.querySelectorAll('#preview-bar-iframe, #PBarNextFrameWrapper').forEach((e) => e.remove()));
   return { p, ctx, bad };
 }
+// The add-on set is filled by page script after the upsell cards render, so wait for it.
+const setIds = async (p) => {
+  try { await p.waitForFunction(() => { const e = document.querySelector('#add-complete-set'); return !!(e && e.dataset.variantIds); }, null, { timeout: 25000 }); } catch (e) {}
+  return (await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); return (e && e.dataset.variantIds) || ''; })) || '';
+};
 // Headings inside main only, so the live ClickShades header and the EZYFIT header never enter the comparison.
 const headings = (p) => p.evaluate(() => [...document.querySelectorAll('main h1, main h2, main h3')]
   .filter((h) => !h.closest('[class*="ezy-"]'))
@@ -109,10 +114,10 @@ try {
   // Add All to Cart: main product plus every visible add-on lands in the cart.
   for (const [id, w, h, label] of [['S6', 1280, 900, 'desktop'], ['S7', 390, 844, 'phone']]) {
     const live = await open(LIVE + SHADES[0].path, w, h);
-    const liveIds = await live.p.evaluate(() => { const e = document.querySelector('#add-complete-set'); return e ? e.dataset.variantIds : ''; });
+    const liveIds = await setIds(live.p);
     await live.ctx.close(); await sleep(1200);
     const { p, ctx } = await open(pv(SHADES[0].path), w, h);
-    const ids = await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); return e ? e.dataset.variantIds : ''; });
+    const ids = await setIds(p);
     const expected = [...new Set(ids.split(',').map((x) => x.trim()).filter(Boolean))];
     const liveExpected = [...new Set(liveIds.split(',').map((x) => x.trim()).filter(Boolean))];
     const startPath = new URL(p.url()).pathname;
