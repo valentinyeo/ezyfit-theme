@@ -120,33 +120,47 @@ try {
   // Add All to Cart: main product plus every visible add-on lands in the cart.
   for (const [id, w, h, label] of [['S6', 1280, 900, 'desktop'], ['S7', 390, 844, 'phone']]) {
     try {
+    // The store answers 429 to busy runner IPs, so cool down first and retry a throttled attempt.
+    await sleep(40000);
     const live = await open(LIVE + ADDALL, w, h);
     const liveIds = await setIds(live.p);
-    await live.ctx.close(); await sleep(1200);
-    const { p, ctx } = await open(pv(ADDALL), w, h);
-    const ids = await setIds(p);
-    const expected = [...new Set(ids.split(',').map((x) => x.trim()).filter(Boolean))];
+    await live.ctx.close();
     const liveExpected = [...new Set(liveIds.split(',').map((x) => x.trim()).filter(Boolean))];
-    const startPath = new URL(p.url()).pathname;
-    const net = [];
-    p.on('response', (r) => { if (/\/cart[/.]/.test(r.url()) || r.url().includes('/recommendations/')) net.push(`${r.request().method()} ${new URL(r.url()).pathname} ${r.status()} ${(r.headers()['content-type'] || '').split(';')[0]}`); });
-    await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
-    const btn = await p.$('#add-complete-set');
-    const diag = await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); if (!e) return 'button missing'; const r = e.getBoundingClientRect(); const cs = getComputedStyle(e); let hid = ''; for (let a = e; a; a = a.parentElement) { if (getComputedStyle(a).display === 'none') { hid = ` hidden by ${a.tagName.toLowerCase()}#${a.id}.${String(a.className).slice(0, 40)}`; break; } } return `rect ${Math.round(r.width)}x${Math.round(r.height)} at y ${Math.round(r.top + scrollY)}, display ${cs.display}, visibility ${cs.visibility}, disabled ${e.disabled},${hid || ' no hidden ancestor'}; ids ${(e.dataset.variantIds || '').split(',').length}`; });
-    console.log(`INFO  ${id}  add-all button  | ${diag}`);
-    if (btn) { await p.evaluate(() => document.querySelector('#add-complete-set').scrollIntoView({ block: 'center' })); await p.waitForTimeout(800); await btn.click({ timeout: 15000 }); }
-    await p.waitForTimeout(7000);
-    const cart = await p.evaluate(async () => { let head = ''; for (let n = 0; n < 4; n++) { const r = await fetch('/cart.js', { headers: { Accept: 'application/json' } }); const t = await r.text(); try { const c = JSON.parse(t); return { lines: c.items.length, qty: c.item_count, ids: c.items.map((i) => String(i.variant_id)), head }; } catch (e) { head = `${r.status} ${r.url.slice(0, 80)} ${t.replace(/\s+/g, ' ').slice(0, 100)}`; await new Promise((x) => setTimeout(x, 5000)); } } return { lines: -1, qty: -1, ids: [], head }; });
-    const drawer = await p.evaluate(() => { const d = document.querySelector('cart-drawer'); if (!d) return 'no cart-drawer'; const r = document.querySelector('#CartDrawer .drawer__inner')?.getBoundingClientRect(); return `class="${d.className}" panel ${r ? Math.round(r.width) + 'px wide, left ' + Math.round(r.left) : 'none'}`; });
-    const stayed = new URL(p.url()).pathname === startPath;
-    const allIn = expected.length >= 2 && expected.every((x) => cart.ids.includes(x)) && cart.lines === expected.length;
-    await snap(p, `${id}-after-add-all-${label}`);
-    gate(id, `Add All to Cart ${label}: main plus every add-on lands in cart, same set as live`,
-      allIn && liveExpected.length === expected.length && stayed,
-      `button holds ${expected.length} variants (live ${liveExpected.length}), cart lines ${cart.lines}, qty ${cart.qty}, still on product page: ${stayed}; drawer: ${drawer}; network: ${net.join(' | ')}; cart read: ${cart.head || 'ok'}`);
-    if (expected.length < 4) info(id, 'fewer than 4 items in this set', `${expected.length} variants; the product has ${expected.length - 1} add-ons`);
-    await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
-    await ctx.close(); await sleep(1200);
+    let last = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      await sleep(attempt === 1 ? 5000 : 45000);
+      const { p, ctx } = await open(pv(ADDALL), w, h);
+      const net = [];
+      p.on('response', (r) => { if (/\/cart[/.]/.test(r.url()) || r.url().includes('/recommendations/')) net.push(`${r.request().method()} ${new URL(r.url()).pathname} ${r.status()}`); });
+      const ids = await setIds(p);
+      const expected = [...new Set(ids.split(',').map((x) => x.trim()).filter(Boolean))];
+      const startPath = new URL(p.url()).pathname;
+      const diag = await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); if (!e) return 'button missing'; const r = e.getBoundingClientRect(); let hid = ''; for (let a = e; a; a = a.parentElement) { if (getComputedStyle(a).display === 'none') { hid = ` hidden by ${a.tagName.toLowerCase()}#${a.id}`; break; } } return `rect ${Math.round(r.width)}x${Math.round(r.height)}${hid || ', visible'}; ids ${(e.dataset.variantIds || '').split(',').filter(Boolean).length}`; });
+      console.log(`INFO  ${id}  attempt ${attempt} add-all button  | ${diag}`);
+      const throttled = () => net.some((x) => / 429$/.test(x));
+      if (expected.length < 2 || throttled()) { last = { expected, net, note: `no add-on set (${diag}); network ${net.join(' | ')}` }; await ctx.close(); continue; }
+      await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
+      await p.evaluate(() => document.querySelector('#add-complete-set').scrollIntoView({ block: 'center' }));
+      await p.waitForTimeout(800);
+      await p.click('#add-complete-set', { timeout: 15000 });
+      await p.waitForTimeout(7000);
+      const cart = await p.evaluate(async () => { let head = ''; for (let n = 0; n < 4; n++) { const r = await fetch('/cart.js', { headers: { Accept: 'application/json' } }); const t = await r.text(); try { const c = JSON.parse(t); return { lines: c.items.length, qty: c.item_count, ids: c.items.map((i) => String(i.variant_id)), head }; } catch (e) { head = `${r.status} ${t.replace(/\s+/g, ' ').slice(0, 60)}`; await new Promise((x) => setTimeout(x, 8000)); } } return { lines: -1, qty: -1, ids: [], head }; });
+      const drawer = await p.evaluate(() => { const d = document.querySelector('cart-drawer'); if (!d) return 'no cart-drawer'; const r = document.querySelector('#CartDrawer .drawer__inner')?.getBoundingClientRect(); return `class="${d.className}" panel ${r ? Math.round(r.width) + 'px wide, left ' + Math.round(r.left) : 'none'}`; });
+      const count = await p.evaluate(() => (document.querySelector('#cart-icon-bubble .cart-count-bubble, .cart-count-bubble, [data-cart-count]')?.textContent || '').replace(/\s+/g, ' ').trim());
+      const stayed = new URL(p.url()).pathname === startPath;
+      await snap(p, `${id}-after-add-all-${label}`);
+      if (cart.lines === -1 || throttled()) { last = { expected, net, note: `throttled: cart read ${cart.head}; network ${net.join(' | ')}` }; await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); }).catch(() => {}); await ctx.close(); continue; }
+      const allIn = expected.every((x) => cart.ids.includes(x)) && cart.lines === expected.length;
+      gate(id, `Add All to Cart ${label}: main plus every add-on lands in cart, same set as live`,
+        allIn && liveExpected.length === expected.length && stayed,
+        `attempt ${attempt}: button holds ${expected.length} variants (live ${liveExpected.length}), cart lines ${cart.lines}, qty ${cart.qty}, header count "${count}", still on product page: ${stayed}; drawer: ${drawer}`);
+      if (expected.length < 4) info(id, 'fewer than 4 items in this set', `${expected.length} variants; this product has ${expected.length - 1} add-ons on live too`);
+      await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
+      await ctx.close();
+      last = { done: true };
+      break;
+    }
+    if (!last || !last.done) gate(id, `Add All to Cart ${label}`, false, `3 attempts failed: ${last ? last.note : 'none'}`);
     } catch (e) { gate(id, 'step failed', false, String(e.message).split('\n')[0]); }
   }
 
