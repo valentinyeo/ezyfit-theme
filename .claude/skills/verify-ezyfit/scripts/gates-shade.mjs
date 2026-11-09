@@ -177,10 +177,12 @@ try {
       if (expected.length < 2) { last = { expected, net, note: `no add-on set (${diag}); network ${net.join(" | ")}` }; await ctx.close(); continue; }
       await p.evaluate(() => document.querySelector('#add-complete-set').scrollIntoView({ block: 'center' }));
       await p.waitForTimeout(800);
+      // Like live ClickShades, Add All posts once, then reloads the product page and opens the cart drawer.
+      // After the reload the header is server-rendered from the real cart, which the test never filled, so the count is not checked here (gates.mjs G9 covers a real add).
+      const reloaded = p.waitForNavigation({ waitUntil: 'load', timeout: 30000 }).then(() => true, () => false);
       await p.click('#add-complete-set', { timeout: 15000 });
-      await p.waitForTimeout(1000);
-      const count1 = await p.evaluate(() => [...document.querySelectorAll('[data-cart-count]')].map((e) => e.textContent.trim()).join('/'));
-      await p.waitForTimeout(3000);
+      const didReload = await reloaded;
+      await p.waitForTimeout(2500);
       const sent = mock.adds.map((x) => { try { return JSON.parse(x).items.map((i) => ({ id: String(i.id), q: i.quantity })); } catch (e) { return null; } });
       const sentIds = sent[0] ? sent[0].map((i) => i.id) : [];
       const drawer = await p.evaluate(() => { const d = document.querySelector('cart-drawer'); if (!d) return 'no cart-drawer'; const r = document.querySelector('#CartDrawer .drawer__inner')?.getBoundingClientRect(); return `class="${d.className}" panel ${r ? Math.round(r.width) + 'px wide, left ' + Math.round(r.left) : 'none'}`; });
@@ -190,9 +192,10 @@ try {
       // The cart endpoints are answered by the test (mock.adds records the request body), so the runner throttle cannot hide a bug here.
       // Real carts are covered by gates.mjs G9 and gates-cro C5, which add to the store cart.
       const allIn = mock.adds.length === 1 && sentIds.length === expected.length && expected.every((x) => sentIds.includes(x)) && sent[0].every((i) => i.q === 1);
-      gate(id, `Add All to Cart ${label}: one add.js call carries main plus every add-on, same set as live, page stays, count updates`,
-        allIn && liveExpected.length === expected.length && stayed && String(count) === String(expected.length),
-        `attempt ${attempt}${replay ? ' (recommendations replayed from live so a throttled runner cannot empty the set)' : ''}: button holds ${expected.length} variants (live ${liveExpected.length}), add.js calls ${mock.adds.length}, sent ${sentIds.length} ids [${sentIds.join(',')}], header count "${count}" (at 1s: "${count1}"), still on product page: ${stayed}; drawer: ${drawer}; network ${net.join(' | ')}`);
+      const drawerOpen = /\bactive\b/.test(drawer);
+      gate(id, `Add All to Cart ${label}: one add.js call carries main plus every add-on, same set as live, reloads on the same product with the cart drawer open`,
+        allIn && liveExpected.length === expected.length && stayed && didReload && drawerOpen,
+        `attempt ${attempt}${replay ? ' (recommendations replayed from live so a throttled runner cannot empty the set)' : ''}: button holds ${expected.length} variants (live ${liveExpected.length}), add.js calls ${mock.adds.length}, sent ${sentIds.length} ids [${sentIds.join(',')}], reloaded: ${didReload}, header count after reload "${count}" (real cart, info only), still on product page: ${stayed}; drawer: ${drawer}; network ${net.join(' | ')}`);
       if (expected.length < 4) info(id, 'fewer than 4 items in this set', `${expected.length} variants; this product has ${expected.length - 1} add-ons on live too`);
       await ctx.close();
       last = { done: true };
