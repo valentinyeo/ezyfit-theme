@@ -79,7 +79,7 @@ async function mockCart(ctx) {
     mock.items += items.reduce((n, i) => n + (i.quantity || 1), 0);
     await r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ items: items.map((i) => ({ id: i.id, variant_id: i.id, quantity: i.quantity || 1 })) }) });
   });
-  await ctx.route(/^https:\/\/[^/]+\/cart\.js(\?.*)?$/, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ item_count: mock.items, items: [] }) }));
+  await ctx.route((u) => u.pathname === '/cart.js', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ item_count: mock.items, items: [] }) }));
   return mock;
 }
 // Headings inside main only, so the live ClickShades header and the EZYFIT header never enter the comparison.
