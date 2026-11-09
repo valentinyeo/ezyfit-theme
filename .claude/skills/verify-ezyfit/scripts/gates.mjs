@@ -57,10 +57,12 @@ try {
 
   // Cart count updates in header after add, desktop.
   ({ p, ctx, bad } = await open(WIPER, 1280, 900));
-  const before = await p.evaluate(async () => (await (await fetch('/cart.js')).json()).item_count);
+  // /cart.js answers 429 with an HTML page when the runner is throttled: retry with a cool-down, never parse an unchecked body.
+  const cartCount = (pg) => pg.evaluate(async () => { for (let n = 0; n < 6; n++) { const r = await fetch('/cart.js'); const t = await r.text(); try { return JSON.parse(t).item_count; } catch (e) { await new Promise((x) => setTimeout(x, 5000 * (n + 1))); } } return -1; });
+  const before = await cartCount(p);
   const addBtn = await p.$('[data-ezy-add], button[name="add"], #add-to-cart, .product-form__submit');
   if (addBtn) { await addBtn.click(); await p.waitForTimeout(4000); }
-  const after = await p.evaluate(async () => (await (await fetch('/cart.js')).json()).item_count);
+  const after = await cartCount(p);
   const badge = await p.evaluate(() => { const e = document.querySelector('.ezy-head [data-cart-count]'); return e ? e.textContent.trim() : 'none'; });
   await snap(p, 'G9-after-add-desktop');
   const objD = bad.filter((x) => x.includes('object'));

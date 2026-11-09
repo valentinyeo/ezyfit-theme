@@ -67,6 +67,21 @@ async function recJson() {
   return null;
 }
 const replayRecs = async (ctx) => { const body = await recJson(); if (body) await ctx.route('**/recommendations/products.json*', (r) => r.fulfill({ status: 200, contentType: 'application/json', body })); return !!body; };
+// Cart endpoints are answered here: the runner IP is throttled on /cart*, which says nothing about the theme.
+// The gate asserts the request the theme sends (mock.adds) and the count it shows (built from that request).
+async function mockCart(ctx) {
+  const mock = { adds: [], items: 0 };
+  await ctx.route('**/cart/add.js', async (r) => {
+    const body = r.request().postData() || '{}';
+    mock.adds.push(body);
+    let items = [];
+    try { items = JSON.parse(body).items || []; } catch (e) {}
+    mock.items += items.reduce((n, i) => n + (i.quantity || 1), 0);
+    await r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ items: items.map((i) => ({ id: i.id, variant_id: i.id, quantity: i.quantity || 1 })) }) });
+  });
+  await ctx.route(/^https:\/\/[^/]+\/cart\.js(\?.*)?$/, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ item_count: mock.items, items: [] }) }));
+  return mock;
+}
 // Headings inside main only, so the live ClickShades header and the EZYFIT header never enter the comparison.
 const headings = (p) => p.evaluate(() => [...document.querySelectorAll('main h1, main h2, main h3')]
   .filter((h) => !h.closest('[class*="ezy-"]'))
@@ -139,8 +154,8 @@ try {
   // Add All to Cart: main product plus every visible add-on lands in the cart.
   for (const [id, w, h, label] of [['S6', 1280, 900, 'desktop'], ['S7', 390, 844, 'phone']]) {
     try {
-    // The store answers 429 to busy runner IPs, so cool down first and retry a throttled attempt.
-    await sleep(40000);
+    // The store answers 429 to busy runner IPs on recommendations. Cart calls are answered by the test, so only that needs a cool-down.
+    await sleep(20000);
     let live = await open(LIVE + ADDALL, w, h);
     let liveIds = await setIds(live.p);
     await live.ctx.close();
@@ -150,7 +165,8 @@ try {
     for (let attempt = 1; attempt <= 3; attempt++) {
       await sleep(attempt === 1 ? 5000 : 45000);
       let replay = false;
-      const { p, ctx } = await open(pv(ADDALL), w, h, attempt > 1 ? async (c) => { replay = await replayRecs(c); } : null);
+      const { p, ctx } = await open(pv(ADDALL), w, h, async (c) => { replay = await replayRecs(c); });
+      const mock = await mockCart(ctx);
       const net = [];
       p.on('response', (r) => { if (/\/cart[/.]/.test(r.url()) || r.url().includes('/recommendations/')) net.push(`${r.request().method()} ${new URL(r.url()).pathname} ${r.status()}`); });
       const ids = await setIds(p);
@@ -158,25 +174,24 @@ try {
       const startPath = new URL(p.url()).pathname;
       const diag = await p.evaluate(() => { const e = document.querySelector('#add-complete-set'); if (!e) return 'button missing'; const r = e.getBoundingClientRect(); let hid = ''; for (let a = e; a; a = a.parentElement) { if (getComputedStyle(a).display === 'none') { hid = ` hidden by ${a.tagName.toLowerCase()}#${a.id}`; break; } } return `rect ${Math.round(r.width)}x${Math.round(r.height)}${hid || ', visible'}; ids ${(e.dataset.variantIds || '').split(',').filter(Boolean).length}`; });
       console.log(`INFO  ${id}  attempt ${attempt} add-all button  | ${diag}`);
-      const throttled = () => net.some((x) => / 429$/.test(x));
-      if (expected.length < 2 || throttled()) { last = { expected, net, note: `no add-on set (${diag}); network ${net.join(' | ')}` }; await ctx.close(); continue; }
-      await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
+      if (expected.length < 2) { last = { expected, net, note: `no add-on set (${diag}); network ${net.join(" | ")}` }; await ctx.close(); continue; }
       await p.evaluate(() => document.querySelector('#add-complete-set').scrollIntoView({ block: 'center' }));
       await p.waitForTimeout(800);
       await p.click('#add-complete-set', { timeout: 15000 });
-      await p.waitForTimeout(7000);
-      const cart = await p.evaluate(async () => { let head = ''; for (let n = 0; n < 4; n++) { const r = await fetch('/cart.js', { headers: { Accept: 'application/json' } }); const t = await r.text(); try { const c = JSON.parse(t); return { lines: c.items.length, qty: c.item_count, ids: c.items.map((i) => String(i.variant_id)), head }; } catch (e) { head = `${r.status} ${t.replace(/\s+/g, ' ').slice(0, 60)}`; await new Promise((x) => setTimeout(x, 8000)); } } return { lines: -1, qty: -1, ids: [], head }; });
+      await p.waitForTimeout(4000);
+      const sent = mock.adds.map((x) => { try { return JSON.parse(x).items.map((i) => ({ id: String(i.id), q: i.quantity })); } catch (e) { return null; } });
+      const sentIds = sent[0] ? sent[0].map((i) => i.id) : [];
       const drawer = await p.evaluate(() => { const d = document.querySelector('cart-drawer'); if (!d) return 'no cart-drawer'; const r = document.querySelector('#CartDrawer .drawer__inner')?.getBoundingClientRect(); return `class="${d.className}" panel ${r ? Math.round(r.width) + 'px wide, left ' + Math.round(r.left) : 'none'}`; });
-      const count = await p.evaluate(() => (document.querySelector('#cart-icon-bubble .cart-count-bubble, .cart-count-bubble, [data-cart-count]')?.textContent || '').replace(/\s+/g, ' ').trim());
+      const count = await p.evaluate(() => (document.querySelector('[data-cart-count]')?.textContent || document.querySelector('#cart-icon-bubble .cart-count-bubble')?.textContent || '').replace(/\s+/g, ' ').trim());
       const stayed = new URL(p.url()).pathname === startPath;
       await snap(p, `${id}-after-add-all-${label}`);
-      if (cart.lines === -1 || throttled()) { last = { expected, net, note: `throttled: cart read ${cart.head}; network ${net.join(' | ')}` }; await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); }).catch(() => {}); await ctx.close(); continue; }
-      const allIn = expected.every((x) => cart.ids.includes(x)) && cart.lines === expected.length;
-      gate(id, `Add All to Cart ${label}: main plus every add-on lands in cart, same set as live`,
-        allIn && liveExpected.length === expected.length && stayed,
-        `attempt ${attempt}${replay ? ' (recommendations replayed from live because the runner was throttled)' : ''}: button holds ${expected.length} variants (live ${liveExpected.length}), cart lines ${cart.lines}, qty ${cart.qty}, header count "${count}", still on product page: ${stayed}; drawer: ${drawer}`);
+      // The cart endpoints are answered by the test (mock.adds records the request body), so the runner throttle cannot hide a bug here.
+      // Real carts are covered by gates.mjs G9 and gates-cro C5, which add to the store cart.
+      const allIn = mock.adds.length === 1 && sentIds.length === expected.length && expected.every((x) => sentIds.includes(x)) && sent[0].every((i) => i.q === 1);
+      gate(id, `Add All to Cart ${label}: one add.js call carries main plus every add-on, same set as live, page stays, count updates`,
+        allIn && liveExpected.length === expected.length && stayed && String(count) === String(expected.length),
+        `attempt ${attempt}${replay ? ' (recommendations replayed from live so a throttled runner cannot empty the set)' : ''}: button holds ${expected.length} variants (live ${liveExpected.length}), add.js calls ${mock.adds.length}, sent ${sentIds.length} ids [${sentIds.join(',')}], header count "${count}", still on product page: ${stayed}; drawer: ${drawer}`);
       if (expected.length < 4) info(id, 'fewer than 4 items in this set', `${expected.length} variants; this product has ${expected.length - 1} add-ons on live too`);
-      await p.evaluate(async () => { await fetch('/cart/clear.js', { method: 'POST' }); });
       await ctx.close();
       last = { done: true };
       break;
