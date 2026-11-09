@@ -61,7 +61,7 @@
         "t2": {
           "type": "tick",
           "settings": {
-            "text": "Ships same day before 2pm"
+            "text": "Ships same day before 2pm AWST"
           }
         },
         "t3": {
@@ -355,7 +355,7 @@
           "type": "question",
           "settings": {
             "q": "How fast is wiper shipping?",
-            "a": "Order before 2pm and it ships the same day. Shipping is free."
+            "a": "Order before 2pm AWST and it ships the same day. Shipping is free."
           }
         },
         "q2": {
