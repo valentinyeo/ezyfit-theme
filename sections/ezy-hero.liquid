@@ -48,16 +48,6 @@
     </div>
 
     <div>
-      <div class="ezy-pack">
-        <h2 class="ezy-hero__h">{{ section.settings.pack_heading }}</h2>
-        <ul class="ezy-ticks">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'pack_item' -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endif -%}
-          {%- endfor -%}
-        </ul>
-        <p class="ezy-pack__price">{{ section.settings.pack_price }}</p>
-      </div>
-
       <a class="ezy-video" href="{{ section.settings.video_url | default: '#' }}">
         {%- if section.settings.video_image != blank -%}
           {{ section.settings.video_image | image_url: width: 900 | image_tag: loading: 'lazy' }}
@@ -67,6 +57,16 @@
         <span class="ezy-video__play" aria-hidden="true"></span>
         <span class="ezy-video__label">{{ section.settings.video_label }}</span>
       </a>
+
+      <div class="ezy-pack">
+        <h2 class="ezy-hero__h">{{ section.settings.pack_heading }}</h2>
+        <ul class="ezy-ticks">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'pack_item' -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+        <p class="ezy-pack__price">{{ section.settings.pack_price }}</p>
+      </div>
 
       <div class="ezy-hero__ticks">
         {%- for block in section.blocks -%}

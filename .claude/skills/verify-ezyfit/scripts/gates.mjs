@@ -119,6 +119,14 @@ try {
 
   // Homepage finder: left-aligned dropdowns, Make search, Make > Model > Year lands on the product.
   ({ p, ctx, bad } = await open('/'));
+  // Phone (390x844): the whole car finder, button included, sits above the fold; the video comes before the pack card.
+  const fold = await p.evaluate(() => {
+    const btn = document.querySelector('[data-ezy-finder] button[type=submit]');
+    const v = document.querySelector('.ezy-hero .ezy-video'), k = document.querySelector('.ezy-hero .ezy-pack');
+    return { btnBottom: btn ? Math.round(btn.getBoundingClientRect().bottom + scrollY) : -1, videoFirst: !!(v && k && (v.compareDocumentPosition(k) & Node.DOCUMENT_POSITION_FOLLOWING)) };
+  });
+  await snap(p, 'G21-home-phone-fold');
+  gate('G21', 'phone homepage: car finder button above the fold (under 700px) and video above the pack card', fold.btnBottom > 0 && fold.btnBottom <= 700 && fold.videoFirst, JSON.stringify(fold));
   await p.click('[data-ezy-dd=make] .ezy-dd__btn');
   await p.keyboard.type('toyota'); await p.keyboard.press('Enter');
   await p.click('[data-ezy-dd=model] .ezy-dd__btn');

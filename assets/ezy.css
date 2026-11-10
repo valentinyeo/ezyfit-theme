@@ -427,6 +427,18 @@ cart-drawer .cart__checkout-button { background: var(--ezy-blue) !important; bor
 .ezy-addons__all small { font-size: 13px; color: var(--ezy-grey); }
 .ezy-addons__all strong { font-size: 20px; }
 .ezy-addons__all .ezy-btn { width: auto; flex: 1 1 auto; max-width: 280px; }
+/* Phone homepage: car finder above the fold, like live ClickShades. */
+@media (max-width: 749px) {
+  .ezy-hero { padding: 18px 0 24px; }
+  .ezy-hero h1 { font-size: 32px; }
+  .ezy-hero__lead { display: none; }
+  .ezy-hero__rating { margin-top: 10px; }
+  .ezy-hero .ezy-finder { margin-top: 14px; padding: 14px 14px 12px; }
+  .ezy-hero .ezy-finder h2 { font-size: 17px; margin-bottom: 10px; }
+  .ezy-hero .ezy-finder .ezy-dd { margin-bottom: 8px; }
+  .ezy-hero .ezy-dd__btn { height: 48px; }
+  .ezy-hero .ezy-video { margin-top: 20px; }
+}
 .ezy-foot__social { display: flex; gap: 14px; margin-top: 10px; }
 .ezy-foot__social a { color: #fff !important; display: inline-flex; }
 .ezy-foot__social a:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 4px; }
