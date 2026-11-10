@@ -7,7 +7,7 @@
       {%- if section.settings.logo != blank -%}
         {{ section.settings.logo | image_url: width: 480 | image_tag: alt: brand, height: 38, width: 120 }}
       {%- else -%}
-        <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="120" height="38">
+        <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="123" height="38">
       {%- endif -%}
     </a>
     <nav class="ezy-head__nav" aria-label="Main">
@@ -42,7 +42,7 @@
   <div class="ezy-drawer__overlay" data-ezy-close></div>
   <div class="ezy-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
     <div class="ezy-drawer__top">
-      <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="120" height="38">
+      <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="123" height="38">
       <button class="ezy-drawer__close" type="button" aria-label="Close menu" data-ezy-close>&times;</button>
     </div>
     <form class="ezy-drawer__search" action="{{ routes.search_url }}" method="get" role="search">
