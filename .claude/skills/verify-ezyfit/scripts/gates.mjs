@@ -83,6 +83,9 @@ try {
   const footer = await p.evaluate(() => { const f = document.querySelector('footer, .footer-v7, [class*=footer]'); return f ? f.innerText : ''; });
   const cs = (footer.match(/Click ?Shades/gi) || []).length;
   gate('G12', 'footer is EZYFIT, not Click Shades', cs === 0 && /ezyfit/i.test(footer), `Click Shades mentions: ${cs}, EZYFIT: ${/ezyfit/i.test(footer)}`);
+  // MACL-10: nothing emails a video, so the signup form must not promise one.
+  const lead = await p.evaluate(() => { const s = document.querySelector('#ezy-lead'); return s ? s.innerText : ''; });
+  gate('G19', 'homepage email form promises no video it cannot send', !!lead && !/video/i.test(lead), lead.replace(/\s+/g, ' ').slice(0, 160) || 'form missing');
   await ctx.close(); await sleep(1500);
 
   // Collection page styled.
