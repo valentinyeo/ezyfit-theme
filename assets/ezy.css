@@ -438,3 +438,17 @@ cart-drawer .cart__checkout-button { background: var(--ezy-blue) !important; bor
   .ezy-addon { grid-template-columns: 1fr; text-align: left; }
   .ezy-addon img { width: 100%; height: 140px; }
 }
+
+/* MACL-21: what you get and fits-your-car blocks on wiper pages. */
+.ezy-fit { display: grid; gap: 20px; }
+@media (min-width: 768px) { .ezy-fit { grid-template-columns: 1fr 1fr; align-items: start; } }
+.ezy-fit__card { border: 1px solid var(--ezy-line); border-radius: var(--ezy-radius); padding: 24px; background: #fff; }
+.ezy-fit__card .ezy-h2 { font-size: 22px; margin: 0 0 16px; }
+.ezy-fit__pic img { display: block; width: 100%; height: auto; border-radius: 12px; background: var(--ezy-tint); }
+.ezy-fit__parts { list-style: none; counter-reset: part; padding: 0; margin: 16px 0 0; }
+.ezy-fit__parts li { counter-increment: part; position: relative; padding-left: 40px; margin: 12px 0; min-height: 28px; font-size: 15px; line-height: 1.4; color: var(--ezy-dark); }
+.ezy-fit__parts li::before { content: counter(part); position: absolute; left: 0; top: -2px; width: 28px; height: 28px; border-radius: 50%; background: var(--ezy-blue); color: #fff; font: 700 14px/28px Poppins, sans-serif; text-align: center; }
+.ezy-fit__sizes { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin: 16px 0 0; }
+.ezy-fit__sizes div { background: var(--ezy-tint); border-radius: 12px; padding: 12px; }
+.ezy-fit__sizes dt { font-size: 13px; color: var(--ezy-grey); }
+.ezy-fit__sizes dd { margin: 4px 0 0; font: 700 18px/1.2 Poppins, sans-serif; color: var(--ezy-dark); }

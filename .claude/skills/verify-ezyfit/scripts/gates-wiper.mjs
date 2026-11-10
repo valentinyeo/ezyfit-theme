@@ -181,6 +181,16 @@ try {
   // W7. Favicon: report what it is. Parked unless an EZYFIT asset exists.
   const fav = await p.evaluate(() => [...document.querySelectorAll('link[rel~="icon"]')].map((l) => l.href));
   gate('W7', 'favicon present and reported (parked for Matt unless an EZYFIT asset exists)', fav.length > 0, JSON.stringify(fav));
+  // W8. MACL-21: numbered what-you-get block and fits-your-car panel.
+  const fit = await p.evaluate(() => {
+    const parts = document.querySelector('[data-ezy-blade-parts]');
+    const car = document.querySelector('[data-ezy-fits-car]');
+    if (car) car.scrollIntoView();
+    return { parts: parts ? parts.querySelectorAll('.ezy-fit__parts li').length : 0, img: !!(parts && parts.querySelector('img')), car: car ? car.querySelector('h2').textContent.trim() : 'missing', lengths: !!document.querySelector('[data-ezy-fit-lengths]') };
+  });
+  await p.waitForTimeout(800);
+  await snap(p, 'W8-desktop-fit');
+  gate('W8', 'wiper page: numbered what-you-get block with picture and fits-your-car panel naming the car', fit.parts >= 3 && fit.img && /Hilux/.test(fit.car), JSON.stringify(fit));
   await ctx.close(); await sleep(1200);
 
   // W6. Footer links.

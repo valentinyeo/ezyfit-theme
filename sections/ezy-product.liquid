@@ -200,6 +200,50 @@
   </div>
 </section>
 
+{%- comment -%}
+  MACL-21: Wipertech-style blocks. Blade lengths come from product metafields
+  custom.blade_driver, custom.blade_passenger, custom.blade_rear (text, e.g. "600 mm");
+  a length row only shows when its metafield is set.
+{%- endcomment -%}
+{%- liquid
+  assign len_driver = product.metafields.custom.blade_driver.value
+  assign len_pass = product.metafields.custom.blade_passenger.value
+  assign len_rear = product.metafields.custom.blade_rear.value
+  assign car_name = car | split: ' ->' | first
+  assign feats = section.settings.features | newline_to_br | split: '<br />'
+-%}
+<section class="ezy ezy-sec" id="ezy-pdp-fit">
+  <div class="ezy-wrap ezy-fit">
+    <div class="ezy-fit__card" data-ezy-blade-parts>
+      <h2 class="ezy-h2">What you get</h2>
+      <div class="ezy-fit__pic">
+        {%- if product.featured_image -%}
+          {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 700', sizes: '(min-width: 768px) 40vw, 100vw', alt: 'Wiper blades for ' | append: car_name }}
+        {%- endif -%}
+      </div>
+      <ol class="ezy-fit__parts">
+        {%- for f in feats -%}{%- assign ft = f | strip -%}{%- if ft != blank -%}<li>{{ ft }}</li>{%- endif -%}{%- endfor -%}
+      </ol>
+    </div>
+    <div class="ezy-fit__card" data-ezy-fits-car>
+      <h2 class="ezy-h2">Fits your {{ car_name }}</h2>
+      <ul class="ezy-ticks">
+        <li>Made for this exact car and year</li>
+        <li>Vehicle-specific connector included</li>
+        <li>Clicks onto your wiper arms, no tools</li>
+      </ul>
+      {%- if len_driver != blank or len_pass != blank or len_rear != blank -%}
+        <dl class="ezy-fit__sizes" data-ezy-fit-lengths>
+          {%- if len_driver != blank -%}<div><dt>Driver side</dt><dd>{{ len_driver }}</dd></div>{%- endif -%}
+          {%- if len_pass != blank -%}<div><dt>Passenger side</dt><dd>{{ len_pass }}</dd></div>{%- endif -%}
+          {%- if len_rear != blank -%}<div><dt>Rear</dt><dd>{{ len_rear }}</dd></div>{%- endif -%}
+        </dl>
+      {%- endif -%}
+      <a class="ezy-pdp__other" href="/#ezy-finder">Not your car? Find your blades</a>
+    </div>
+  </div>
+</section>
+
 <section class="ezy ezy-sec" id="ezy-pdp-addons" data-ezy-addons-wrap hidden>
   <div class="ezy-wrap">
     <h2 class="ezy-h2">Select add-ons</h2>
@@ -506,6 +550,7 @@
     { "type": "text", "id": "store_rating", "label": "Store rating text (used when product has no reviews)", "default": "4.8 from 49 store reviews" },
     { "type": "url", "id": "fit_video", "label": "Default fitment video (mp4 or YouTube)" },
     { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Made for your exact car\n2 minute fit, no tools\nWrong fit? We swap it free within 30 days\nOrder before 2pm AWST, ships the same day\nFree shipping\n12-month warranty included" },
+    { "type": "textarea", "id": "features", "label": "What you get, numbered (one per line)", "default": "Front blade pair for your car\nPremium rubber, streak-free in all conditions\nVehicle-specific connector, fitted\n12-month warranty" },
     { "type": "text", "id": "pickup_title", "label": "Pickup title", "default": "Pickup available at 21 Discovery Drive" },
     { "type": "text", "id": "pickup_note", "label": "Pickup note", "default": "Usually ready in 24 hours" },
     { "type": "textarea", "id": "pickup_address", "label": "Pickup address (empty hides pickup)", "default": "21 Discovery Drive, Bibra Lake WA 6163, Australia" }
