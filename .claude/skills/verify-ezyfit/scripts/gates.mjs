@@ -90,6 +90,14 @@ try {
   gate('G22', 'footer links skip the empty Find my car and FAQs pages', deadFoot.length === 0, deadFoot.join(', ') || 'none');
   await ctx.close(); await sleep(1500);
 
+  // Old links to the empty Find my car page land on the homepage finder.
+  ({ p, ctx, bad } = await open('/pages/find-my-car'));
+  await p.waitForTimeout(2500);
+  const fwd = await p.evaluate(() => ({ path: location.pathname, hash: location.hash, finder: !!document.querySelector('#find .ezy-finder') }));
+  await snap(p, 'G23-find-my-car');
+  gate('G23', 'old Find my car link lands on the homepage car finder', fwd.path === '/' && fwd.hash === '#find' && fwd.finder, JSON.stringify(fwd));
+  await ctx.close(); await sleep(1500);
+
   // Collection page styled.
   ({ p, ctx, bad } = await open('/collections/wiper-blades'));
   const collEzy = await p.evaluate(() => !!document.querySelector('main .ezy'));

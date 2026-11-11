@@ -1,6 +1,11 @@
 {{ 'section-main-page.css' | asset_url | stylesheet_tag }}
 
-{% if page.handle == 'shop-by-make' %}
+{%- comment -%} These pages are empty in admin; old links and Google still land here, so send people to the homepage finder and FAQ. {%- endcomment -%}
+{%- if page.content == blank and page.handle == 'find-my-car' or page.content == blank and page.handle == 'faqs' -%}
+  {%- if page.handle == 'faqs' -%}{%- assign ezy_go = '/#ezy-faq' -%}{%- assign ezy_label = 'Go to our questions and answers' -%}{%- else -%}{%- assign ezy_go = '/#find' -%}{%- assign ezy_label = 'Go to the car finder' -%}{%- endif -%}
+  <div class="page-width" data-ezy-page-forward="{{ ezy_go }}"><p><a href="{{ ezy_go }}">{{ ezy_label }}</a></p></div>
+  <script>location.replace({{ ezy_go | json }});</script>
+{% elsif page.handle == 'shop-by-make' %}
   {%- comment -%} Shop by Make - Custom brand grid for this specific page {%- endcomment -%}
   {% render 'shop-by-make-content' %}
 {% else %}
