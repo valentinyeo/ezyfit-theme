@@ -86,6 +86,8 @@ try {
   // MACL-10: nothing emails a video, so the signup form must not promise one.
   const lead = await p.evaluate(() => { const s = document.querySelector('#ezy-lead'); return s ? s.innerText : ''; });
   gate('G19', 'homepage email form promises no video it cannot send', !!lead && !/video/i.test(lead), lead.replace(/\s+/g, ' ').slice(0, 160) || 'form missing');
+  const deadFoot = await p.evaluate(() => [...document.querySelectorAll('.ezy-foot a')].map(a => a.getAttribute('href')).filter(h => ['/pages/find-my-car', '/pages/faqs'].includes(h)));
+  gate('G22', 'footer links skip the empty Find my car and FAQs pages', deadFoot.length === 0, deadFoot.join(', ') || 'none');
   await ctx.close(); await sleep(1500);
 
   // Collection page styled.
