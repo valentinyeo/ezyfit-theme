@@ -230,7 +230,8 @@
   .ezy-steps { grid-template-columns: repeat(3, 1fr); }
   .ezy-guarantee { max-width: 720px; margin: 0 auto; text-align: center; }
   .ezy-guarantee .ezy-btn { max-width: 320px; margin: 0 auto; }
-  .ezy-faq { max-width: 820px; }
+  .ezy-faq { max-width: 820px; margin-inline: auto; }
+  #ezy-faq .ezy-h2 { text-align: center; }
   .ezy-final .ezy-btn { max-width: 320px; }
   .ezy-sticky { display: none; }
 }
