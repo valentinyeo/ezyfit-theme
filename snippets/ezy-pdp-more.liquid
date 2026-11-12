@@ -1,0 +1,80 @@
+{%- comment -%}
+  Long wiper product page (the extra blocks Matt asked for). Rendered by ezy-product before the FAQ,
+  so it only shows on wiper pages. Reuses the homepage block styles; nothing here repeats the
+  fit panel, add-ons, video or reviews above it.
+  Data blocks stay hidden until the product has the data:
+    custom.clip_photo (file) shows the "Your clip" block,
+    custom.customer_count (number) adds the customer count to the photo heading.
+{%- endcomment -%}
+{%- liquid
+  assign clip_photo = product.metafields.custom.clip_photo.value
+  assign customers = product.metafields.custom.customer_count.value
+  assign photos = 'cb-real-1.jpg,cb-real-3.jpg,cb-real-4.jpg,cb-real-5.jpg,cb-real-7.jpg,cb-real-8.jpg' | split: ','
+  assign shade_img = images['SideShade2.png']
+-%}
+<div data-ezy-pdp-more>
+  {%- if clip_photo != blank -%}
+    <section class="ezy ezy-sec ezy-sec--rule" id="ezy-pdp-clip" data-ezy-pdp-clip>
+      <div class="ezy-wrap ezy-shades__grid">
+        {{ clip_photo | image_url: width: 900 | image_tag: loading: 'lazy', alt: 'Wiper arm clip on the ' | append: car_name }}
+        <div>
+          <h2 class="ezy-h2">Your clip</h2>
+          <p class="ezy-sub">This is the clip on your {{ car_name }}. Our blades come with the matching connector.</p>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  <section class="ezy ezy-sec ezy-sec--rule" id="ezy-pdp-photos">
+    <div class="ezy-wrap">
+      <h2 class="ezy-h2">{% if customers != blank %}Fitted by {{ customers }}+ drivers{% else %}Fitted by drivers like you{% endif %}</h2>
+      <p class="ezy-sub">Real photos sent in by customers.</p>
+      <div class="ezy-photos">
+        {%- for f in photos -%}
+          <div class="ezy-photo"><img src="{{ f | asset_url }}" alt="Blades fitted on a customer's car" loading="lazy" width="1000" height="1000"></div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <section class="ezy ezy-sec ezy-sec--yellow ezy-sec--rule" id="ezy-pdp-compare">
+    <div class="ezy-wrap">
+      <h2 class="ezy-h2">Why not cheap blades?</h2>
+      <p class="ezy-sub" style="color: var(--ezy-dark)">Universal blades need adaptors to fit. Ours are made for your car.</p>
+      <table class="ezy-compare">
+        <thead><tr><th></th><th class="is-us">EZYFIT</th><th>Cheap</th><th>Dealer</th></tr></thead>
+        <tbody>
+          <tr><td>Made for your exact car</td><td class="is-us">Yes</td><td>No</td><td>Yes</td></tr>
+          <tr><td>Fitment video for your car</td><td class="is-us">Yes</td><td>No</td><td>No</td></tr>
+          <tr><td>Fit at home in 2 minutes</td><td class="is-us">Yes</td><td>Adaptors</td><td>Book a visit</td></tr>
+          <tr><td>Free swap within 30 days</td><td class="is-us">Yes</td><td>Varies</td><td>Varies</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ezy ezy-sec ezy-sec--yellow ezy-sec--rule" id="ezy-pdp-guarantee" style="border-bottom: 3px solid var(--ezy-blue)">
+    <div class="ezy-wrap">
+      <div class="ezy-guarantee">
+        <h2>Fits your car, or we swap it free</h2>
+        <p>These blades are made for your {{ car_name }}. If they don't fit, tell us within 30 days and we send the right ones free.</p>
+        <a class="ezy-btn" href="#ezy-pdp-top">Add to cart</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ezy ezy-sec ezy-sec--blue ezy-shades" id="ezy-pdp-shades">
+    <div class="ezy-wrap ezy-shades__grid">
+      {%- if shade_img != blank -%}
+        {{ shade_img | image_url: width: 900 | image_tag: loading: 'lazy', alt: 'Click Shades fitted to a car side window' }}
+      {%- else -%}
+        <img src="{{ 'ezy-shade-ranger.png' | asset_url }}" alt="Click Shades fitted to a car side window" loading="lazy" width="900" height="675">
+      {%- endif -%}
+      <div>
+        <h2>Keep the sun out too</h2>
+        <p>Click-in car shades made for the same cars as our wipers, with a magnetic fit instead of suction cups.</p>
+        <a class="ezy-btn ezy-btn--yellow" href="/collections/car-window-shades">Shop car shades</a>
+      </div>
+    </div>
+  </section>
+</div>

@@ -60,7 +60,7 @@
   endif
   assign perm = all_products['windscreen-water-repellent']
 -%}
-<section class="ezy ezy-pdp" data-ezy-pdp>
+<section class="ezy ezy-pdp" id="ezy-pdp-top" data-ezy-pdp>
   <div class="ezy-wrap ezy-pdp__grid">
     <div class="ezy-pdp__media">
       <div class="ezy-pdp__slides" data-ezy-slides>
@@ -295,6 +295,8 @@
     <div class="ezy-loox"><div id="looxReviews" data-product-id="{{ product.id }}" class="loox-reviews-default">{{ product.metafields.loox.reviews }}</div></div>
   </div>
 </section>
+
+{% render 'ezy-pdp-more', product: product, car_name: car_name %}
 
 {%- if section.blocks.size > 0 -%}
 <section class="ezy ezy-sec ezy-sec--rule" id="ezy-faq">
