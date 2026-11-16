@@ -1,29 +1,35 @@
 # Header and cart
 
-Files: `sections/ezy-header.liquid`, `sections/ezy-announcement.liquid`, `sections/header-group.json`, `layout/theme.cart.liquid`.
+Shoppers navigate from the shared header, open search, and see their cart count after adding blades. The cart page retains the EZYFIT header and shipping message.
 
 ## Sub-features
 
-- Announcement bar with rotating messages and links.
-- Phone menu drawer with search, menu links and account.
-- Search toggle under the header (desktop and phone).
-- Cart badge that updates after any `/cart/add|change|update|clear` fetch, from any section.
-- Desktop: cart icon opens the slide-out cart drawer. Phone: it goes to `/cart`.
-- The cart page (alternate layout) shows the same header.
+- `header-menu` opens a phone drawer with navigation, search and account links.
+- `header-search` toggles a search panel and focuses the input.
+- `header-count` refreshes the cart badge after fetch mutations, cart events and restored-page navigation.
+- `header-cart` opens a desktop drawer when one with an `open()` method exists. Otherwise the cart link navigates to `/cart`, including on phones.
+- `header-announcement` rotates messages and offers pause/play.
+- `cart-copy` uses free standard shipping wording on the cart page and drawer.
 
 ## How to get to it (user POV)
 
-Any page. Tap the three-line icon on a phone. Tap the magnifier. Add a wiper to the cart and watch the number on the cart pill.
+Open any storefront page. On a phone, tap the menu icon. Tap the magnifier for search or cart pill for the cart. Add blades from a wiper product page.
 
 ## Driving it with Playwright (GitHub only)
 
-- Menu: click `.ezy-head__menu`, then `[data-ezy-drawer]` must not be `hidden` and must show at least 3 visible links (G7).
-- Search: `[data-ezy-search]` toggles `#ezy-search` (G8).
-- Cart count: on a wiper page at 1280 wide, read `/cart.js` `item_count`, click `[data-ezy-add]`, wait 4 s, read again; `.ezy-head [data-cart-count]` text must equal the new count (G9).
-- Cart page: `/cart` must contain `.ezy-head` (G10).
-- Announcement: no `.ezy-bar a` without an `href` (G11).
+Preconditions: follow the [index drive](README.md#preconditions-and-drive). The Hilux product must be available for G9.
+
+- Open the product on phone and tap `.ezy-head__menu`. G7 requires at least three visible links in `[data-ezy-drawer]`.
+- Inspect header search. G8 checks a search handle exists; it does not click or submit it.
+- Click `[data-ezy-add]` at 1280px. G9 reads real `/cart.js` before and after, requires count growth, and compares the badge with the resulting count.
+- Open `/cart`. G10 requires `.ezy-head`. C1e checks brand metadata and C5a checks free standard shipping copy.
+- Open home. G11 rejects announcement anchors without `href`. C5b checks drawer shipping wording and rejects old wording in the section response.
 
 ## Gotchas
 
-- The header has both a desktop nav (`.ezy-head__nav`, hidden on phones) and the drawer. Check the drawer on phones, not the nav.
-- The badge refresh relies on a wrapped `window.fetch`. Code that adds to cart with a form post reloads the page instead, which is also fine.
+- G0 checks served theme identity on the initial product visit. It does not prove checkout files were uploaded.
+- G8 does not prove the search toggle. G11 does not prove rotation, pause/play or that an announcement link exists.
+- G9 covers add only, not change, update, clear or page restoration. W2c opens the drawer after Add All, not by clicking the header cart icon.
+- The alternate cart layout includes the header but no cart drawer. Do not require drawer opening there.
+- Desktop navigation is hidden on phones. Inspect the drawer instead.
+- A form-post cart addition reloads the badge from Shopify instead of using the fetch wrapper.

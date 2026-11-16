@@ -1,23 +1,29 @@
 # Wiper collection and search results
 
-Files: `sections/ezy-collection.liquid`, `sections/ezy-search.liquid`, `snippets/ezy-product-card.liquid`, `templates/collection.json`, `templates/search.json`.
+Shoppers narrow the wiper grid by car and browse shared product cards in search. Matching titles lead search results, with matching wipers before shades.
 
 ## Sub-features
 
-- Collections whose handle contains "wiper" render the EZYFIT grid; other collections keep `collection-product-grid-v7`.
-- Type-your-car filter narrows the grid live and shows "No blades listed for that car yet" plus a Request your car button when nothing matches. `?car=hilux` prefills it.
-- Search results use the same cards, labelled Wiper blades or Car shades, with a fallback when no products match.
+- `collection-grid` uses the EZYFIT grid for handles containing `wiper`. Other collections keep the legacy grid.
+- `collection-filter` narrows the rendered cards live. `?car=hilux` prefills it. No matches shows "No blades listed for that car yet" and a Request your car link.
+- `search-results` labels cards Wiper blades or Car shades and offers a fallback when no products match.
+- `search-order` groups title-matching wipers, title-matching shades, other wipers and other products.
 
 ## How to get to it (user POV)
 
-Header menu "Shop Blades", footer "Wiper blades", `/collections/wiper-blades`. Search from the header magnifier or the homepage finder when several cars match.
+Choose Shop Blades in the header, Wiper blades in the footer, or `/collections/wiper-blades`. Search through the header or homepage finder fallback. Gates open `/search?q=hilux&type=product` directly.
 
 ## Driving it with Playwright (GitHub only)
 
-- `/collections/wiper-blades`: `main .ezy` present (G13). Fill `[data-ezy-coll-q]` with `hilux`; every visible `.ezy-coll__item` must have `hilux` in `data-search`, and at least one is visible (G13b).
-- `/search?q=hilux&type=product`: `main .ezy-coll` present with at least one `.ezy-coll__card` (G17).
+Preconditions: follow the [index drive](README.md#preconditions-and-drive). The collection needs at least one Hilux card; search needs at least two Hilux titles for C6.
+
+- Open `/collections/wiper-blades`. G13 requires `main .ezy`.
+- Type `hilux` in `[data-ezy-coll-q]`. G13b requires at least one visible `.ezy-coll__item` and `hilux` in every visible card's searchable text.
+- Open the Hilux search URL. G17 requires the EZYFIT collection container and at least one card.
+- Inspect C6. Hilux titles must precede other titles and the first card must be a wiper. C1c/C1d check brand metadata on both pages.
 
 ## Gotchas
 
-- The store's search is fuzzy: a nonsense query still returns some shade products. Do not assert an empty state from search; assert it from the collection filter instead.
-- Collection pages paginate at 96, so all 65 wipers fit on one page today.
+- Filter prefill, empty state, Request your car navigation and clearing the filter are described by source but not exercised by gates.
+- Collections paginate at 96. Filtering searches only the current page, not every product in the store. Do not assume an old product count remains true.
+- Shopify search can be fuzzy. Use a collection filter for a deterministic empty-state recipe, not a nonsense search query.

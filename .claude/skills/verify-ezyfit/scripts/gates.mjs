@@ -152,7 +152,7 @@ try {
   gate('G18', 'homepage finder: normal dropdowns, Toyota > Hilux > year opens the product', fin.native === 0 && fin.align === 'left' && /\d{4}/.test(fin.year) && fin.landed === WIPER, JSON.stringify(fin));
   await ctx.close();
 } catch (e) {
-  console.log('ERROR', e.message);
+  gate('GERR', 'gate script ran to the end', false, e.message);
 }
 await b.close();
 const passed = results.filter((r) => r.pass).length;
