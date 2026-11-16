@@ -162,7 +162,8 @@ try {
     };
   });
   const dateRe = /by (Mon|Tue|Wed|Thu|Fri|Sat|Sun) \d{1,2} [A-Z][a-z]{2}/;
-  gate('W5a', 'delivery: free and express estimate with date and note', /Free delivery/i.test(info.ship) && /Express delivery/.test(info.ship) && dateRe.test(info.ship) && /\$10/.test(info.ship) && /estimates/.test(info.ship), info.ship);
+  const policyLink = await p.locator('[data-ezy-ship] a').getAttribute('href');
+  gate('W5a', 'delivery uses the published shipping window, not invented dates or express service', /Free delivery/i.test(info.ship) && /1–4 business days total/i.test(info.ship) && !/Express delivery|\$10/.test(info.ship) && !dateRe.test(info.ship) && /estimates/i.test(info.ship) && policyLink === '/policies/shipping-policy', JSON.stringify({ ship: info.ship, policyLink }));
   gate('W5b', 'stock line says in stock', /in stock/i.test(info.stock), info.stock);
   gate('W5c', 'pickup block states the Discovery Drive address', /21 Discovery Drive/.test(info.pickup) && /Bibra Lake/.test(info.pickup), info.pickup);
   gate('W5d', 'warranty tick present', info.ticks.some((x) => /12-month warranty/i.test(x)), JSON.stringify(info.ticks));
