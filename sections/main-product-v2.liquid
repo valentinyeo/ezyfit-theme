@@ -1146,7 +1146,7 @@
         <span class="price-current">{{ product.price | money }}</span>
         {% if product.compare_at_price > product.price %}
           <span class="price-compare">{{ product.compare_at_price | money }}</span>
-          <span class="price-badge">SAVE {{ product.compare_at_price | minus: product.price | money }}</span>
+          <span class="price-badge">Save {{ product.compare_at_price | minus: product.price | money }}</span>
         {% endif %}
       </div>
 
