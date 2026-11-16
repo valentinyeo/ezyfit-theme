@@ -10,6 +10,7 @@ One file per shopper-facing feature. Gate ids refer to the `scripts/gates*.mjs` 
 | Wiper collection and search results | [collection-and-search.md](collection-and-search.md) | G13, G13b, G17 |
 | Footer and shade pages | [footer-and-shades.md](footer-and-shades.md) | G12, G16 |
 | ClickShades shade page parity with live | [shade-page-parity.md](shade-page-parity.md) | G16, G16b, `gates-shade.mjs` |
+| Shop name is EZYFIT on home, a shade product, and a wiper product | `scripts/gates-brand.mjs` | B1 |
 | Design quality (impeccable detector) | [design-quality.md](design-quality.md) | not wired into GitHub yet |
 
 Covered since the last map: homepage finder routing (G18). CRO checks live in `gates-cro.mjs`.

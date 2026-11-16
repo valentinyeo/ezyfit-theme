@@ -78,6 +78,7 @@ Gate files, one per area. Add a new area as a new `gates-<area>.mjs`; the workfl
 | `gates.mjs` | Header, cart, wiper product, collection, search, footer, homepage finder, shade page keeps old design | G0 to G18 |
 | `gates-cro.mjs` | Conversion and CRO checks, written by the CRO agent | see file header |
 | `gates-shade.mjs` | ClickShades shade page parity, written by the shade agent | see file header |
+| `gates-brand.mjs` | Shop name on home, a shade product, and a wiper product | B1 |
 
 One page as a picture, on GitHub:
 
