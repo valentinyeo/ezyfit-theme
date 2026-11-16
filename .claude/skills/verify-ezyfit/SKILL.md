@@ -12,7 +12,7 @@ For verification maintenance, Launch means selecting the existing unpublished dr
 ## Hard rules
 
 - No CI, builds, tests or browsers on this server (house rule, 2026-11-08). Playwright and Chromium run only on GitHub-hosted runners through `gates.yml` and `shot.yml`. Small paid minutes on this private repo are fine. On this server you may push, fetch over plain HTTP, call `gh`, and read artifacts.
-- Never push to or publish theme `149894070428`. It is the live ClickShades shop. Every script refuses it, and the workflows refuse it as a `theme_id`.
+- Never push to or publish theme `149894070428`. It is the live ClickShades shop. Upload helpers and workflows refuse it as a target.
 - Never publish the draft or QA theme. Publishing is the owner's call.
 - Never change store data (products, prices, metafields) to make a check pass. A failing gate is reported, not weakened.
 - Never print or commit the theme token. Scripts read it from `~/projects/clickshades-theme/CLAUDE.md` into memory.
@@ -153,7 +153,7 @@ QA proves a whole-repo state the owner can click through. The draft stays the pl
 
 ## Evidence
 
-Each gates file writes `_preview/evidence/<timestamp>/` on the runner: `gates.json` (theme id, time, each gate with the observed value) and screenshots. The workflow uploads them as the artifact `gates-evidence-<run id>` (kept 14 days):
+Each gates file writes a timestamped directory under `_preview/evidence/` on the runner. It contains screenshots and its JSON result file, such as `gates.json`, `gates-cro.json`, `gates-shade.json` or `gates-wiper.json`, with theme ID, time and observed values. The workflow uploads them as the artifact `gates-evidence-<run id>` (kept 14 days):
 
 ```bash
 gh run download <run id> -n gates-evidence-<run id> -D /tmp/evidence
@@ -169,7 +169,7 @@ Proof standards:
 
 ## Cleanup
 
-Nothing runs on this server, so nothing to stop. Do not delete the draft or QA themes. Delete scratch downloads in `/tmp`. Evidence in `_preview/evidence/` is git-ignored and Shopify-ignored; keep it. Artifacts expire on GitHub by themselves.
+No browser runs on this server, so there is no browser process to stop. The optional watcher is a short-lived cron command, not an app server. Do not delete the draft or QA themes. Remove disposable scratch downloads only after keeping the proof you need. Evidence in `_preview/evidence/` is git-ignored and Shopify-ignored; keep it. Artifacts expire on GitHub by themselves.
 
 ## Other helpers
 
