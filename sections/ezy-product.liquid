@@ -22,9 +22,6 @@
   endif
   assign quarter = variant.price | divided_by: 4
   assign wipers = section.settings.collection | default: collections['wiper-blades']
-  assign now_s = 'now' | date: '%s'
-  assign free_eta = now_s | plus: 518400
-  assign express_eta = now_s | plus: 172800
 
   assign upsells = '' | split: ','
   assign up_src = 'none'
@@ -180,9 +177,8 @@
       <p class="ezy-pdp__msg" role="status" aria-live="polite" data-ezy-msg></p>
 
       <div class="ezy-pdp__ship" data-ezy-ship>
-        <p><strong>Free delivery</strong> by {{ free_eta | date: '%a %-d %b' }}</p>
-        <p><strong>Express delivery</strong> by {{ express_eta | date: '%a %-d %b' }}, $10 at checkout</p>
-        <small>Delivery times are estimates and may vary.</small>
+        <p><strong>Free delivery</strong>, 1–4 business days total.</p>
+        <small>Delivery times are estimates and may vary. See our <a href="{{ shop.shipping_policy.url }}">shipping policy</a> for handling times and delivery conditions.</small>
       </div>
 
       <ul class="ezy-ticks ezy-pdp__ticks">
