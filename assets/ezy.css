@@ -192,7 +192,7 @@
 .ezy-faq summary::-webkit-details-marker { display: none; }
 .ezy-faq summary::after { content: "+"; color: var(--ezy-blue); font-size: 24px; font-weight: 700; }
 .ezy-faq details[open] summary::after { content: "\2212"; }
-.ezy-faq details p { color: var(--ezy-grey); line-height: 1.6; padding-bottom: 20px; font-size: 14px; }
+.ezy-faq details p { color: var(--ezy-grey); line-height: 1.6; padding-bottom: 12px; font-size: 14px; }
 
 /* Final call to action */
 .ezy-final h2 { color: var(--ezy-blue); font-size: 28px; margin-bottom: 10px !important; }
@@ -344,7 +344,6 @@
 .ezy-type--soon { background: #fafbfd; }
 .ezy-type__badge--soon { background: var(--ezy-dark); color: #fff; }
 .ezy-faq summary { min-height: 56px; }
-.ezy-faq details p { padding-bottom: 12px; }
 .ezy-hero__ticks span::before, .ezy-types__unsure::before { content: ""; display: inline-block; vertical-align: -2px; width: 14px; height: 14px; margin-right: 6px; background: var(--ezy-green); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat; }
 .ezy-types__unsure::before { flex: 0 0 16px; width: 16px; height: 16px; margin-top: 3px; }
 
