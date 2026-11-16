@@ -23,14 +23,17 @@ try {
       const themeId = await page.evaluate(() => window.Shopify?.theme?.id);
       const links = await page.locator('link[rel="stylesheet"]').evaluateAll((nodes) => nodes.map((n) => n.href).filter((href) => /\/ezy\.css(?:\?|$)/.test(href)));
       gate(`S1-${width}-${route}`, 'requested theme loads ezy.css exactly once', String(themeId) === THEME && links.length === 1, JSON.stringify({ route, themeId, links }));
-      if (route !== WIPER) continue;
-      await page.locator('#ezy-pdp-photos').scrollIntoViewIfNeeded();
-      await page.waitForFunction(() => [...document.querySelectorAll('#ezy-pdp-photos img')].length === 6 && [...document.querySelectorAll('#ezy-pdp-photos img')].every((img) => img.complete && img.naturalWidth > 0));
-      const photos = await page.locator('#ezy-pdp-photos img').evaluateAll((nodes) => nodes.map((img) => ({ srcset: img.srcset, sizes: img.sizes, currentSrc: img.currentSrc, width: img.naturalWidth })));
-      gate(`S2-${width}`, 'six customer photos load responsive candidates', photos.length === 6 && photos.every((img) => /160w/.test(img.srcset) && /320w/.test(img.srcset) && /640w/.test(img.srcset) && img.sizes && img.width > 0 && /cb-real-\d+-(160|320|640)\.jpg/.test(img.currentSrc)), JSON.stringify(photos));
-      const compare = await page.locator('#ezy-pdp-compare').innerText();
-      gate(`S3-${width}`, 'wiper benefits make no competitor comparisons or timed fitting promises', /EZYFIT/.test(compare) && !/cheap|dealer|universal|2 minutes/i.test(compare), compare.replace(/\s+/g, ' '));
-      await page.screenshot({ path: path.join(OUT, `photos-${width}.png`) });
+      if (route !== '/' && route !== WIPER) continue;
+      const surface = route === '/' ? 'home' : 'wiper';
+      await page.locator('.ezy-photos').scrollIntoViewIfNeeded();
+      await page.waitForFunction(() => [...document.querySelectorAll('.ezy-photos img')].length === 6 && [...document.querySelectorAll('.ezy-photos img')].every((img) => img.complete && img.naturalWidth > 0));
+      const photos = await page.locator('.ezy-photos img').evaluateAll((nodes) => nodes.map((img) => ({ srcset: img.srcset, sizes: img.sizes, currentSrc: img.currentSrc, width: img.naturalWidth })));
+      gate(`S2-${surface}-${width}`, 'six customer photos load responsive candidates', photos.length === 6 && photos.every((img) => /160w/.test(img.srcset) && /320w/.test(img.srcset) && /640w/.test(img.srcset) && img.sizes && img.width > 0 && /cb-real-\d+-(160|320|640)\.jpg/.test(img.currentSrc)), JSON.stringify(photos));
+      await page.screenshot({ path: path.join(OUT, `photos-${surface}-${width}.png`) });
+      if (route === WIPER) {
+        const compare = await page.locator('#ezy-pdp-compare').innerText();
+        gate(`S3-${width}`, 'wiper benefits make no competitor comparisons or timed fitting promises', /EZYFIT/.test(compare) && !/cheap|dealer|universal|2 minutes/i.test(compare), compare.replace(/\s+/g, ' '));
+      }
     }
     await context.close();
   }

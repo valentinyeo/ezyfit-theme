@@ -31,7 +31,7 @@
       <p class="ezy-sub">Real photos sent in by customers.</p>
       <div class="ezy-photos">
         {%- for f in photos -%}
-          <div class="ezy-photo"><img src="{{ f | asset_url }}" alt="Blades fitted on a customer's car" loading="lazy" width="1000" height="1000"></div>
+          <div class="ezy-photo">{% render 'ezy-customer-photo', file: f, alt: "Blades fitted on a customer's car" %}</div>
         {%- endfor -%}
       </div>
     </div>
@@ -39,15 +39,15 @@
 
   <section class="ezy ezy-sec ezy-sec--yellow ezy-sec--rule" id="ezy-pdp-compare">
     <div class="ezy-wrap">
-      <h2 class="ezy-h2">Why not cheap blades?</h2>
-      <p class="ezy-sub" style="color: var(--ezy-dark)">Universal blades need adaptors to fit. Ours are made for your car.</p>
+      <h2 class="ezy-h2">Your EZYFIT blades</h2>
+      <p class="ezy-sub" style="color: var(--ezy-dark)">Check the fit and product details above before ordering.</p>
       <table class="ezy-compare">
-        <thead><tr><th></th><th class="is-us">EZYFIT</th><th>Cheap</th><th>Dealer</th></tr></thead>
+        <thead><tr><th scope="col">Product detail</th><th scope="col" class="is-us">EZYFIT</th></tr></thead>
         <tbody>
-          <tr><td>Made for your exact car</td><td class="is-us">Yes</td><td>No</td><td>Yes</td></tr>
-          <tr><td>Fitment video for your car</td><td class="is-us">Yes</td><td>No</td><td>No</td></tr>
-          <tr><td>Fit at home in 2 minutes</td><td class="is-us">Yes</td><td>Adaptors</td><td>Book a visit</td></tr>
-          <tr><td>Free swap within 30 days</td><td class="is-us">Yes</td><td>Varies</td><td>Varies</td></tr>
+          <tr><th scope="row">Vehicle-specific connector</th><td class="is-us">Included</td></tr>
+          {%- if product.metafields.custom.fit_video.value != blank or section.settings.fit_video != blank -%}
+            <tr><th scope="row">Fitting video</th><td class="is-us"><a href="#ezy-pdp-video">Watch the fitting guide</a></td></tr>
+          {%- endif -%}
         </tbody>
       </table>
     </div>

@@ -5,7 +5,6 @@
   Fitment video: custom.fit_video (URL) on the product, else the section default.
 {%- endcomment -%}
 {%- if product.title contains 'Wiper' -%}
-{{ 'ezy.css' | asset_url | stylesheet_tag }}
 {%- liquid
   assign variant = product.selected_or_first_available_variant
   assign spray = product.metafields.custom.spray_product.value

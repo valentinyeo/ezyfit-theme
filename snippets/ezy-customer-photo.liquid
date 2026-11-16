@@ -1,0 +1,24 @@
+{%- liquid
+  assign resized = false
+  case file
+    when 'cb-real-1.jpg', 'cb-real-3.jpg', 'cb-real-4.jpg', 'cb-real-5.jpg', 'cb-real-7.jpg', 'cb-real-8.jpg'
+      assign resized = true
+      assign stem = file | remove: '.jpg'
+      assign small = stem | append: '-160.jpg'
+      assign medium = stem | append: '-320.jpg'
+      assign large = stem | append: '-640.jpg'
+  endcase
+-%}
+<img
+  {% if resized %}
+    src="{{ medium | asset_url }}"
+    srcset="{{ small | asset_url }} 160w, {{ medium | asset_url }} 320w, {{ large | asset_url }} 640w"
+    sizes="(min-width: 1168px) 181px, (min-width: 768px) calc((100vw - 82px) / 6), calc((100vw - 52px) / 3)"
+  {% else %}
+    src="{{ file | asset_url }}"
+  {% endif %}
+  alt="{{ alt | escape }}"
+  loading="lazy"
+  width="1000"
+  height="1000"
+>

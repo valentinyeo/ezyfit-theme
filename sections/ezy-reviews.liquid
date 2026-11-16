@@ -1,4 +1,3 @@
-{{ 'ezy.css' | asset_url | stylesheet_tag }}
 {%- comment -%}
   Reviews and customer photos. Add the Loox app block in the theme editor; it replaces the placeholder cards.
 {%- endcomment -%}
@@ -21,7 +20,7 @@
       <div class="ezy-photos">
         {%- for f in photos -%}
           {%- assign f = f | strip -%}
-          <div class="ezy-photo"><img src="{{ f | asset_url }}" alt="{{ section.settings.photo_alt | escape }}" loading="lazy" width="1000" height="1000"></div>
+          <div class="ezy-photo">{% render 'ezy-customer-photo', file: f, alt: section.settings.photo_alt %}</div>
         {%- endfor -%}
       </div>
     {%- elsif section.settings.style == 'loox' -%}

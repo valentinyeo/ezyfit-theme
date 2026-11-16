@@ -2,7 +2,6 @@
   EZYFIT wiper collection grid. Renders only for wiper collections; other collections keep collection-product-grid-v7.
 {%- endcomment -%}
 {%- if collection.handle contains 'wiper' -%}
-{{ 'ezy.css' | asset_url | stylesheet_tag }}
 <section class="ezy ezy-sec ezy-coll">
   <div class="ezy-wrap">
     <h1 class="ezy-h2">{{ section.settings.heading | default: collection.title }}</h1>
