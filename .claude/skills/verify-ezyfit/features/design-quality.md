@@ -1,28 +1,33 @@
 # Design quality
 
-Checks that the EZYFIT sections stay free of the patterns impeccable flags (low contrast, cramped padding, skipped headings, text glyphs as icons and so on).
+Shoppers see Poppins headings and CSS-drawn tick, cross and FAQ icons across the homepage, wiper page and collection. The broad impeccable detector is not part of the Actions gates.
 
 ## Sub-features
 
-- Headings render in Poppins ExtraBold Italic (weights 800 are loaded in `layout/theme.liquid`). Dawn's heading font must not win.
-- Ticks, crosses and FAQ plus and minus are drawn with CSS masks, not text characters.
+- `design-headings` uses Poppins 800 italic for EZYFIT headings. The finder heading deliberately uses normal 700.
+- `design-icons` uses CSS masks for ticks, crosses and FAQ plus/minus icons.
+- `design-audit` inspects contrast, spacing and heading structure. This is a verification gap until a runner workflow provisions and runs the detector.
 
 ## How to get to it (user POV)
 
-Homepage, a wiper product page and the wiper collection.
+Open `/`, `/products/front-windscreen-wipers-for-toyota-hilux-2018` and `/collections/wiper-blades` at phone and desktop widths.
 
 ## Driving it with Playwright (GitHub only)
 
-Needs a browser, so it runs on a GitHub runner only (no workflow wires it yet; add one before relying on it). Save the rendered `.ezy` sections with the theme CSS, then run the detector on the saved files:
+Preconditions: the [index drive](README.md#preconditions-and-drive) can run shade style gate S4, but does not exercise the broad design audit. Do not report this feature as fully live-covered from a green gates run.
+
+The existing DOM helper is a runner-only draft/desktop capture. Its output lives at `_preview/evidence/dom/` relative to the repo root. A future runner job must install Playwright and provide the impeccable executable before using these commands:
 
 ```bash
-PLAYWRIGHT_PATH=$HOME/.npm-global/lib/node_modules/playwright node .claude/skills/verify-ezyfit/scripts/dump-ezy.mjs
+PLAYWRIGHT_PATH=playwright node .claude/skills/verify-ezyfit/scripts/dump-ezy.mjs
 ~/.claude/skills/impeccable/scripts/impeccable detect _preview/evidence/dom/home.html _preview/evidence/dom/pdp.html _preview/evidence/dom/coll.html
 ```
 
-No output and exit 0 means clean. Font check in a page: `getComputedStyle(document.querySelector('.ezy h1')).fontFamily` must start with `Poppins`.
+Detector exit 0 with no findings covers the saved markup only. Rendered-page proof must also inspect heading computed family, weight and style with the finder exception, loaded fonts, icon masks and FAQ open/closed states. Capture screenshots at both widths. No current workflow performs these steps.
 
 ## Gotchas
 
-- `impeccable detect <url>` times out on the Shopify preview. Use the saved-DOM route above.
-- The detector judges only what was saved. Look at the screenshots too.
+- `dump-ezy.mjs` hardcodes the draft ID and a 1280px viewport. It cannot prove QA or phone behaviour as written.
+- Saved markup includes EZYFIT CSS but excludes competing Dawn styles and Google font loading. It cannot prove the rendered font override.
+- The impeccable executable path is a prerequisite, not something `gates.yml` installs. Do not run it or the DOM helper on this server.
+- Keep intended design requirements separate from detector coverage. Missing coverage is not evidence of a product defect.

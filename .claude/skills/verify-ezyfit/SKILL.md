@@ -1,11 +1,13 @@
 ---
 name: verify-ezyfit
-description: Prove the EZYFIT Version B Shopify theme works the way a shopper uses it. Use after any change to this repo, before saying a theme change is done, before promoting to the QA theme, or when the draft or QA theme looks off. The theme only runs on Shopify, so you push files to the unpublished draft theme, then the browser checks (phone and desktop Chromium, header, cart, wiper product, collection, search, footer, shade page parity) run on GitHub Actions, never on this server.
+description: Verify the EZYFIT Shopify storefront through GitHub Actions, maintain its shopper feature map, and monitor daily QA runs. Use after theme changes, before QA promotion, for verification maintenance, or when draft or QA looks wrong. Browsers and tests run only on GitHub-hosted runners. Maintenance uses the existing unpublished theme without uploading files.
 ---
 
 # Verify the EZYFIT theme
 
-Surface: the real storefront at `easy-fit-store1.myshopify.com`, opened with `?preview_theme_id=<id>`. There is no local server. "Launch" is pushing files to a theme. "Drive" is a GitHub Actions run.
+The storefront is `easy-fit-store1.myshopify.com`, opened with `?preview_theme_id=<id>`. There is no local server. Drive it through GitHub Actions.
+
+For verification maintenance, Launch means selecting the existing unpublished draft or QA theme and running Doctor. Do not call upload or promotion helpers. Edit only this skill and the verification workflows. Report product bugs separately. The builder flow below applies only when theme uploads were explicitly authorised.
 
 ## Hard rules
 
@@ -58,12 +60,16 @@ Every line must say `OK`: store answers, the requested theme id is served, its r
 ## Drive (GitHub Actions only)
 
 ```bash
-gh workflow run gates.yml -f theme_id=158148984988
-gh run list --workflow gates.yml --limit 3
+gh workflow run gates.yml --ref main -f theme_id=158148984988
+gh run list --workflow gates.yml --branch main --event workflow_dispatch --limit 1
 gh run watch <run id> --interval 300 --exit-status
 ```
 
-`gates.yml` runs on `ubuntu-latest` with Node 22, installs Playwright and Chromium, then runs every `.claude/skills/verify-ezyfit/scripts/gates*.mjs` in turn with the theme id as the first argument. It keeps going after a failing file and fails the job at the end if any file failed. It runs on `workflow_dispatch` and on every push to `main`. A run of `gates.mjs` alone took 1m42s (2 billable minutes); the job times out at 20 minutes and a newer run of the same theme cancels an older one.
+For branch verification, replace both `main` arguments with the pushed branch name. Match the run's branch, HEAD SHA and theme input before watching. Never poll faster than 300 seconds.
+
+`gates.yml` runs on `ubuntu-latest` with Node 22, installs Playwright and Chromium, then runs every `.claude/skills/verify-ezyfit/scripts/gates*.mjs` with the theme ID as its first argument. It continues after a failing file and fails the job at the end if any file failed. Dispatch uses the selected theme. Pushes to `main` use the draft. The daily schedule uses QA, as described in Routine. The job times out at 20 minutes. Dispatch/push runs can cancel an older run on the same ref and theme; scheduled runs do not cancel an in-progress run.
+
+If GitHub refuses to start because billing failed, record the annotation and run link. Report blocked with zero executed gates. Do not run checks here, weaken gates or merge around the failure.
 
 Each gates file prints one `PASS` or `FAIL` line per gate with the observed value, ends with `N/M gates pass`, and exits 1 on any failure. Read the whole log, not just the job colour:
 
@@ -75,9 +81,10 @@ Gate files, one per area. Add a new area as a new `gates-<area>.mjs`; the workfl
 
 | File | Area | Gate ids |
 |---|---|---|
-| `gates.mjs` | Header, cart, wiper product, collection, search, footer, homepage finder, shade page keeps old design | G0 to G18 |
-| `gates-cro.mjs` | Conversion and CRO checks, written by the CRO agent | see file header |
-| `gates-shade.mjs` | ClickShades shade page parity, written by the shade agent | see file header |
+| `gates.mjs` | Header/cart, wiper basics, collection/search, footer, finder, newsletter copy, phone fold, legacy forwarding | G0–G13, G5d, G13b, G16–G19, G16b, G21–G23, GERR on exception; G14/G15/G20 absent |
+| `gates-cro.mjs` | Brand metadata, review copy, finder inventory, sticky bar, shipping, search order, AWST | C1a–C1f, C2a/C2b, C3, C4a/C4b, C5a/C5b, C6, C7a/C7b; CERR on exception |
+| `gates-shade.mjs` | Shade structure/brand, mocked Add All, shade collection, alternate parts homepage | S0–S8, S5b, P1/P1d, P2–P5; ERR on exception |
+| `gates-wiper.mjs` | Add-ons, mocked Add All/quantity, Loox, FAQ schema, delivery, footer policies, fit panels, long page | W1a/W1b, W2a–W2d, W3a/W3b, W4, W5a–W5e, W6–W9; WERR on exception |
 
 One page as a picture, on GitHub:
 
@@ -91,6 +98,43 @@ Then view `/tmp/shot/shot.png`. Widths: 390 phone, 1280 desktop.
 Stable handles the gates use (keep them when editing sections): `[data-ezy-head]`, `[data-ezy-menu]`, `[data-ezy-drawer]`, `[data-ezy-search]`, `[data-cart-count]`, `[data-ezy-pdp]`, `[data-ezy-type]`, `[data-ezy-position]`, `[data-ezy-year]`, `[data-ezy-fit-video]`, `[data-ezy-add]`, `[data-ezy-coll-q]`, `[data-ezy-finder]`, `[data-ezy-dd]`, `.ezy-coll__item`, `.ezy-coll__card`.
 
 The feature map in [features/README.md](features/README.md) says which gate proves which shopper journey and what is not covered yet.
+
+## Routine
+
+This follows the Funeral Prints routine in `~/projects/funeralprints/scripts/fp-checks-watch.py` and `valentinyeo/fp-checks`'s `smoke.yml`, with one daily run and a board ticket instead of email.
+
+- `gates.yml` schedules the full gate set once daily at **21:00 UTC**, using unpublished QA theme `158330912924`. GitHub schedules run only from the default branch after merge and can start late. The workflow never uploads Shopify files.
+- `scripts/checks-watch.py` runs hourly outside GitHub. It reads only scheduled `gates.yml` runs on `main` through `gh`, ignoring manual and push runs. A missing run, newest run older than 30 hours, or newest completed run that did not succeed triggers an alert. A recent queued/running run is not a failure.
+- The watcher finds one active ticket titled "EZYFIT daily shopper checks need attention" on board `12322`, or creates it in Backlog `35326` with `brain-medium`. It adds a +1 agent note with the run link. Later incidents reuse the ticket, even if somebody moved it out of Backlog. It never moves or closes tickets.
+- A local lock prevents overlapping runs. State under `~/.local/state/ezyfit-checks-watch.json` suppresses repeated alerts for the same problem/run. A remote note marker handles a crash after posting. Healthy runs clear local suppression. GH/API errors exit nonzero without inventing a stale alert. There is no email.
+
+The orchestrator installs cron only after this PR is verified and merged. Provision a dedicated Hypertask agent on board `12322` using board-identity, not a user login. Save its credential privately with mode 600 at `~/.config/hypertask-agents/credentials/sessions/ezyfit-checks-watch-agent-token`. `EZYFIT_HT_TOKEN_FILE` may point to another private file. Never paste the token into cron, logs or this repo. The watcher refuses a user identity before board writes. Ensure `gh` can read this repository and `hypertask` is on PATH.
+
+Read-only inspection is safe here and does not require a board credential:
+
+```bash
+.claude/skills/verify-ezyfit/scripts/checks-watch.py --dry-run
+```
+
+Normal invocation reads GitHub and can write the board:
+
+```bash
+.claude/skills/verify-ezyfit/scripts/checks-watch.py
+```
+
+From the merged checkout, the orchestrator creates `~/.local/state` and installs this crontab line. Do not install it during maintenance:
+
+```cron
+17 * * * * PATH=/home/valentin/.local/bin:/usr/local/bin:/usr/bin:/bin /home/valentin/projects/ezyfit-theme/.claude/skills/verify-ezyfit/scripts/checks-watch.py >> /home/valentin/.local/state/ezyfit-checks-watch.log 2>&1
+```
+
+Watcher regression checks run in `gates.yml` before the browser gates. Their standalone invocation, **GitHub-hosted runner only**, is:
+
+```bash
+python3 .claude/skills/verify-ezyfit/scripts/test_checks_watch.py
+```
+
+They use mocked CLI responses, never real board writes. After installation, the orchestrator checks the first real alert and confirms a repeated hourly invocation does not duplicate it. Dry-run output alone does not prove board delivery. Until the first scheduled run, the watcher reports stale. Remove only this cron line to stop monitoring; retain its ticket and evidence.
 
 ## Promote to QA
 

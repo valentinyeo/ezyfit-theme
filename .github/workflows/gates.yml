@@ -4,6 +4,8 @@ name: gates
 # House rule: no CI, builds or tests on the VPS. The preview URL is public, so no secrets are needed.
 
 on:
+  schedule:
+    - cron: '0 21 * * *'
   workflow_dispatch:
     inputs:
       theme_id:
@@ -14,8 +16,8 @@ on:
     branches: [main]
 
 concurrency:
-  group: gates-${{ github.ref }}-${{ github.event.inputs.theme_id || 'draft' }}
-  cancel-in-progress: true
+  group: gates-${{ github.ref }}-${{ github.event_name == 'schedule' && '158330912924' || github.event.inputs.theme_id || '158148984988' }}
+  cancel-in-progress: ${{ github.event_name != 'schedule' }}
 
 permissions:
   contents: read
@@ -25,13 +27,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      THEME_ID: ${{ github.event.inputs.theme_id || '158148984988' }}
+      THEME_ID: ${{ github.event_name == 'schedule' && '158330912924' || github.event.inputs.theme_id || '158148984988' }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Watcher regression checks
+        run: python3 .claude/skills/verify-ezyfit/scripts/test_checks_watch.py
 
       - name: Refuse the live theme
         run: |

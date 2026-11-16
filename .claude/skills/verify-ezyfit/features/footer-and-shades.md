@@ -1,22 +1,31 @@
-# Footer and shade pages
+# Footer and legacy pages
 
-Files: `sections/ezy-footer.liquid`, `sections/footer-group.json`; shade guards in `sections/main-product-v2.liquid`, `video-carousel.liquid`, `reviews.liquid`, `faq.liquid`, `collection-product-grid-v7.liquid`.
+Shoppers find store details, help and policy links in the EZYFIT footer. Old links to empty Find my car and FAQ pages lead to the matching homepage section instead of a blank page.
 
 ## Sub-features
 
-- Footer shows the EZYFIT brand, Shop and Help links, business details (ABN, address, hours) and payment icons. Phone and email stay hidden until filled in the section settings.
-- Shade products and shade collections keep the old Click Shades layout under the new header and footer. The old sections skip themselves on wiper products and wiper collections.
+- `footer-details` shows the brand, Shop and Help links, ABN, address, opening hours and payment icons. Phone and email appear only when configured.
+- `footer-links` sends Find my car to `/#find` and FAQs to `/#ezy-faq`. Cookie policy, legal disclaimer and configured Facebook/Instagram links are available.
+- `page-forward` redirects empty `/pages/find-my-car` and `/pages/faqs` to those anchors, with a fallback link. Pages with content do not redirect.
+- `shade-guard` retains the legacy shade layout under the new header/footer, with EZYFIT product styling. Wiper products skip legacy product sections. See [shade parity](shade-page-parity.md).
 
 ## How to get to it (user POV)
 
-Scroll to the bottom of any page. For shades: header "Shop Shades", then any product.
+Scroll to the footer on any page. Choose Find my car, FAQs, policy or social links. An old bookmark can open `/pages/find-my-car` or `/pages/faqs`. Choose Shop Shades for shade products.
 
 ## Driving it with Playwright (GitHub only)
 
-- Homepage footer text has no "Click Shades" and does contain "EZYFIT" (G12).
-- First product link on `/collections/car-window-shades` opens a page with `.product-page-v2`, no `.ezy-pdp`, and `.ezy-head` (G16).
+Preconditions: follow the [index drive](README.md#preconditions-and-drive). The legacy Find my car page must remain empty for G23. Policy pages and configured social links must exist for W6.
+
+- Inspect the homepage footer. G12 requires EZYFIT text and no Click Shades branding.
+- Inspect footer destinations with G22. It rejects `/pages/find-my-car` and `/pages/faqs`; it does not verify the correct anchors by clicking them.
+- Open `/pages/find-my-car`. G23 requires `/`, `#find` and `#find .ezy-finder` after forwarding.
+- Scroll to the phone product footer. W6 requires cookie/legal/social links and HTTP 200 for policy URLs.
+- Open the first shade product from its collection. G16 requires `.product-page-v2`, no `.ezy-pdp`, and the new header. G16b rejects broken object requests.
 
 ## Gotchas
 
-- The footer link "Car shades" is deliberately worded without the Click Shades name.
-- `sections/faq.liquid`, `reviews.liquid` and `video-carousel.liquid` use Windows line endings. Keep them when editing, or the diff explodes.
+- FAQ forwarding is implemented in `sections/main-page.liquid` but has no equivalent browser gate. Do not count G23 as proof for both routes.
+- G12 does not assert address, ABN, hours, payment icons or conditional contacts. W6 does not prove policy content or social destination correctness.
+- Legacy shade layout preservation allows intentional colour/font changes through `assets/ezy-shade.css`.
+- Some legacy sections use Windows line endings. Verification maintenance never edits them.
