@@ -9,6 +9,7 @@ One file per shopper-facing feature. Gate ids refer to the `scripts/gates*.mjs` 
 | Wiper product page | [wiper-product.md](wiper-product.md) | G1 to G6, G9 |
 | Wiper collection and search results | [collection-and-search.md](collection-and-search.md) | G13, G13b, G17 |
 | Footer and shade pages | [footer-and-shades.md](footer-and-shades.md) | G12, G16 |
+| Shade box contents, UV figure and discount copy | [shade-product-data.md](shade-product-data.md) | SC0 to SC4 in `gates-shade-content.mjs` |
 | ClickShades shade page parity with live | [shade-page-parity.md](shade-page-parity.md) | G16, G16b, `gates-shade.mjs` |
 | Design quality (impeccable detector) | [design-quality.md](design-quality.md) | not wired into GitHub yet |
 
