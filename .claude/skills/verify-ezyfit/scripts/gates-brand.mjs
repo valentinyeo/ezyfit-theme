@@ -93,11 +93,12 @@ try {
       gate('B5', 'wiper page keeps the Click Blades logo', l.head.includes(BLADES_LOGO), `header logo ${l.head}`);
     } else {
       const ok = l.head.includes(SHADES_LOGO) && l.foot.includes(SHADES_LOGO) && l.oldAsset === 0;
-      gate('B4a', `${label}: header and footer use the Click Shades logo`, ok, JSON.stringify(l).slice(0, 300));
+      const id = label === 'home' ? 'B4a' : 'B4b';
+      gate(id, `${label}: header and footer use the Click Shades logo`, ok, JSON.stringify(l).slice(0, 300));
     }
     if (label === 'home') {
       const ok = l.drawer.includes(SHADES_LOGO) && l.oldAsset === 0;
-      gate('B4b', 'phone menu uses the Click Shades logo', ok, `drawer logo ${l.drawer}`);
+      gate('B4c', 'phone menu uses the Click Shades logo', ok, `drawer logo ${l.drawer}`);
     }
     await ctx.close(); await sleep(1200);
   }
