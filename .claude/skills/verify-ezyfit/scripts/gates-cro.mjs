@@ -32,14 +32,14 @@ const seo = (p) => p.evaluate(() => {
 });
 
 try {
-  // 1. Titles and meta say 1300 EZYFIT, not Click Shades.
+  // 1. Titles and meta say Click Shades (MACL-34), not EZYFIT.
   for (const [id, url] of [['C1a', '/'], ['C1b', WIPER], ['C1c', '/collections/wiper-blades'], ['C1d', '/search?q=hilux&type=product'], ['C1e', '/cart']]) {
     const { p, ctx } = await open(url);
     const s = await seo(p);
     const all = Object.values(s).join(' | ');
-    const ok = /1300 EZYFIT/.test(s.title) && s.site === '1300 EZYFIT' && !/Click Shades|ClickShades/i.test(all);
-    gate(id, `title and meta are 1300 EZYFIT: ${url}`, ok, JSON.stringify({ title: s.title, site: s.site, ogt: s.ogt }));
-    if (url === '/') gate('C1f', 'home title is the wiper headline plus brand', s.title === 'Wiper blades made for your exact car | 1300 EZYFIT', s.title);
+    const ok = /Click Shades/.test(s.title) && s.site === 'Click Shades' && !/ezy\s?fit/i.test(all);
+    gate(id, `title and meta are Click Shades: ${url}`, ok, JSON.stringify({ title: s.title, site: s.site, ogt: s.ogt }));
+    if (url === '/') gate('C1f', 'home title is the wiper headline plus brand', s.title === 'Wiper blades made for your exact car | Click Shades', s.title);
     await ctx.close(); await sleep(1200);
   }
 
