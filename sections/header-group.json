@@ -11,7 +11,7 @@
         "m1": {
           "type": "message",
           "settings": {
-            "text": "25% off every wiper, already in the price.",
+            "text": "25% off all wiper blades. Discount already applied, no code needed.",
             "link_text": "Shop",
             "link": "shopify://collections/wiper-blades"
           }
@@ -19,7 +19,7 @@
         "m2": {
           "type": "message",
           "settings": {
-            "text": "Free shipping. Ships same day before 2pm AWST.",
+            "text": "Free standard shipping. Ships same day before 2pm AWST.",
             "link_text": "Shop wipers",
             "link": "shopify://collections/wiper-blades"
           }

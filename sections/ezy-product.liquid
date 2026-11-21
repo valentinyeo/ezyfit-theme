@@ -301,7 +301,7 @@
 {%- if section.blocks.size > 0 -%}
 <section class="ezy ezy-sec ezy-sec--rule" id="ezy-faq">
   <div class="ezy-wrap">
-    <h2 class="ezy-h2" style="margin-bottom: 20px !important">Questions drivers ask</h2>
+    <h2 class="ezy-h2" style="margin-bottom: 20px !important">Frequently Asked Questions</h2>
     <div class="ezy-faq">
       {%- for block in section.blocks -%}
         <details {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
@@ -551,7 +551,7 @@
     { "type": "collection", "id": "collection", "label": "Wiper collection (for the year list)" },
     { "type": "text", "id": "store_rating", "label": "Store rating text (used when product has no reviews)", "default": "4.8 from 49 store reviews" },
     { "type": "url", "id": "fit_video", "label": "Default fitment video (mp4 or YouTube)" },
-    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Made for your exact car\n2 minute fit, no tools\nWrong fit? We swap it free within 30 days\nOrder before 2pm AWST, ships the same day\nFree shipping\n12-month warranty included" },
+    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Perfect fit for your exact vehicle\nSnap-on in under 2 minutes\nWrong fit? Free swap within 30 days\nOrder before 2pm, ships the same day\nFree standard shipping\n12-month warranty included" },
     { "type": "textarea", "id": "features", "label": "What you get, numbered (one per line)", "default": "Front blade pair for your car\nPremium rubber, streak-free in all conditions\nVehicle-specific connector, fitted\n12-month warranty" },
     { "type": "text", "id": "pickup_title", "label": "Pickup title", "default": "Pickup available at 21 Discovery Drive" },
     { "type": "text", "id": "pickup_note", "label": "Pickup note", "default": "Usually ready in 24 hours" },

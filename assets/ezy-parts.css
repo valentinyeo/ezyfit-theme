@@ -3,7 +3,7 @@
 .ezy-parts__tile { display: flex; flex-direction: column; height: 100%; background: #fff; border: 3px solid var(--ezy-blue); border-radius: 20px; overflow: hidden; text-decoration: none; color: var(--ezy-dark); }
 .ezy-parts__img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--ezy-tint); }
 .ezy-parts__body { display: flex; flex-direction: column; flex: 1; gap: 6px; padding: 16px 16px 20px; }
-.ezy-parts__title { font-size: 24px; font-weight: 800; font-style: italic; letter-spacing: -0.02em; line-height: 1.15; }
+.ezy-parts__title { font-size: 24px; font-weight: 700; font-style: normal; letter-spacing: normal; line-height: 1.15; }
 .ezy-parts__text { font-size: 15px; line-height: 1.5; color: var(--ezy-grey); }
 .ezy-parts__price { font-size: 15px; font-weight: 700; color: var(--ezy-blue); }
 .ezy-parts__go { align-self: flex-start; margin-top: auto; padding: 12px 20px; min-height: 48px; display: inline-flex; align-items: center; border-radius: 12px; background: var(--ezy-blue); color: #fff; font-size: 16px; font-weight: 700; }

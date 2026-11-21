@@ -6,8 +6,7 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */
-{
+ */{
   "sections": {
     "main": {
       "type": "main-product-v2",
@@ -189,21 +188,21 @@
           "type": "question",
           "settings": {
             "q": "How do I fit them?",
-            "a": "Lift the arm, press the tab and slide the old blade off, then click the new one on. About 2 minutes, no tools. The video above shows each step."
+            "a": "Installation takes under 2 minutes - no tools required. Lift the arm, press the tab and slide the old blade off, then click the new one on. The video above shows each step."
           }
         },
         "q3": {
           "type": "question",
           "settings": {
             "q": "How fast is shipping?",
-            "a": "Order before 2pm AWST and it ships the same day. Shipping is free."
+            "a": "Free standard shipping on all orders. Express shipping is available at checkout for an extra $10. Orders placed before 2pm ship the same day, Monday to Friday. Orders placed after 2pm or on weekends ship the following business day."
           }
         },
         "q4": {
           "type": "question",
           "settings": {
             "q": "What if they don't fit?",
-            "a": "Tell us within 30 days and we send the right ones free."
+            "a": "We offer a 30-day return policy. If they don't fit, tell us within 30 days and we send the right ones free. If the return is due to our error, defective, damaged or the wrong item, there are no costs to the customer."
           }
         }
       },
