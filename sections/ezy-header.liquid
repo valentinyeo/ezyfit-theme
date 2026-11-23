@@ -56,16 +56,16 @@
   </form>
 </header>
 
-<div class="ezy ezy-drawer" id="ezy-drawer" data-ezy-drawer hidden>
+<dialog class="ezy ezy-drawer" id="ezy-drawer" data-ezy-drawer aria-label="Menu" hidden>
   <div class="ezy-drawer__overlay" data-ezy-close></div>
-  <div class="ezy-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="ezy-drawer__panel">
     <div class="ezy-drawer__top">
       {%- if is_blades -%}
         <img src="{{ 'clickblades-logo.png' | asset_url }}" alt="{{ logo_brand }}" width="110" height="34">
       {%- else -%}
         <img src="{{ shades_logo }}" alt="{{ logo_brand }}" width="102" height="34">
       {%- endif -%}
-      <button class="ezy-drawer__close" type="button" aria-label="Close menu" data-ezy-close>&times;</button>
+      <button class="ezy-drawer__close" type="button" aria-label="Close menu" data-ezy-close autofocus>&times;</button>
     </div>
     <form class="ezy-drawer__search" action="{{ routes.search_url }}" method="get" role="search">
       <input type="search" name="q" placeholder="{{ section.settings.search_placeholder }}" aria-label="Search" autocomplete="off">
@@ -79,7 +79,7 @@
       <a href="{{ routes.account_url }}">Account</a>
     </nav>
   </div>
-</div>
+</dialog>
 
 <script>
   (function () {
@@ -90,15 +90,16 @@
     // Phone menu.
     var drawer = document.querySelector('[data-ezy-drawer]');
     var menuBtn = head.querySelector('[data-ezy-menu]');
-    function setMenu(open) {
-      drawer.hidden = !open;
-      menuBtn.setAttribute('aria-expanded', String(open));
-      document.documentElement.style.overflow = open ? 'hidden' : '';
-      if (open) drawer.querySelector('.ezy-drawer__close').focus(); else menuBtn.focus();
-    }
-    menuBtn.addEventListener('click', function () { setMenu(true); });
-    drawer.querySelectorAll('[data-ezy-close]').forEach(function (el) { el.addEventListener('click', function () { setMenu(false); }); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !drawer.hidden) setMenu(false); });
+    menuBtn.addEventListener('click', function () {
+      drawer.hidden = false;
+      drawer.showModal();
+      menuBtn.setAttribute('aria-expanded', 'true');
+    });
+    drawer.querySelectorAll('[data-ezy-close]').forEach(function (el) { el.addEventListener('click', function () { drawer.close(); }); });
+    drawer.addEventListener('close', function () {
+      drawer.hidden = true;
+      menuBtn.setAttribute('aria-expanded', 'false');
+    });
 
     // Search bar under the header.
     var searchBtn = head.querySelector('[data-ezy-search]');

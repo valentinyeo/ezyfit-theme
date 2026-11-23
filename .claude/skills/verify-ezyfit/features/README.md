@@ -5,6 +5,7 @@ One file per shopper-facing feature. Gate ids refer to the `scripts/gates*.mjs` 
 | Feature | File | Gates |
 |---|---|---|
 | Homepage finder (Make, Model, Year) | in [collection-and-search.md](collection-and-search.md) | G18 |
+| Keyboard finder, return links and modal menu | [keyboard-and-finder.md](keyboard-and-finder.md) | K0 to K8 in `gates-keyboard.mjs` |
 | Header, phone menu, search, cart count | [header-and-cart.md](header-and-cart.md) | G0, G7, G8, G9, G10, G11 |
 | Wiper product page | [wiper-product.md](wiper-product.md) | G1 to G6, G9 |
 | Wiper collection and search results | [collection-and-search.md](collection-and-search.md) | G13, G13b, G17 |

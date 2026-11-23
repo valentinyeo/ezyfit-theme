@@ -143,8 +143,10 @@
             li.addEventListener('click', function () { self.choose(o); });
             li.addEventListener('keydown', function (e) {
               if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); self.choose(o); }
-              if (e.key === 'ArrowDown' && li.nextElementSibling) { e.preventDefault(); li.nextElementSibling.focus(); }
-              if (e.key === 'ArrowUp') { e.preventDefault(); (li.previousElementSibling || search).focus(); }
+              var visible = Array.from(list.children).filter(function (option) { return !option.hidden; });
+              var index = visible.indexOf(li);
+              if (e.key === 'ArrowDown') { e.preventDefault(); (visible[index + 1] || li).focus(); }
+              if (e.key === 'ArrowUp') { e.preventDefault(); (visible[index - 1] || (search.hidden ? btn : search)).focus(); }
             });
             list.appendChild(li);
           });
@@ -158,7 +160,8 @@
         },
         open: function () {
           closeAll(self); menu.hidden = false; el.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true');
-          search.value = ''; self.filter(''); search.focus();
+          search.value = ''; self.filter('');
+          (search.hidden ? (list.firstElementChild || btn) : search).focus();
         },
         close: function () { menu.hidden = true; el.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); },
         filter: function (t) {
@@ -169,6 +172,14 @@
       // Few options need no search box.
       self.searchable = function (on) { search.hidden = !on; };
       btn.addEventListener('click', function () { menu.hidden ? self.open() : self.close(); });
+      btn.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        e.preventDefault();
+        if (menu.hidden) self.open();
+        var visible = Array.from(list.children).filter(function (li) { return !li.hidden; });
+        var option = e.key === 'ArrowUp' ? visible[visible.length - 1] : visible[0];
+        if (option) option.focus();
+      });
       search.addEventListener('input', function () { self.filter(search.value); });
       search.addEventListener('keydown', function (e) {
         var first = Array.from(list.children).find(function (li) { return !li.hidden; });

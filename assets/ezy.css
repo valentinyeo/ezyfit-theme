@@ -71,8 +71,10 @@
 .ezy .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Phone menu drawer */
-.ezy-drawer { position: fixed; inset: 0; z-index: 1000; }
+.ezy-drawer { position: fixed; inset: 0; z-index: 1000; margin: 0; padding: 0; border: 0; width: 100%; height: 100%; max-width: none; max-height: none; background: transparent; }
 .ezy-drawer[hidden] { display: none; }
+.ezy-drawer:modal { overscroll-behavior: contain; }
+.ezy-drawer::backdrop { background: transparent; overflow: hidden; overscroll-behavior: contain; }
 .ezy-drawer__overlay { position: absolute; inset: 0; background: rgba(26, 26, 26, .5); }
 .ezy-drawer__panel { position: absolute; top: 0; left: 0; bottom: 0; width: min(86vw, 360px); background: #fff; padding: 16px; overflow-y: auto; }
 .ezy-drawer__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
