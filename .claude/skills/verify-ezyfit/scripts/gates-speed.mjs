@@ -32,7 +32,7 @@ try {
       await page.screenshot({ path: path.join(OUT, `photos-${surface}-${width}.png`) });
       if (route === WIPER) {
         const compare = await page.locator('#ezy-pdp-compare').innerText();
-        gate(`S3-${width}`, 'wiper benefits make no competitor comparisons or timed fitting promises', /EZYFIT/.test(compare) && !/cheap|dealer|universal|2 minutes/i.test(compare), compare.replace(/\s+/g, ' '));
+        gate(`S3-${width}`, 'wiper benefits make no competitor comparisons or timed fitting promises', /Click Shades/.test(compare) && !/cheap|dealer|universal|2 minutes/i.test(compare), compare.replace(/\s+/g, ' '));
       }
     }
     await context.close();

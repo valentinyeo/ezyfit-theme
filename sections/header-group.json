@@ -27,7 +27,7 @@
         "m3": {
           "type": "message",
           "settings": {
-            "text": "Wrong fit? Free swap within 30 days.",
+            "text": "Wrong fit? 30-day returns, you cover return shipping.",
             "link_text": "How it works",
             "link": "/#ezy-faq"
           }

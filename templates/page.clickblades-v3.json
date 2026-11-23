@@ -254,9 +254,9 @@
       "type": "cb-guarantee",
       "settings": {
         "title": "Perfect Fit Guarantee",
-        "description": "Order risk-free. If your Click Blades don't fit your vehicle perfectly, we'll send you the right ones or give you a full refund — no questions asked. We're that confident in our fitment data.",
+        "description": "Order risk-free. If your Click Blades don't fit your vehicle perfectly, return them within 30 days for a refund. If the error is ours, return shipping is free; for a wrong fit you pay the actual cost of return shipping.",
         "point_1": "30-day money-back guarantee",
-        "point_2": "Free replacement if wrong fit",
+        "point_2": "Returns within 30 days if wrong fit",
         "point_3": "12-month warranty included",
         "cta_text": "Find Your Blades",
         "cta_link": "#cb-vehicle-picker"
