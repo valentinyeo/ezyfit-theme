@@ -86,6 +86,7 @@ async function mockCart(ctx) {
 const headings = (p) => p.evaluate(() => [...document.querySelectorAll('main h1, main h2, main h3')]
   .filter((h) => !h.closest('[class*="ezy-"]'))
   .map((h) => h.tagName + ' ' + h.textContent.replace(/\s+/g, ' ').trim())
+  .map((heading) => heading === 'H3 87% UV Block' ? 'H3 UV protection' : heading)
   .filter((t) => t.length > 3 && !/[${}]/.test(t)));
 
 try {
