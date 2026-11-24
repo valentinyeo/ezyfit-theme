@@ -1,6 +1,6 @@
 Live parity: live theme 149894070428 vs draft theme 158148984988
 Live origin https://clickshades.com.au, draft via https://easy-fit-store1.myshopify.com?preview_theme_id=158148984988
-Run at 2026-11-24 01:16:10 UTC
+Run at 2026-11-24 01:20:24 UTC
 
 ID   AREA           STATUS                                  RESULT PAGE
 -----------------------------------------------------------------------------------------------------------------
