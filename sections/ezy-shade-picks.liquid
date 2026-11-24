@@ -1,0 +1,105 @@
+{%- comment -%}
+  MACL-37 P02: the shade products row from the live Click Shades homepage.
+  Same job as live's product-cards section (image, price and add to cart), painted in the
+  new theme's Click Shades look. Live reads the top-picks collection, so this does too.
+  A single-variant product adds straight to the cart; a product with choices sends the
+  shopper to the product page instead of guessing a variant.
+
+  MACL-37: this is a separate file because live's product-cards section also renders the
+  blade carousel on /pages/click-blades (templates/page.clickblades*.json). Rebuilding
+  product-cards in place took that page's eight blade cards away. Sections named in a
+  template's "type" have to keep their own job.
+{%- endcomment -%}
+{%- liquid
+  assign picks_handle = section.settings.collection | default: 'top-picks'
+  assign picks = collections[picks_handle].products
+  assign picks_limit = section.settings.limit | default: 4
+-%}
+<section class="ezy ezy-sec ezy-picks" id="ezy-shade-picks">
+  <div class="ezy-wrap">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="ezy-h2">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.sub != blank -%}
+      <p class="ezy-sub">{{ section.settings.sub }}</p>
+    {%- endif -%}
+    <ul class="ezy-picks__grid">
+      {%- for p in picks limit: picks_limit -%}
+        {%- assign car = p.title | split: ' for ' | last | split: ' ->' | first -%}
+        {%- assign pick_variant = p.selected_or_first_available_variant -%}
+        <li class="ezy-card ezy-pick">
+          <a class="ezy-pick__link" href="{{ p.url }}">
+            <span class="ezy-pick__img">
+              {%- if p.featured_image -%}
+                {{ p.featured_image | image_url: width: 500 | image_tag: loading: 'lazy', sizes: '(min-width: 1024px) 270px, (min-width: 768px) 25vw, 50vw', widths: '250, 360, 500', alt: car }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag }}
+              {%- endif -%}
+            </span>
+            <span class="ezy-pick__name">{{ car }}</span>
+          </a>
+          <p class="ezy-pick__price">
+            <strong>{{ p.price | money }}</strong>{%- if p.compare_at_price > p.price %} <s>{{ p.compare_at_price | money }}</s>{%- endif -%}
+          </p>
+          {%- if p.available == false -%}
+            <p class="ezy-pick__out">Sold out</p>
+          {%- elsif p.variants.size == 1 -%}
+            <button class="ezy-btn ezy-pick__add" type="button" data-pick-add="{{ pick_variant.id }}">Add to cart</button>
+          {%- else -%}
+            <a class="ezy-btn ezy-btn--ghost ezy-pick__add" href="{{ p.url }}">Choose options</a>
+          {%- endif -%}
+        </li>
+      {%- else -%}
+        <li class="ezy-pick__empty">No products in this collection yet.</li>
+      {%- endfor -%}
+    </ul>
+    <p class="ezy-pick__msg" role="status" aria-live="polite" data-pick-msg></p>
+    {%- if section.settings.link != blank -%}
+      <a class="ezy-picks__all" href="{{ section.settings.link }}">{{ section.settings.link_label | default: 'See all car shades' }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('ezy-shade-picks');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    var msg = root.querySelector('[data-pick-msg]');
+    root.querySelectorAll('[data-pick-add]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btn.disabled = true;
+        msg.textContent = 'Adding...';
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ items: [{ id: Number(btn.dataset.pickAdd), quantity: 1 }] })
+        })
+          .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
+          .then(function () {
+            document.dispatchEvent(new CustomEvent('cart:updated'));
+            msg.innerHTML = 'Added. <a href="{{ routes.cart_url }}">View cart and check out</a>';
+          })
+          .catch(function () { msg.textContent = 'Could not add to cart. Please try again.'; })
+          .then(function () { btn.disabled = false; });
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shade picks row",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection (empty uses top-picks)" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Car shades for the cars we fit most" },
+    { "type": "textarea", "id": "sub", "label": "Subtext", "default": "Click-into-place shades, cut to your exact vehicle. Same day dispatch before 2pm AWST." },
+    { "type": "range", "id": "limit", "label": "Products shown", "min": 1, "max": 8, "step": 1, "default": 4 },
+    { "type": "url", "id": "link", "label": "Link under the row" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "See all car shades" }
+  ],
+  "presets": [
+    { "name": "Shade picks row" }
+  ]
+}
+{% endschema %}

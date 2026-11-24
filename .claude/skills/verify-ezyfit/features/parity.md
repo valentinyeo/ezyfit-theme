@@ -38,17 +38,18 @@ A full run took about six minutes at two requests in flight. Shopify answers 429
 decides it is being crawled; the script backs off and retries, so a 429 never shows up as
 a theme failure.
 
-The last full run is saved in `features/parity-evidence-2026-11-24b.txt`:
+The last full run is saved in `features/parity-evidence-2026-11-24c.txt`:
 97 rows, 97 PASS, 38 URLs, 38 PASS. Map counts: KEPT 64, REPLACED-BY 20, MISSING 11,
 NOT-NEEDED 2. The run before the MACL-37 fixes is in
-`features/parity-evidence-2026-11-24.txt` (MISSING 20).
+`features/parity-evidence-2026-11-24.txt` (MISSING 20); the run before the blade carousel
+fix is in `features/parity-evidence-2026-11-24b.txt`.
 
 ## Table
 
 | ID | Area | Live item | Where on live | Status | Evidence in this check |
 |---|---|---|---|---|---|
 | P01 | Homepage | Make, Model, Year finder | `/` `car-selector` | REPLACED-BY ezy-hero finder | live has `car-selector`; draft has `data-ezy-finder`. draft finder reads the wiper-blades collection for Wipers and the live brand collections for Sun shades, see P96 |
-| P02 | Homepage | Featured shade product cards (4 products with price and add to cart) | `/` `product-cards` | KEPT | live has `product-cards`; draft has `product-cards` + `ezy-shade-picks`. same top-picks collection as live, four cards with image, price and add to cart, rebuilt as ezy-pick cards in the new look; a sold-out card says Sold out and still links to the product |
+| P02 | Homepage | Featured shade product cards (4 products with price and add to cart) | `/` `product-cards` | KEPT | live has `product-cards`; draft has `ezy-shade-picks` + `ezy-pick__add`. same top-picks collection as live, four cards with image, price and add to cart, rebuilt in the new look as its own section; a sold-out card says Sold out and still links to the product |
 | P03 | Homepage | Customer video carousel (5 videos, lightbox) | `/` `video-carousel` | REPLACED-BY ezy-hero single fit video | live has `video-carousel`; draft must not have `video-carousel`. one hero video ("Watch a real fit"), no carousel |
 | P04 | Homepage | Shop by Popular Cars grid (7 cars plus View All) | `/` `popular-models-grid` | REPLACED-BY ezy-popular-cars | live has `popular-models-grid`; draft has `ezy-cars`. 4 cars, no View All link to /pages/shop-by-make |
 | P05 | Homepage | Five 'Why Click Shades' shade benefit cards | `/` `Triple Laminate Technology` | MISSING | live has `Triple Laminate Technology`; draft must not have `Triple Laminate Technology`. shade benefits live on shade product pages, not on the homepage any more |
@@ -74,7 +75,7 @@ NOT-NEEDED 2. The run before the MACL-37 fixes is in
 | P25 | Footer | Find my car link opens /pages/find-my-car | `/` `href="/pages/find-my-car"` | REPLACED-BY /#find | live has `href="/pages/find-my-car"`; draft must not have `href="/pages/find-my-car"`. the page still answers (P33); the link now jumps to the homepage finder |
 | P26 | Footer | Business name, ABN, address, hours | `/` `24 127 742 441` | KEPT | live has `24 127 742 441`; draft has `24 127 742 441` |
 | P27 | Footer | Social links (Facebook, Instagram) | `/` `instagram.com/clickshades` | KEPT | live has `instagram.com/clickshades`; draft has `instagram.com/clickshades`. the "Follow Us" heading and blurb are gone, the icons stay |
-| P28 | Page | /pages/click-blades (Click Blades ad landing) | `/pages/click-blades` `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel` | KEPT | live has `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel`; draft has `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel`. same template and same 14 sections; only header and footer changed |
+| P28 | Page | /pages/click-blades (Click Blades ad landing) | `/pages/click-blades` `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel` | KEPT | live has `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel`; draft has `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel` + `product-carousel-card`. same template and same 14 sections, and the blade carousel is still the eight live blade cards from live's own `product-cards` section; only header and footer changed |
 | P29 | Page | /pages/contact (contact form) | `/pages/contact` `contact-form` | KEPT | live has `contact-form`; draft has `contact-form` |
 | P30 | Page | /pages/about-us | `/pages/about-us` `title:About Us` | KEPT | live has `title:About Us`; draft has `title:About Us` |
 | P31 | Page | /pages/become-a-stockist | `/pages/become-a-stockist` `title:Become a Stockist` + `contact-form` | KEPT | live has `title:Become a Stockist` + `contact-form`; draft has `title:Become a Stockist` + `contact-form` |
@@ -174,7 +175,12 @@ same `top-picks` collection live uses, right after the blade type cards. P96 cam
 Wipers / Sun shades choice in the homepage finder, Wipers by default so the blade flow did
 not change, Sun shades reading the same 20 brand collections live's car-selector reads.
 
-Eight cheap items closed with them: P08, P13, P14, P19, P22, P23 and P66.
+Seven cheap items closed with them: P08, P13, P14, P19, P22, P23 and P66.
+
+One regression this check caught and fixed: live's `product-cards` section also renders the
+eight blade cards on `/pages/click-blades`. Rebuilding it in place for the homepage shade
+row took those cards off that page, so the shade row now lives in its own section and
+`product-cards.liquid` is the live carousel again. P28 asserts the carousel markers.
 
 One limit on P96 worth knowing: a brand whose collection carries no shade products yet
 (BMW, Mercedes-Benz, Volkswagen, Lexus, Chevrolet, Geely, Infiniti, Chery at the last run)

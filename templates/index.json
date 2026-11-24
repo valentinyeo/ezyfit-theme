@@ -180,7 +180,7 @@
       "settings": {}
     },
     "picks": {
-      "type": "product-cards",
+      "type": "ezy-shade-picks",
       "settings": {
         "collection": "top-picks",
         "heading": "Car shades for the cars we fit most",

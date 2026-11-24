@@ -1,0 +1,149 @@
+Live parity: live theme 149894070428 vs draft theme 158148984988
+Live origin https://clickshades.com.au, draft via https://easy-fit-store1.myshopify.com?preview_theme_id=158148984988
+Run at 2026-11-24 01:33:08 UTC
+
+ID   AREA           STATUS                                  RESULT PAGE
+-----------------------------------------------------------------------------------------------------------------
+P01  Homepage       REPLACED-BY ezy-hero finder             PASS   /
+P02  Homepage       KEPT                                    PASS   /
+P03  Homepage       REPLACED-BY ezy-hero single fit video   PASS   /
+P04  Homepage       REPLACED-BY ezy-popular-cars            PASS   /
+P05  Homepage       MISSING                                 PASS   /
+P06  Homepage       REPLACED-BY ezy-reviews (#looxReviews)  PASS   /
+P07  Homepage       REPLACED-BY ezy-comparison              PASS   /
+P08  Homepage       REPLACED-BY ezy-trust row               PASS   /
+P09  Homepage       REPLACED-BY ezy-faq                     PASS   /
+P10  Homepage       NOT-NEEDED                              PASS   /
+P11  Every page     REPLACED-BY ezy-announcement            PASS   /
+P12  Homepage       REPLACED-BY ezy-seo wiper copy          PASS   /
+P13  Header         KEPT                                    PASS   /
+P14  Header         KEPT                                    PASS   /
+P15  Header         KEPT                                    PASS   /
+P16  Header         KEPT                                    PASS   /
+P17  Header         KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P18  Footer         REPLACED-BY ezy-lead-capture on the homepagePASS   /
+P19  Footer         KEPT                                    PASS   /
+P20  Footer         KEPT                                    PASS   /
+P21  Footer         KEPT                                    PASS   /
+P22  Footer         KEPT                                    PASS   /
+P23  Footer         KEPT                                    PASS   /
+P24  Footer         REPLACED-BY /#ezy-faq                   PASS   /
+P25  Footer         REPLACED-BY /#find                      PASS   /
+P26  Footer         KEPT                                    PASS   /
+P27  Footer         KEPT                                    PASS   /
+P28  Page           KEPT                                    PASS   /pages/click-blades
+P29  Page           KEPT                                    PASS   /pages/contact
+P30  Page           KEPT                                    PASS   /pages/about-us
+P31  Page           KEPT                                    PASS   /pages/become-a-stockist
+P32  Page           KEPT                                    PASS   /pages/request-your-car
+P33  Page           KEPT                                    PASS   /pages/find-my-car
+P34  Page           KEPT                                    PASS   /pages/faqs
+P35  Page           KEPT                                    PASS   /pages/happy-customers
+P36  Page           KEPT                                    PASS   /pages/shop-by-make
+P37  Page           KEPT                                    PASS   /pages/return-policy
+P38  Page           KEPT                                    PASS   /pages/order-cancellation-policy
+P39  Page           KEPT                                    PASS   /pages/payment-policy
+P40  Page           KEPT                                    PASS   /pages/legal-disclaimer
+P41  Page           KEPT                                    PASS   /pages/accessibility-statement
+P42  Page           KEPT                                    PASS   /pages/cookie-policy
+P43  Policy         KEPT                                    PASS   /policies/privacy-policy
+P44  Policy         KEPT                                    PASS   /policies/refund-policy
+P45  Policy         KEPT                                    PASS   /policies/shipping-policy
+P46  Policy         KEPT                                    PASS   /policies/terms-of-service
+P47  Page           KEPT                                    PASS   /this-page-does-not-exist-xyz
+P48  Page           KEPT                                    PASS   /blogs/news
+P49  Collection     KEPT                                    PASS   /collections/all
+P50  Collection     KEPT                                    PASS   /collections/car-window-shades
+P51  Collection     KEPT                                    PASS   /collections/windscreen-sun-shade
+P52  Collection     MISSING                                 PASS   /collections/wiper-blades
+P53  Collection     MISSING                                 PASS   /collections/sun-shade-for-car-wiper-bladess-for-toyota
+P54  Search         MISSING                                 PASS   /search?q=Toyota
+P55  Search         KEPT                                    PASS   /search?q=Toyota
+P56  Shade product  KEPT                                    PASS   /products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025
+P57  Shade product  KEPT                                    PASS   /products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025
+P58  Shade product  KEPT                                    PASS   /products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025
+P59  Shade product  KEPT                                    PASS   /products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025
+P60  Shade product  KEPT                                    PASS   /products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025
+P61  Shade product  KEPT                                    PASS   /products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025
+P62  Wiper product  KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P63  Wiper product  KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P64  Wiper product  KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P65  Wiper product  KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P66  Wiper product  KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P67  Wiper product  MISSING                                 PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P68  Wiper product  MISSING                                 PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P69  Wiper product  MISSING                                 PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P70  Wiper product  MISSING                                 PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P71  Wiper product  MISSING                                 PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P72  Wiper product  REPLACED-BY ezy-faq                     PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P73  Wiper product  MISSING                                 PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P74  Wiper product  REPLACED-BY ezy-product "What you get"  PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P75  Cart           KEPT                                    PASS   /cart
+P76  Cart           MISSING                                 PASS   /cart
+P77  Cart           REPLACED-BY ezy-cart-note               PASS   /cart
+P78  SEO            KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P79  SEO            KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P80  SEO            KEPT                                    PASS   /
+P81  SEO            KEPT                                    PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P82  Tracking       KEPT                                    PASS   /
+P83  Tracking       KEPT                                    PASS   /
+P84  Tracking       KEPT                                    PASS   /
+P85  Tracking       KEPT                                    PASS   /
+P86  App embed      KEPT                                    PASS   /
+P87  App embed      KEPT                                    PASS   /
+P88  URL            KEPT                                    PASS   /robots.txt
+P89  URL            KEPT                                    PASS   /sitemap.xml
+P90  Template       NOT-NEEDED                              PASS   /pages/click-blades
+P91  Collection     KEPT                                    PASS   /collections
+P93  Wiper product  REPLACED-BY ezy-product sticky bar      PASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P94  Wiper product  REPLACED-BY ezy-qty minus and plus stepperPASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P95  Wiper product  REPLACED-BY ezy-pdp__pickup details blockPASS   /products/front-windscreen-wipers-for-toyota-rav4-2018
+P96  Homepage       REPLACED-BY ezy-hero finder with a Wipers / Sun shades choicePASS   /
+P97  Collection     KEPT                                    PASS   /collections/wiper-blades
+P98  Shade product  REPLACED-BY "UV protection" with no numberPASS   /products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025
+
+URL health: live and draft must answer the same status
+STATUS  LIVE  DRAFT  PATH
+---------------------------------------------------------------------------------
+PASS      200   200  /
+PASS      200   200  /collections/all
+PASS      200   200  /collections/car-window-shades
+PASS      200   200  /collections/windscreen-sun-shade
+PASS      200   200  /collections/wiper-blades
+PASS      200   200  /collections/find-your-car
+PASS      200   200  /collections/top-picks
+PASS      200   200  /collections/sun-shade-for-car-wiper-bladess-for-toyota
+PASS      200   200  /products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025
+PASS      200   200  /products/rear-side-windows-click-shades-for-mazda-cx-5-2017-2025
+PASS      200   200  /products/front-windscreen-wipers-for-toyota-rav4-2018
+PASS      200   200  /products/front-windscreen-wipers-for-ford-ranger-2021
+PASS      200   200  /pages/click-blades
+PASS      200   200  /search?q=Toyota
+PASS      200   200  /search?q=Hilux
+PASS      200   200  /cart
+PASS      200   200  /pages/contact
+PASS      200   200  /pages/about-us
+PASS      200   200  /pages/become-a-stockist
+PASS      200   200  /pages/request-your-car
+PASS      200   200  /pages/return-policy
+PASS      200   200  /pages/happy-customers
+PASS      200   200  /pages/find-my-car
+PASS      200   200  /pages/order-cancellation-policy
+PASS      200   200  /pages/payment-policy
+PASS      200   200  /pages/legal-disclaimer
+PASS      200   200  /pages/accessibility-statement
+PASS      200   200  /pages/cookie-policy
+PASS      200   200  /pages/faqs
+PASS      200   200  /pages/shop-by-make
+PASS      200   200  /policies/privacy-policy
+PASS      200   200  /policies/refund-policy
+PASS      200   200  /policies/shipping-policy
+PASS      200   200  /policies/terms-of-service
+PASS      200   200  /blogs/news
+PASS      200   200  /blogs/news/how-do-you-install-car-window-shades
+PASS      200   200  /robots.txt
+PASS      200   200  /sitemap.xml
+
+Rows: 97 PASS, 0 FAIL | URLs: 38 PASS, 0 FAIL
+Map counts: KEPT 64, REPLACED-BY 20, MISSING 11, NOT-NEEDED 2
+FAIL on a MISSING row means the gap closed: update features/parity.md and this file. FAIL on a KEPT row means the draft lost it.
