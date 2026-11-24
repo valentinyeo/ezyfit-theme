@@ -179,6 +179,17 @@
       ],
       "settings": {}
     },
+    "picks": {
+      "type": "product-cards",
+      "settings": {
+        "collection": "top-picks",
+        "heading": "Car shades for the cars we fit most",
+        "sub": "Click-into-place shades, cut to your exact vehicle. Same day dispatch before 2pm AWST.",
+        "limit": 4,
+        "link": "shopify://collections/car-window-shades",
+        "link_label": "See all car shades"
+      }
+    },
     "shades": {
       "type": "ezy-car-shades",
       "settings": {
@@ -296,6 +307,52 @@
       "type": "ezy-guarantee",
       "settings": {}
     },
+    "trust": {
+      "type": "ezy-trust",
+      "settings": {
+        "label": "Why shoppers trust Click Shades"
+      },
+      "blocks": {
+        "b1": {
+          "type": "badge",
+          "settings": {
+            "title": "Perfect Fit",
+            "desc": "Custom designed for your exact vehicle",
+            "icon": "fit"
+          }
+        },
+        "b2": {
+          "type": "badge",
+          "settings": {
+            "title": "87% UV Block",
+            "desc": "Advanced mesh technology",
+            "icon": "sun"
+          }
+        },
+        "b3": {
+          "type": "badge",
+          "settings": {
+            "title": "Easy Install",
+            "desc": "Snap-on in under 2 minutes",
+            "icon": "tool"
+          }
+        },
+        "b4": {
+          "type": "badge",
+          "settings": {
+            "title": "30-Day Returns",
+            "desc": "Hassle-free returns",
+            "icon": "return"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
     "faq": {
       "type": "ezy-faq",
       "blocks": {
@@ -354,12 +411,14 @@
     "popular",
     "lead",
     "types",
+    "picks",
     "shades",
     "reviews",
     "photos",
     "compare",
     "fit",
     "guarantee",
+    "trust",
     "faq",
     "final"
   ]

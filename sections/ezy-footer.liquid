@@ -22,6 +22,7 @@
       <nav class="ezy-foot__col" aria-label="Shop">
         <h2 class="ezy-foot__h">Shop</h2>
         <a href="/collections/wiper-blades">Wiper Blades</a>
+        <a href="/collections/windscreen-sun-shade">Windscreen Sun Shade</a>
         <a href="/#find">Find my car</a>
         <a href="/pages/request-your-car">Request Your Car</a>
         <a href="/collections/car-window-shades">Car Window Shades</a>
@@ -53,6 +54,11 @@
     <div class="ezy-foot__pay" aria-label="Payment options">
       {%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag: class: 'ezy-foot__payicon' }}{%- endfor -%}
     </div>
+    {%- comment -%} MACL-37 P22: the live footer Afterpay block, same wording. {%- endcomment -%}
+    <p class="ezy-foot__afterpay">
+      <span>Buy now, pay later with</span> <b>Afterpay</b> <span>- 4 interest-free payments</span>
+      <a href="https://www.afterpay.com/en-AU/how-it-works" target="_blank" rel="noopener">Learn more</a>
+    </p>
     <p class="ezy-foot__copy">&copy; {{ 'now' | date: '%Y' }} {{ brand }}. All rights reserved.</p>
   </div>
 </footer>
@@ -63,8 +69,8 @@
   "settings": [
     { "type": "text", "id": "brand_name", "label": "Brand name", "default": "Click Shades" },
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "Wiper blades made for your exact car. Fits in 2 minutes." },
-    { "type": "text", "id": "phone", "label": "Phone (hidden when empty)" },
-    { "type": "text", "id": "email", "label": "Email (hidden when empty)" },
+    { "type": "text", "id": "phone", "label": "Phone (hidden when empty)", "default": "1300 399 348" },
+    { "type": "text", "id": "email", "label": "Email (hidden when empty)", "default": "sales@clickshades.com.au" },
     { "type": "text", "id": "facebook_url", "label": "Facebook page (hidden when empty)", "default": "https://www.facebook.com/profile.php?id=61580829655005" },
     { "type": "text", "id": "instagram_url", "label": "Instagram profile (hidden when empty)", "default": "https://www.instagram.com/clickshades" },
     { "type": "text", "id": "abn", "label": "ABN", "default": "24 127 742 441" },

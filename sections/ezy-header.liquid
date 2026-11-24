@@ -14,6 +14,12 @@
   else
     assign logo_brand = brand
   endif
+  comment
+    MACL-37 P13 and P14. The store's main-menu linklist sends "Shop by Make" to /collections
+    and "Shop Blades" to the wiper collection. Live sends both to their landing pages, so
+    those two titles are remapped here. The linklist itself is store data and is left alone.
+  endcomment
+  assign nav_pages = 'Shop by Make:/pages/shop-by-make|Shop Blades:/pages/click-blades' | split: '|'
 -%}
 <header class="ezy ezy-head" data-ezy-head>
   <div class="ezy-wrap ezy-head__in">
@@ -29,7 +35,12 @@
     </a>
     <nav class="ezy-head__nav" aria-label="Main">
       {%- for link in linklists[section.settings.menu].links -%}
-        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+        {%- assign nav_url = link.url -%}
+        {%- for pair in nav_pages -%}
+          {%- assign bits = pair | split: ':' -%}
+          {%- if bits[0] == link.title -%}{%- assign nav_url = bits[1] -%}{%- endif -%}
+        {%- endfor -%}
+        <a href="{{ nav_url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
       {%- endfor -%}
     </nav>
     <div class="ezy-head__tools">
@@ -72,7 +83,12 @@
     </form>
     <nav class="ezy-drawer__nav" aria-label="Menu">
       {%- for link in linklists[section.settings.menu].links -%}
-        <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- assign nav_url = link.url -%}
+        {%- for pair in nav_pages -%}
+          {%- assign bits = pair | split: ':' -%}
+          {%- if bits[0] == link.title -%}{%- assign nav_url = bits[1] -%}{%- endif -%}
+        {%- endfor -%}
+        <a href="{{ nav_url }}">{{ link.title }}</a>
         {%- for child in link.links -%}<a class="ezy-drawer__sub" href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
       {%- endfor -%}
       <a href="{{ routes.account_url }}">Account</a>

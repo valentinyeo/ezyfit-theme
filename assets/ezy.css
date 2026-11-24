@@ -457,3 +457,51 @@ cart-drawer .cart__checkout-button { background: var(--ezy-blue) !important; bor
 .ezy-fit__sizes div { background: var(--ezy-tint); border-radius: 12px; padding: 12px; }
 .ezy-fit__sizes dt { font-size: 13px; color: var(--ezy-grey); }
 .ezy-fit__sizes dd { margin: 4px 0 0; font: 700 18px/1.2 Poppins, sans-serif; color: var(--ezy-dark); }
+
+/* MACL-37: live parity items closed before the Click Shades switch. */
+/* Homepage shade product row (P02), same job as live product-cards. */
+.ezy-picks__grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ezy-pick { display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+.ezy-pick__link { display: block; text-decoration: none; }
+.ezy-pick__img { display: block; aspect-ratio: 1; background: #f8f9fa; overflow: hidden; }
+.ezy-pick__img img, .ezy-pick__img svg { width: 100%; height: 100%; object-fit: contain; }
+.ezy-pick__name { display: block; padding: 10px 12px 0; font-weight: 700; font-size: 14px; line-height: 1.3; }
+.ezy-pick__price { padding: 6px 12px 0; font-size: 14px; color: var(--ezy-grey); }
+.ezy-pick__price strong { color: var(--ezy-blue); font-size: 18px; }
+.ezy-pick__add { margin: auto 12px 12px; min-height: 44px; font-size: 15px; }
+.ezy-pick__out { margin: 0 12px 12px !important; font-size: 13px; font-weight: 700; color: #b42318; }
+.ezy-pick__empty { grid-column: 1 / -1; color: var(--ezy-grey); font-size: 14px; }
+.ezy-picks__all { display: inline-block; margin-top: 20px; font-weight: 700; color: var(--ezy-blue) !important; }
+.ezy-pick__msg { min-height: 20px; margin-top: 12px !important; font-size: 14px; font-weight: 600; color: var(--ezy-green); }
+.ezy-pick__msg a { color: var(--ezy-blue); }
+@media (min-width: 768px) { .ezy-picks__grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+
+/* Homepage trust row (P08), live wording. */
+.ezy-trust { padding: 40px 0; border-top: 3px solid var(--ezy-blue); background: #fff; }
+.ezy-trust__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ezy-trust__item { text-align: center; padding: 18px 12px; background: var(--ezy-tint); border-radius: 12px; }
+.ezy-trust__icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ezy-blue); color: #fff; margin-bottom: 10px; }
+.ezy-trust__icon svg { width: 22px; height: 22px; }
+.ezy-trust__title { font-size: 15px; }
+.ezy-trust__desc { font-size: 13px; line-height: 1.4; color: var(--ezy-grey); margin-top: 4px !important; }
+@media (min-width: 768px) { .ezy-trust { padding: 56px 0; } .ezy-trust__grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } .ezy-trust__item { padding: 24px 16px; } }
+
+/* Footer Afterpay block (P22) and contact links (P19). */
+.ezy-foot__afterpay { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, .1); font-size: 14px; color: #fff; }
+.ezy-foot__afterpay b { color: #fff; }
+
+/* Wiper product trust badges and secure checkout row (P66). */
+.ezy-pdp__trust { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--ezy-line); }
+.ezy-pdp__trust span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--ezy-grey); }
+.ezy-pdp__trust svg { width: 16px; height: 16px; color: var(--ezy-blue); flex: none; }
+.ezy-pdp__secure { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; color: var(--ezy-grey); }
+.ezy-pdp__secure svg { width: 38px; height: 24px; }
+
+/* Finder mode pills: Wipers or Sun shades (P96). */
+.ezy-finder__modes { display: flex; gap: 8px; border: 0; padding: 0; margin: 0 0 14px; }
+.ezy-finder__mode { position: relative; flex: 1; cursor: pointer; }
+.ezy-finder__mode input { position: absolute; opacity: 0; pointer-events: none; }
+.ezy-finder__mode span { display: block; text-align: center; padding: 8px; border: 2px solid var(--ezy-line); border-radius: 999px; font-size: 14px; font-weight: 700; color: var(--ezy-grey); background: #fff; }
+.ezy-finder__mode input:checked + span { border-color: var(--ezy-blue); background: var(--ezy-blue); color: #fff; }
+.ezy-finder__mode input:focus-visible + span { outline: 3px solid var(--ezy-blue); outline-offset: 2px; }
+@media (max-width: 749px) { .ezy-hero .ezy-finder__modes { margin-bottom: 8px; } }

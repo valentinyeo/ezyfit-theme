@@ -185,6 +185,27 @@
         {%- for t in ticks -%}{%- assign tt = t | strip -%}{%- if tt != blank -%}<li>{{ tt }}</li>{%- endif -%}{%- endfor -%}
       </ul>
 
+      {%- comment -%}
+        MACL-37 P66: the trust badges and "Secure checkout with" payment row live shows in
+        the wiper buy box, back in the new markup.
+      {%- endcomment -%}
+      {%- assign trust_lines = section.settings.trust_badges | newline_to_br | split: '<br />' -%}
+      <div class="ezy-pdp__trust">
+        {%- for line in trust_lines -%}
+          {%- assign tl = line | strip -%}
+          {%- if tl != blank -%}
+            <span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.4-3 8.3-7 9-4-.7-7-4.6-7-9V6l7-3z"/><path d="m9 12 2 2 4-4"/></svg>
+              {{ tl }}
+            </span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="ezy-pdp__secure">
+        <span>{{ section.settings.secure_text }}</span>
+        {%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag: class: 'ezy-foot__payicon' }}{%- endfor -%}
+      </div>
+
       {%- if section.settings.pickup_address != blank -%}
         <details class="ezy-pdp__pickup" data-ezy-pickup>
           <summary><strong>{{ section.settings.pickup_title }}</strong><small>{{ section.settings.pickup_note }}</small></summary>
@@ -549,6 +570,8 @@
     { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Perfect fit for your exact vehicle\nSnap-on in under 2 minutes\nWrong fit? 30-day returns\nOrder before 2pm, ships the same day\nFree standard shipping\n12-month warranty included" },
     { "type": "textarea", "id": "features", "label": "What you get, numbered (one per line)", "default": "Front blade pair for your car\nPremium rubber, streak-free in all conditions\nVehicle-specific connector, fitted\n12-month warranty" },
     { "type": "text", "id": "pickup_title", "label": "Pickup title", "default": "Pickup available at 21 Discovery Drive" },
+    { "type": "textarea", "id": "trust_badges", "label": "Trust badges in the buy box (one per line)", "default": "Free Shipping\n30-Day Returns\nAussie Quality" },
+    { "type": "text", "id": "secure_text", "label": "Secure checkout line", "default": "Secure checkout with" },
     { "type": "text", "id": "pickup_note", "label": "Pickup note", "default": "Usually ready in 24 hours" },
     { "type": "textarea", "id": "pickup_address", "label": "Pickup address (empty hides pickup)", "default": "21 Discovery Drive, Bibra Lake WA 6163, Australia" }
   ],

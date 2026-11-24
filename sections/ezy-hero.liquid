@@ -11,7 +11,22 @@
       {%- endif -%}
 
       <form class="ezy-finder" action="{{ routes.search_url }}" method="get" data-ezy-finder>
-        <h2 class="ezy-hero__h">{{ section.settings.finder_heading }}</h2>
+        {%- comment -%}
+          MACL-37 P96: live's finder serves shade shoppers, this one served wipers only.
+          The pills switch the catalogue; Wipers stays the default so the blade flow is
+          exactly what it was. Sun shades reads the live brand collections.
+        {%- endcomment -%}
+        <fieldset class="ezy-finder__modes">
+          <legend class="visually-hidden">What are you shopping for?</legend>
+          <label class="ezy-finder__mode">
+            <input type="radio" name="ezy-finder-type" value="wipers" checked data-ezy-finder-type>
+            <span>Wipers</span>
+          </label>
+          <label class="ezy-finder__mode">
+            <input type="radio" name="ezy-finder-type" value="shades" data-ezy-finder-type>
+            <span>Sun shades</span>
+          </label>
+        </fieldset>
         <input type="hidden" name="type" value="product">
         <input type="hidden" name="q" data-ezy-q>
         <div class="ezy-dd" data-ezy-dd="make">
@@ -41,8 +56,8 @@
             <ul class="ezy-dd__list" role="listbox" aria-label="Year"></ul>
           </div>
         </div>
-        <button class="ezy-btn" type="submit">{{ section.settings.button }}</button>
-        <p class="ezy-finder__next">{{ section.settings.next_text }}</p>
+        <button class="ezy-btn" type="submit" data-find-wipers="{{ section.settings.button }}" data-find-shades="{{ section.settings.button_shade }}">{{ section.settings.button }}</button>
+        <p class="ezy-finder__next" data-next-wipers="{{ section.settings.next_text }}" data-next-shades="{{ section.settings.next_text_shade }}">{{ section.settings.next_text }}</p>
       </form>
     </div>
 
@@ -119,6 +134,53 @@
       if (model) cars.push({ make: make, model: model, year: year, url: p.u }); else rejected.push(p.t);
     });
     // EZY-PARSE-END
+    // Sun shades read the live brand collections, the same list live's car-selector uses.
+    var SHADE_BRANDS = {
+      'Toyota': 'sun-shade-for-car-wiper-bladess-for-toyota',
+      'Ford': 'sun-shade-for-car-wiper-bladess-for-ford',
+      'Mazda': 'sun-shade-for-car-wiper-bladess-for-mazda',
+      'Honda': 'car-windscreen-shade-windscreen-wiper-blades-for-honda',
+      'Hyundai': 'sun-shade-for-car-wiper-bladess-for-hyundai',
+      'Nissan': 'sun-shade-for-car-wiper-bladess-for-nissan',
+      'Mitsubishi': 'sun-shade-for-car-wiper-bladess-for-mitsubishi',
+      'Kia': 'sun-shade-for-car-wiper-bladess-for-kia',
+      'BMW': 'car-window-sun-shades-wiper-blade-for-bmw',
+      'Mercedes-Benz': 'sun-shade-for-car-wiper-bladess-for-mercedes',
+      'Volkswagen': 'sun-shade-for-car-wiper-bladess-for-volkswagen',
+      'Subaru': 'sun-shade-for-car-good-wiper-blades-for-subaru',
+      'Isuzu': 'car-windscreen-shade-windscreen-wiper-blades-for-isuzu',
+      'Lexus': 'sun-shade-for-car-wiper-bladess-for-lexus',
+      'MG': 'sunshades-for-car-windows-wiper-blade-for-mg',
+      'Chevrolet': 'sun-shade-for-car-wiper-bladess-for-chevrolet',
+      'Geely': 'sun-shade-for-car-wiper-bladess-for-geely',
+      'Infiniti': 'sun-shade-for-car-wiper-bladess-for-infiniti',
+      'BYD': 'sun-shade-for-car-wiper-bladess-for-byd',
+      'Chery': 'sun-shade-for-car-wiper-bladess-for-chery'
+    };
+    var wiperCars = cars;
+    var shadeCars = [];
+    var shadeCache = {};
+    var mode = 'wipers';
+    function catalog() { return mode === 'shades' ? shadeCars : wiperCars; }
+    // "Rear Side Windows Click Shades for Toyota RAV 4 2019-2025" -> model "RAV 4", year "2019 to 2025".
+    function shadeCar(p, brand) {
+      var m = String(p.title || '').match(/\bfor\s+(.+)$/i);
+      if (!m) return null;
+      var rest = m[1].replace(/\s*->\s*$/, '').trim();
+      var brandWords = brand.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean);
+      var words = rest.split(/\s+/);
+      while (words.length > 1 && brandWords.indexOf(words[0].toLowerCase().replace(/[^a-z0-9]/g, '')) > -1) words.shift();
+      rest = words.join(' ');
+      var year = '';
+      var yrs = rest.match(/\b(?:19|20)\d{2}\b(?:\s*[-\u2013]\s*\b(?:19|20)\d{2}\b)?\s*$/);
+      if (yrs) {
+        var nums = yrs[0].match(/\d{4}/g);
+        year = nums.length > 1 ? nums[0] + ' to ' + nums[1] : nums[0];
+        rest = rest.slice(0, yrs.index).trim();
+      }
+      if (!rest) return null;
+      return { make: brand, model: rest, year: year, url: p.url };
+    }
     // "rav4", "RAV 4" and "Rav-4" all compare equal.
     var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]/g, ''); };
     var q = form.querySelector('[data-ezy-q]');
@@ -192,22 +254,72 @@
     dds.make = Dropdown(form.querySelector('[data-ezy-dd=make]'), function (mk) {
       pick.make = mk; pick.model = ''; pick.year = '';
       dds.year.set([]);
-      dds.model.set(uniq(cars.filter(function (c) { return c.make === mk; }).map(function (c) { return c.model; })).sort());
+      if (mode === 'shades') { loadShadeMake(mk); return; }
+      dds.model.set(uniq(wiperCars.filter(function (c) { return c.make === mk; }).map(function (c) { return c.model; })).sort());
     });
     dds.model = Dropdown(form.querySelector('[data-ezy-dd=model]'), function (md) {
       pick.model = md; pick.year = '';
-      var years = uniq(cars.filter(function (c) { return c.make === pick.make && c.model === md; }).map(yearOf).filter(Boolean)).sort();
+      var years = uniq(catalog().filter(function (c) { return c.make === pick.make && c.model === md; }).map(yearOf).filter(Boolean)).sort();
       dds.year.set(years);
     });
     dds.year = Dropdown(form.querySelector('[data-ezy-dd=year]'), function (y) { pick.year = y; });
-    var makes = uniq(cars.map(function (c) { return c.make; })).sort();
-    dds.make.set(makes);
+    // Models for a shade brand come from that brand's collection, the way live's car-selector loads them.
+    function loadShadeMake(mk) {
+      var cached = shadeCache[mk];
+      if (cached) {
+        shadeCars = cached;
+        dds.model.set(uniq(cached.map(function (c) { return c.model; })).sort());
+        return;
+      }
+      shadeCars = [];
+      var handle = SHADE_BRANDS[mk];
+      if (!handle) return;
+      fetch('/collections/' + handle + '/products.json?limit=250')
+        .then(function (r) { return r.ok ? r.json() : { products: [] }; })
+        .then(function (data) {
+          var parsed = (data.products || []).map(function (p) { return shadeCar(p, mk); }).filter(Boolean);
+          shadeCache[mk] = parsed;
+          if (mode !== 'shades' || pick.make !== mk) return;
+          shadeCars = parsed;
+          dds.model.set(uniq(parsed.map(function (c) { return c.model; })).sort());
+        })
+        .catch(function () { if (mode === 'shades' && pick.make === mk) dds.model.set([]); });
+    }
+    function setMode(m) {
+      mode = m;
+      pick.make = ''; pick.model = ''; pick.year = '';
+      dds.year.set([]);
+      dds.model.set([]);
+      var submitBtn = form.querySelector('button[type=submit]');
+      var nextEl = form.querySelector('.ezy-finder__next');
+      if (submitBtn) submitBtn.textContent = m === 'shades' ? submitBtn.dataset.findShades : submitBtn.dataset.findWipers;
+      if (nextEl) nextEl.textContent = m === 'shades' ? nextEl.dataset.nextShades : nextEl.dataset.nextWipers;
+      if (m === 'shades') {
+        shadeCars = [];
+        dds.make.set(Object.keys(SHADE_BRANDS).sort());
+      } else {
+        dds.make.set(uniq(wiperCars.map(function (c) { return c.make; })).sort());
+      }
+    }
+    form.querySelectorAll('[data-ezy-finder-type]').forEach(function (input) {
+      input.addEventListener('change', function () { if (input.checked) setMode(input.value); });
+    });
+    setMode('wipers');
     dds.model.searchable(false); dds.year.searchable(false);
     dds.model.set([]); dds.year.set([]);
     document.addEventListener('click', function (e) { if (!form.contains(e.target)) closeAll(null); });
     form.addEventListener('submit', function (e) {
       if (!pick.make) { e.preventDefault(); dds.make.open(); return; }
-      var hits = cars.filter(function (c) {
+      if (mode === 'shades') {
+        // Same route as live's car-selector: one match opens the product, several go to search.
+        var shadeHits = shadeCars.filter(function (c) {
+          return c.make === pick.make && (!pick.model || c.model === pick.model) && (!pick.year || c.year === pick.year);
+        });
+        if (shadeHits.length === 1) { e.preventDefault(); window.location.href = shadeHits[0].url; return; }
+        q.value = (pick.make + ' ' + pick.model).trim();
+        return;
+      }
+      var hits = wiperCars.filter(function (c) {
         return c.make === pick.make && (!pick.model || c.model === pick.model) && (!pick.year || c.year === pick.year);
       });
       if (hits.length === 1) { e.preventDefault(); window.location.href = hits[0].url; return; }
@@ -232,10 +344,12 @@
     { "type": "textarea", "id": "lead", "label": "Lead", "default": "Guaranteed fit for your specific vehicle. Front pair from $59, was $79, 25% off is already in the price. Search your car, then watch its own 2 minute fitment video." },
     { "type": "text", "id": "rating_text", "label": "Store rating text (fill from Loox)", "default": "4.8 from 49 store reviews" },
     { "type": "collection", "id": "collection", "label": "Wiper collection for the finder" },
-    { "type": "text", "id": "finder_heading", "label": "Finder heading", "default": "Find your wipers" },
+    { "type": "text", "id": "finder_heading", "label": "Finder heading (unused, the pills label the finder)", "default": "Find your wipers" },
     { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Your car, for example Ranger" },
-    { "type": "text", "id": "button", "label": "Button", "default": "Find my wipers" },
-    { "type": "text", "id": "next_text", "label": "Text under button", "default": "Your car's blades and fitment video come next." },
+    { "type": "text", "id": "button", "label": "Wipers button", "default": "Find my wipers" },
+    { "type": "text", "id": "next_text", "label": "Text under the wipers button", "default": "Your car's blades and fitment video come next." },
+    { "type": "text", "id": "button_shade", "label": "Sun shades button", "default": "Find my shades" },
+    { "type": "text", "id": "next_text_shade", "label": "Text under the sun shades button", "default": "Your car's shades come next. Free shipping Australia wide." },
     { "type": "text", "id": "pack_heading", "label": "Pack heading", "default": "Your Exact Fit Pack" },
     { "type": "text", "id": "pack_price", "label": "Pack price line", "default": "From $59 a front pair. 25% off already in." },
     { "type": "image_picker", "id": "video_image", "label": "Video image" },
