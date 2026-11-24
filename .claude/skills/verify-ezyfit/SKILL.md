@@ -1,6 +1,6 @@
 ---
 name: verify-ezyfit
-description: Prove the EZYFIT Version B Shopify theme works the way a shopper uses it. Use after any change to this repo, before saying a theme change is done, before promoting to the QA theme, or when the draft or QA theme looks off. The theme only runs on Shopify, so you push files to the unpublished draft theme, then the browser checks (phone and desktop Chromium, header, cart, wiper product, collection, search, footer, shade page parity) run on GitHub Actions, never on this server.
+description: Prove the EZYFIT Version B Shopify theme works the way a shopper uses it. Use after any change to this repo, before saying a theme change is done, before promoting to the QA theme, before switching the live shop to this theme, or when the draft or QA theme looks off. Two proofs: parity.mjs, plain HTTP from this server, checks every item the live Click Shades theme offers still exists on the draft; and the browser checks (phone and desktop Chromium, header, cart, wiper product, collection, search, footer, shade page parity) which run on GitHub Actions, never on this server.
 ---
 
 # Verify the EZYFIT theme
@@ -14,6 +14,7 @@ Surface: the real storefront at `easy-fit-store1.myshopify.com`, opened with `?p
 - Never publish the draft or QA theme. Publishing is the owner's call.
 - Never change store data (products, prices, metafields) to make a check pass. A failing gate is reported, not weakened.
 - Never print or commit the theme token. Scripts read it from `~/projects/clickshades-theme/CLAUDE.md` into memory.
+- `scripts/parity.mjs` is the one check that runs here: plain HTTP reads of the live shop and the draft, no browser, no writes. It never pushes and never asks for the token.
 
 ## Themes
 
@@ -91,6 +92,37 @@ Then view `/tmp/shot/shot.png`. Widths: 390 phone, 1280 desktop.
 Stable handles the gates use (keep them when editing sections): `[data-ezy-head]`, `[data-ezy-menu]`, `[data-ezy-drawer]`, `[data-ezy-search]`, `[data-cart-count]`, `[data-ezy-pdp]`, `[data-ezy-type]`, `[data-ezy-position]`, `[data-ezy-year]`, `[data-ezy-fit-video]`, `[data-ezy-add]`, `[data-ezy-coll-q]`, `[data-ezy-finder]`, `[data-ezy-dd]`, `.ezy-coll__item`, `.ezy-coll__card`.
 
 The feature map in [features/README.md](features/README.md) says which gate proves which shopper journey and what is not covered yet.
+
+## Parity with the live shop (before any switch)
+
+Gates prove the draft works. Parity proves the draft still offers everything the live shop
+(theme `149894070428`) offers, which is the question that decides whether the switch is
+allowed. It is plain HTTP, no browser and no Playwright, so it runs here:
+
+```bash
+node .claude/skills/verify-ezyfit/scripts/parity.mjs            # every row and URL
+node .claude/skills/verify-ezyfit/scripts/parity.mjs --rows     # rows only
+node .claude/skills/verify-ezyfit/scripts/parity.mjs --id P54   # one row
+node .claude/skills/verify-ezyfit/scripts/parity.mjs --md       # regenerate the parity table
+```
+
+It fetches the live URL and the draft URL (`?preview_theme_id=158148984988`) for every row
+in [features/parity.md](features/parity.md), asserts the status, and looks for the marker
+strings that row names. Then it sweeps 38 URLs Google and ads hit and requires the same
+status on both. It prints one `PASS` or `FAIL` line per row, ends with `Rows: N PASS` and
+`Map counts: KEPT/REPLACED-BY/MISSING/NOT-NEEDED`, and exits 1 on any failure. A full run
+takes about six minutes; two requests in flight, with backoff on Shopify's 429.
+
+Read it this way: a MISSING row passes while the gap is still open, so a FAIL on a MISSING
+row means a gap closed and the row must move. A FAIL on a KEPT row means the draft lost
+something. Save each run:
+
+```bash
+node .claude/skills/verify-ezyfit/scripts/parity.mjs > .claude/skills/verify-ezyfit/features/parity-evidence-$(date -u +%F).txt
+```
+
+`features/parity.md` holds the table, the MISSING list with severity, and what was proven
+by file diff instead of HTTP. Update the row in the script first, then `--md`, then the doc.
 
 ## Promote to QA
 
