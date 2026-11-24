@@ -179,7 +179,8 @@
         rest = rest.slice(0, yrs.index).trim();
       }
       if (!rest) return null;
-      return { make: brand, model: rest, year: year, url: p.url };
+      // products.json carries a handle, not a url.
+      return { make: brand, model: rest, year: year, url: p.handle ? '/products/' + p.handle : '' };
     }
     // "rav4", "RAV 4" and "Rav-4" all compare equal.
     var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]/g, ''); };
@@ -277,7 +278,11 @@
       fetch('/collections/' + handle + '/products.json?limit=250')
         .then(function (r) { return r.ok ? r.json() : { products: [] }; })
         .then(function (data) {
-          var parsed = (data.products || []).map(function (p) { return shadeCar(p, mk); }).filter(Boolean);
+          // The brand collections mix shades and blades; a shade shopper only wants shades.
+          var parsed = (data.products || [])
+            .filter(function (p) { return !/wiper/i.test(String(p.title || '')); })
+            .map(function (p) { return shadeCar(p, mk); })
+            .filter(Boolean);
           shadeCache[mk] = parsed;
           if (mode !== 'shades' || pick.make !== mk) return;
           shadeCars = parsed;
