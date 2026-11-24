@@ -504,4 +504,8 @@ cart-drawer .cart__checkout-button { background: var(--ezy-blue) !important; bor
 .ezy-finder__mode span { display: block; text-align: center; padding: 8px; border: 2px solid var(--ezy-line); border-radius: 999px; font-size: 14px; font-weight: 700; color: var(--ezy-grey); background: #fff; }
 .ezy-finder__mode input:checked + span { border-color: var(--ezy-blue); background: var(--ezy-blue); color: #fff; }
 .ezy-finder__mode input:focus-visible + span { outline: 3px solid var(--ezy-blue); outline-offset: 2px; }
-@media (max-width: 749px) { .ezy-hero .ezy-finder__modes { margin-bottom: 8px; } }
+/* Phone: the pills take the slot the finder heading used, so the finder button stays above the fold. */
+@media (max-width: 749px) {
+  .ezy-hero .ezy-finder__modes { margin-bottom: 8px; }
+  .ezy-hero .ezy-finder__mode span { padding: 5px 6px; font-size: 13px; }
+}
