@@ -38,21 +38,21 @@ A full run took about six minutes at two requests in flight. Shopify answers 429
 decides it is being crawled; the script backs off and retries, so a 429 never shows up as
 a theme failure.
 
-The last full run is saved in `features/parity-evidence-2026-11-24c.txt`:
-97 rows, 97 PASS, 38 URLs, 38 PASS. Map counts: KEPT 64, REPLACED-BY 20, MISSING 11,
-NOT-NEEDED 2. The run before the MACL-37 fixes is in
-`features/parity-evidence-2026-11-24.txt` (MISSING 20); the run before the blade carousel
-fix is in `features/parity-evidence-2026-11-24b.txt`.
+The last full run is saved in `features/parity-evidence-2026-11-25.txt`:
+97 rows, 97 PASS, 38 URLs, 38 PASS. Map counts: KEPT 71, REPLACED-BY 23, MISSING 1,
+NOT-NEEDED 2. The runs before it are `features/parity-evidence-2026-11-24c.txt`
+(MISSING 11), `features/parity-evidence-2026-11-24.txt` (MISSING 20) and
+`features/parity-evidence-2026-11-24b.txt`, from before the blade carousel fix.
 
 ## Table
 
 | ID | Area | Live item | Where on live | Status | Evidence in this check |
 |---|---|---|---|---|---|
 | P01 | Homepage | Make, Model, Year finder | `/` `car-selector` | REPLACED-BY ezy-hero finder | live has `car-selector`; draft has `data-ezy-finder`. draft finder reads the wiper-blades collection for Wipers and the live brand collections for Sun shades, see P96 |
-| P02 | Homepage | Featured shade product cards (4 products with price and add to cart) | `/` `product-cards` | KEPT | live has `product-cards`; draft has `ezy-shade-picks` + `ezy-pick__add`. same top-picks collection as live, four cards with image, price and add to cart, rebuilt in the new look as its own section; a sold-out card says Sold out and still links to the product |
+| P02 | Homepage | Featured shade product cards (4 products with price and add to cart) | `/` `product-cards` | KEPT | live has `product-cards`; draft has `ezy-shade-picks` + `ezy-pick__add`. same top-picks collection as live, four cards with image, price and add to cart, rebuilt in the new look as the ezy-shade-picks section; a sold-out card says Sold out and still links to the product |
 | P03 | Homepage | Customer video carousel (5 videos, lightbox) | `/` `video-carousel` | REPLACED-BY ezy-hero single fit video | live has `video-carousel`; draft must not have `video-carousel`. one hero video ("Watch a real fit"), no carousel |
 | P04 | Homepage | Shop by Popular Cars grid (7 cars plus View All) | `/` `popular-models-grid` | REPLACED-BY ezy-popular-cars | live has `popular-models-grid`; draft has `ezy-cars`. 4 cars, no View All link to /pages/shop-by-make |
-| P05 | Homepage | Five 'Why Click Shades' shade benefit cards | `/` `Triple Laminate Technology` | MISSING | live has `Triple Laminate Technology`; draft must not have `Triple Laminate Technology`. shade benefits live on shade product pages, not on the homepage any more |
+| P05 | Homepage | Five 'Why Click Shades' shade benefit cards | `/` `Triple Laminate Technology` | KEPT | live has `Triple Laminate Technology`; draft has `Triple Laminate Technology`. live wording on the live why-clickshades section, rendered on the homepage right after the shade block |
 | P06 | Homepage | Loox customer reviews | `/` `looxReviews` | REPLACED-BY ezy-reviews (#looxReviews) | live has `looxReviews`; draft has `looxReviews`. the Loox script must fill the empty div at runtime; not provable over HTTP |
 | P07 | Homepage | Comparison table | `/` `comparison-table` | REPLACED-BY ezy-comparison | live has `comparison-table`; draft has `ezy-compare`. now framed as "Why not cheap blades?" |
 | P08 | Homepage | Trust badges row (Perfect Fit, 87% UV Block, Easy Install, 30-Day Returns) | `/` `trust-grid` | REPLACED-BY ezy-trust row | live has `trust-grid`; draft has `ezy-trust` + `87% UV Block`. four badges with the live wording, above the FAQ like live |
@@ -75,7 +75,7 @@ fix is in `features/parity-evidence-2026-11-24b.txt`.
 | P25 | Footer | Find my car link opens /pages/find-my-car | `/` `href="/pages/find-my-car"` | REPLACED-BY /#find | live has `href="/pages/find-my-car"`; draft must not have `href="/pages/find-my-car"`. the page still answers (P33); the link now jumps to the homepage finder |
 | P26 | Footer | Business name, ABN, address, hours | `/` `24 127 742 441` | KEPT | live has `24 127 742 441`; draft has `24 127 742 441` |
 | P27 | Footer | Social links (Facebook, Instagram) | `/` `instagram.com/clickshades` | KEPT | live has `instagram.com/clickshades`; draft has `instagram.com/clickshades`. the "Follow Us" heading and blurb are gone, the icons stay |
-| P28 | Page | /pages/click-blades (Click Blades ad landing) | `/pages/click-blades` `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel` | KEPT | live has `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel`; draft has `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel` + `product-carousel-card`. same template and same 14 sections, and the blade carousel is still the eight live blade cards from live's own `product-cards` section; only header and footer changed |
+| P28 | Page | /pages/click-blades (Click Blades ad landing) | `/pages/click-blades` `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel` | KEPT | live has `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel`; draft has `cb-hero` + `cb-trust-bar` + `cb-gallery` + `video-carousel` + `product-carousel-card` + `Nissan Navara/NP300`. same template and same 14 sections; only header and footer changed. the blade carousel is still live product-cards: an earlier MACL-37 commit rebuilt that section for shades and took these eight blade cards away, fixed by moving the shade row into sections/ezy-shade-picks.liquid |
 | P29 | Page | /pages/contact (contact form) | `/pages/contact` `contact-form` | KEPT | live has `contact-form`; draft has `contact-form` |
 | P30 | Page | /pages/about-us | `/pages/about-us` `title:About Us` | KEPT | live has `title:About Us`; draft has `title:About Us` |
 | P31 | Page | /pages/become-a-stockist | `/pages/become-a-stockist` `title:Become a Stockist` + `contact-form` | KEPT | live has `title:Become a Stockist` + `contact-form`; draft has `title:Become a Stockist` + `contact-form` |
@@ -99,9 +99,9 @@ fix is in `features/parity-evidence-2026-11-24b.txt`.
 | P49 | Collection | /collections/all toolbar (car picker, In Stock, sort) | `/collections/all` `car-picker` + `In Stock` | KEPT | live has `car-picker` + `In Stock`; draft has `car-picker` + `In Stock` |
 | P50 | Collection | /collections/car-window-shades toolbar | `/collections/car-window-shades` `car-picker` + `In Stock` | KEPT | live has `car-picker` + `In Stock`; draft has `car-picker` + `In Stock`. non-wiper collections keep collection-product-grid-v7 untouched |
 | P51 | Collection | /collections/windscreen-sun-shade | `/collections/windscreen-sun-shade` `car-picker` | KEPT | live has `car-picker`; draft has `car-picker`. non-wiper collections keep collection-product-grid-v7 untouched |
-| P52 | Collection | /collections/wiper-blades car picker and sort control | `/collections/wiper-blades` `car-picker` + `Filter & Sort` | MISSING | live has `car-picker` + `Filter & Sort`; draft must not have `car-picker` + `sort_by` + `Filter & Sort`. ezy-collection replaces the grid for any collection handle containing "wiper": a text box over the full list, no car picker and no price or best-selling sort. The In Stock toggle survives, see P97 |
-| P53 | Collection | Brand collections, for example the Toyota shade and blade collection | `/collections/sun-shade-for-car-wiper-bladess-for-toyota` `car-picker` | MISSING | live has `car-picker`; draft must not have `car-picker`. same ezy-collection swap as P52: the draft answers the URL and links it from the header drawer, but the car picker is replaced by a text box and the sort control is gone. In Stock survives, see P97 |
-| P54 | Search | /search toolbar (car picker, In Stock toggle, sort) | `/search?q=Toyota` `car-picker` + `Filter & Sort` | MISSING | live has `car-picker` + `Filter & Sort`; draft must not have `car-picker` + `Filter & Sort`. ezy-search has a single text box and a result grid, nothing else |
+| P52 | Collection | /collections/wiper-blades car picker and sort control | `/collections/wiper-blades` `car-picker` + `Filter & Sort` | KEPT | live has `car-picker` + `Filter & Sort`; draft has `car-picker` + `sort_by` + `Filter & Sort`. the live collection-car-picker snippet inside the ezy-collection toolbar, with a sort_by select over the collection sort options and the Filter and Sort sheet on phones; In Stock keeps its own control, see P97 |
+| P53 | Collection | Brand collections, for example the Toyota shade and blade collection | `/collections/sun-shade-for-car-wiper-bladess-for-toyota` `car-picker` | KEPT | live has `car-picker`; draft has `car-picker`. same toolbar as P52 on the 24 wiper collections: the live picker snippet with the make preselected from the handle, plus sort and In Stock |
+| P54 | Search | /search toolbar (car picker, In Stock toggle, sort) | `/search?q=Toyota` `car-picker` + `Filter & Sort` | KEPT | live has `car-picker` + `Filter & Sort`; draft has `car-picker` + `Filter & Sort`. the live search-car-picker snippet plus a sort_by select and the Filter and Sort sheet on /search, In Stock beside them |
 | P55 | Search | /search product results | `/search?q=Toyota` `href="/products/` | KEPT | live has `href="/products/`; draft has `href="/products/`. same products, ranked blades first on the draft |
 | P56 | Shade product | Add-ons and Add All to Cart | `/products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025` `add-complete-set` | KEPT | live has `add-complete-set`; draft has `add-complete-set`. shade products still render main-product-v2 unchanged |
 | P57 | Shade product | Loox product reviews | `/products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025` `looxReviews` | KEPT | live has `looxReviews`; draft has `looxReviews` |
@@ -113,14 +113,14 @@ fix is in `features/parity-evidence-2026-11-24b.txt`.
 | P63 | Wiper product | Loox product reviews | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `looxReviews` | KEPT | live has `looxReviews`; draft has `looxReviews` |
 | P64 | Wiper product | Afterpay message | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `Afterpay` | KEPT | live has `Afterpay`; draft has `Afterpay` |
 | P65 | Wiper product | 12-month warranty promise | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `12-month warranty` | KEPT | live has `12-month warranty`; draft has `12-month warranty`. kept in the ezy-product tick list |
-| P66 | Wiper product | Trust badges and "Secure checkout with" payment row | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `Secure checkout` | KEPT | live has `Secure checkout`; draft has `Secure checkout` + `Aussie Quality`. Free Shipping, 30-Day Returns and Aussie Quality with the live wording, then Secure checkout with the store payment icons, under the add to cart button |
-| P67 | Wiper product | Customer photo gallery (cb-gallery) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `cb-gallery` | MISSING | live has `cb-gallery`; draft must not have `cb-gallery`. the new page shows one product gallery, not the customer photo section |
-| P68 | Wiper product | Video carousel (3 videos) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `video-carousel` | MISSING | live has `video-carousel`; draft must not have `video-carousel`. ezy-product renders one fitting video instead |
-| P69 | Wiper product | Perfect Fit Guarantee section (cb-guarantee) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `cb-guarantee` | MISSING | live has `cb-guarantee`; draft must not have `cb-guarantee`. ezy-product keeps a one line 30-day return promise, the guarantee section is gone |
-| P70 | Wiper product | "What You'll Notice" benefits (cb-benefits) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `cb-benefits` | MISSING | live has `cb-benefits`; draft must not have `cb-benefits` |
-| P71 | Wiper product | Comparison table (cb-comparison) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `cb-comparison` | MISSING | live has `cb-comparison`; draft must not have `cb-comparison` |
+| P66 | Wiper product | Trust badges and "Secure checkout with" payment row | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `Secure checkout` | KEPT | live has `Secure checkout`; draft has `Secure checkout` + `Aussie Quality` + `ezy-pdp__secure` + `ezy-pdp__trust`. Free Shipping, 30-Day Returns and Aussie Quality with the live wording, then Secure checkout with the store payment icons, under the add to cart button |
+| P67 | Wiper product | Customer photo gallery (cb-gallery) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `cb-gallery` | REPLACED-BY ezy-pdp-photos | live has `cb-gallery`; draft has `ezy-pdp-photos`. the new page keeps a customer photo section instead: six customer photos under a fitted-by-drivers heading, and W9 covers it, so cb-gallery is not needed |
+| P68 | Wiper product | Video carousel (3 videos) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `video-carousel` | KEPT | live has `video-carousel`; draft has `video-carousel`. the live three-video carousel in product.wiper-v2 and v3; the ezy-product fitting video stays above it |
+| P69 | Wiper product | Perfect Fit Guarantee section (cb-guarantee) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `cb-guarantee` | REPLACED-BY ezy-pdp-guarantee | live has `cb-guarantee`; draft has `Perfect Fit Guarantee` + `30-day money-back guarantee`. the three live guarantee points and the Perfect Fit Guarantee line fold into the new guarantee block, which still names the car |
+| P70 | Wiper product | "What You'll Notice" benefits (cb-benefits) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `cb-benefits` | KEPT | live has `cb-benefits`; draft has `cb-benefits`. the live cb-benefits section, same four benefit cards, in the wiper templates after the product page |
+| P71 | Wiper product | Comparison table (cb-comparison) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `cb-comparison` | REPLACED-BY ezy-pdp-compare | live has `cb-comparison`; draft has `ezy-pdp-compare` + `Vehicle-specific connector`. the new page carries a two-column product-detail table, the PR 7 table, instead of the us vs cheap vs dealer table |
 | P72 | Wiper product | FAQ accordion (8 questions) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `faq-section` | REPLACED-BY ezy-faq | live has `faq-section`; draft has `ezy-faq`. 5 questions instead of 8 |
-| P73 | Wiper product | "Trusted by 5,000+ customers Australia-wide" social proof | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `Trusted by 5,000` | MISSING | live has `Trusted by 5,000`; draft must not have `Trusted by 5,000`. the draft shows a store review count instead, from Loox metafields |
+| P73 | Wiper product | "Trusted by 5,000+ customers Australia-wide" social proof | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `Trusted by 5,000` | KEPT | live has `Trusted by 5,000`; draft has `Trusted by 5,000`. the live line is now the reviews heading on the wiper page, above the same Loox reviews |
 | P74 | Wiper product | "What's Included" list | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `What's Included` | REPLACED-BY ezy-product "What you get" | live has `What's Included`; draft must not have `What's Included` |
 | P75 | Cart | Cart page upsell carousel and trust rating | `/cart` `upsell` | KEPT | live has `upsell`; draft has `upsell` + `cart-v7` |
 | P76 | Cart | Green success banner ("Great choice!") | `/cart` `cart-v7__banner` | MISSING | live has `cart-v7__banner`; draft must not have `cart-v7__banner`. the cart drawer still says "Added to your cart" |
@@ -142,13 +142,13 @@ fix is in `features/parity-evidence-2026-11-24b.txt`.
 | P93 | Wiper product | Sticky mobile add-to-cart bar | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `sticky-atc` | REPLACED-BY ezy-product sticky bar | live has `sticky-atc`; draft has `data-ezy-sticky`. same job, new markup: ezy-pdp__sticky carries the live price and the add button |
 | P94 | Wiper product | Quantity stepper | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `quantity-input` | REPLACED-BY ezy-qty minus and plus stepper | live has `quantity-input`; draft has `data-ezy-qty`. 1 to 10, same range as live |
 | P95 | Wiper product | Pickup availability (21 Discovery Drive, Bibra Lake) | `/products/front-windscreen-wipers-for-toyota-rav4-2018` `pickup-availability` | REPLACED-BY ezy-pdp__pickup details block | live has `pickup-availability`; draft has `data-ezy-pickup`. same address and opening hours, collapsed instead of expanded |
-| P96 | Homepage | Make, Model, Year finder that finds car window shades | `/` `ymm-form` + `ymm-dropdown` | REPLACED-BY ezy-hero finder with a Wipers / Sun shades choice | live has `ymm-form` + `ymm-dropdown`; draft has `data-ezy-finder-type` + `Sun shades`. Wipers is the default, so the blade flow is unchanged; Sun shades reads the same 20 brand collections as live and routes like live car-selector: one match opens the product, several go to /search?type=product&q=Brand+Model |
+| P96 | Homepage | Make, Model, Year finder that finds car window shades | `/` `ymm-form` + `ymm-dropdown` | REPLACED-BY ezy-hero finder with a Wipers / Sun shades choice | live has `ymm-form` + `ymm-dropdown`; draft has `data-ezy-finder-type` + `value="wipers" checked` + `Sun shades` + `SHADE_BRANDS`. Wipers is the default, so the blade flow is unchanged; Sun shades reads the same 20 brand collections as live and routes like live car-selector: one match opens the product, several go to /search?type=product&q=Brand+Model |
 | P97 | Collection | In Stock toggle on the wiper collections | `/collections/wiper-blades` `In Stock` | KEPT | live has `In Stock`; draft has `In Stock`. rebuild inside ezy-collection, same shopper control as P49 and P50 |
 | P98 | Shade product | "87% UV block" claim in the Why Choose Click Shades list | `/products/rear-side-windows-click-shades-for-toyota-rav4-2019-2025` `87%` | REPLACED-BY "UV protection" with no number | live has `87%`; draft must not have `87%`. the draft tells shoppers to see product details for the UV information; the live number and the 87% UV Block badge are gone from the shade page and from the benefits bar |
 
 ## Missing items
 
-11 rows are MISSING. Severity is from the shopper's side, not the code's:
+One row is MISSING. Severity is from the shopper's side, not the code's:
 
 - **blocks switch**: a shopper loses a way to see or buy the shop's main product, or a
   promise the business is built on disappears. Fix before the live switch. No row carries
@@ -158,16 +158,6 @@ fix is in `features/parity-evidence-2026-11-24b.txt`.
 
 | ID | What live offers | Severity | Why it matters | Smallest fix |
 |---|---|---|---|---|
-| P52 | Car picker and price/best-selling sort on `/collections/wiper-blades` | nice to have | The main blade collection became one long list with a text box; In Stock survives, sort does not | Add sort and car filter to `ezy-collection` |
-| P53 | The same car picker and sort on the 24 collections whose handle contains "wiper" | nice to have | Same cause as P52, 24 more URLs that Google indexes, most of them brand pages | Same fix as P52 |
-| P54 | Car picker, In Stock toggle and sort on `/search` | nice to have | Search results are a plain grid; a shopper searching "Toyota" cannot narrow by car or stock | Reuse the collection toolbar on `ezy-search` |
-| P67 | Customer photo gallery on the wiper product page | nice to have | Real customer photos under the buy area; the new page shows the product gallery only | Add `cb-gallery` to `product.wiper-v3.json` |
-| P68 | Three-video carousel on the wiper product page | nice to have | One fitting video remains, the carousel of three is gone | Add `video-carousel` back to the wiper templates |
-| P69 | Perfect Fit Guarantee section on the wiper product page | nice to have | The guarantee section with its three points and CTA is replaced by one line of return copy | Add `cb-guarantee` back, or fold its three points into `ezy-product` |
-| P70 | "What You'll Notice" benefit cards on the wiper product page | nice to have | Four benefit cards with proof copy are gone | Add `cb-benefits` back to the wiper templates |
-| P71 | Click Blades comparison table on the wiper product page | nice to have | The "us vs cheap blades vs dealership" table is gone from the product page (it is still on `/pages/click-blades`) | Add `cb-comparison` back, or link to it |
-| P73 | "Trusted by 5,000+ customers Australia-wide" on the wiper product page | nice to have | Social proof line is replaced by a Loox review count | Add the line back with the current Loox number |
-| P05 | Five shade benefit cards on the homepage (triple laminate, 3D laser fit, UV, interior, install) | nice to have | The shade story left the homepage; it still lives on shade product pages | Add a shade benefits block to the homepage |
 | P76 | Green "Great choice!" banner on the cart page | nice to have | Confirmation moment on the cart page is gone; the drawer still confirms | Re-add the banner in `main-cart-v7` |
 
 The two switch blockers are closed. P02 came back as a shade products row built from the
@@ -176,6 +166,19 @@ Wipers / Sun shades choice in the homepage finder, Wipers by default so the blad
 not change, Sun shades reading the same 20 brand collections live's car-selector reads.
 
 Seven cheap items closed with them: P08, P13, P14, P19, P22, P23 and P66.
+
+Ten more closed in the same ticket, all against the live markup:
+
+- P52, P53, P54: live's car picker snippet and a `sort_by` select in the new toolbar on the
+  wiper collections and on `/search`, with the Filter & Sort sheet on phones.
+- P68, P70: live's `video-carousel` and `cb-benefits` sections in the wiper templates.
+- P67, P71: the new product page already did the job, so the rows moved to REPLACED-BY
+  `ezy-pdp-photos` and `ezy-pdp-compare` (the PR 7 two-column table).
+- P69: live's three guarantee points and its Perfect Fit Guarantee line went into the new
+  guarantee block.
+- P73: live's trusted-by line is now the heading of the wiper page reviews block.
+- P05: live's `why-clickshades` section renders on the homepage again, right after the
+  shade block.
 
 One regression this check caught and fixed: live's `product-cards` section also renders the
 eight blade cards on `/pages/click-blades`. Rebuilding it in place for the homepage shade
