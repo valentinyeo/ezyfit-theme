@@ -70,8 +70,19 @@ try {
         await page.screenshot({ path: path.join(OUT, 'mobile-menu.png') });
         await page.keyboard.press('Escape');
         await drawer.waitFor({ state: 'hidden' });
-        const returned = await menu.evaluate(node => node === document.activeElement && node.getAttribute('aria-expanded') === 'false');
-        gate('K6', 'Escape closes the menu and restores its opener', returned, String(returned));
+        // `hidden` goes true the moment the dialog loses its open attribute, one task before
+        // the close event lands. Wait for the state K6 asserts instead of reading it on that
+        // first tick: same assertion, no race. A menu that really left focus behind or left
+        // aria-expanded true still fails.
+        const settled = await page
+          .waitForFunction(() => {
+            const opener = document.querySelector('[data-ezy-menu]');
+            return !!opener && opener === document.activeElement && opener.getAttribute('aria-expanded') === 'false';
+          }, null, { timeout: 3000 })
+          .then(() => true, () => false);
+        const state = await menu.evaluate(node => ({ focused: node === document.activeElement, expanded: node.getAttribute('aria-expanded') }));
+        const returned = settled && state.focused && state.expanded === 'false';
+        gate('K6', 'Escape closes the menu and restores its opener', returned, JSON.stringify(state));
         await menu.press('Enter');
         await drawer.locator('.ezy-drawer__close').click();
         await drawer.waitFor({ state: 'hidden' });

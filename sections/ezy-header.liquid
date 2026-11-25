@@ -102,19 +102,30 @@
     if (!head || head.dataset.ready) return;
     head.dataset.ready = '1';
 
-    // Phone menu.
+    // Phone menu. The theme owns the open and closed state: aria-expanded and focus on the
+    // opener move in the same tick as the close, not in the async close event. Relying on
+    // that event left aria-expanded reading "true" for a task after the menu was already
+    // gone, and left focus on the browser's native restore instead of the opener.
     var drawer = document.querySelector('[data-ezy-drawer]');
     var menuBtn = head.querySelector('[data-ezy-menu]');
-    menuBtn.addEventListener('click', function () {
-      drawer.hidden = false;
-      drawer.showModal();
-      menuBtn.setAttribute('aria-expanded', 'true');
-    });
-    drawer.querySelectorAll('[data-ezy-close]').forEach(function (el) { el.addEventListener('click', function () { drawer.close(); }); });
-    drawer.addEventListener('close', function () {
+    function setMenuOpen(open) {
+      menuBtn.setAttribute('aria-expanded', String(open));
+      if (open) {
+        drawer.hidden = false;
+        drawer.showModal();
+        return;
+      }
+      if (drawer.open) drawer.close();
       drawer.hidden = true;
-      menuBtn.setAttribute('aria-expanded', 'false');
-    });
+      menuBtn.focus();
+    }
+    menuBtn.addEventListener('click', function () { setMenuOpen(!drawer.open); });
+    drawer.querySelectorAll('[data-ezy-close]').forEach(function (el) { el.addEventListener('click', function () { setMenuOpen(false); }); });
+    // Escape: take it from the native cancel so the state above is set right away, and
+    // catch the key inside the drawer's search box, where Chrome clears the field first.
+    drawer.addEventListener('cancel', function (event) { event.preventDefault(); setMenuOpen(false); });
+    drawer.addEventListener('keydown', function (event) { if (event.key === 'Escape') { event.preventDefault(); setMenuOpen(false); } });
+    drawer.addEventListener('close', function () { setMenuOpen(false); });
 
     // Search bar under the header.
     var searchBtn = head.querySelector('[data-ezy-search]');
