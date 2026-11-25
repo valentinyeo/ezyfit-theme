@@ -404,6 +404,13 @@
     "final": {
       "type": "ezy-final-cta",
       "settings": {}
+    },
+    "why": {
+      "type": "why-clickshades",
+      "settings": {
+        "heading": "Why Click Shades?",
+        "image_alt": "ClickShades Car Window Shades"
+      }
     }
   },
   "order": [
@@ -413,6 +420,7 @@
     "types",
     "picks",
     "shades",
+    "why",
     "reviews",
     "photos",
     "compare",
