@@ -37,19 +37,19 @@
         "p4": {
           "type": "pack_item",
           "settings": {
-            "text": "Exact fit, or we swap it free within 30 days"
+            "text": "Exact fit, or return it within 30 days"
           }
         },
         "t0": {
           "type": "tick",
           "settings": {
-            "text": "Exact fit or free swap"
+            "text": "Perfect fit for your exact vehicle"
           }
         },
         "t1": {
           "type": "tick",
           "settings": {
-            "text": "2 minute fit, no tools"
+            "text": "Snap-on in under 2 minutes"
           }
         },
         "t2": {
@@ -61,7 +61,7 @@
         "t3": {
           "type": "tick",
           "settings": {
-            "text": "Free shipping"
+            "text": "Free standard shipping"
           }
         }
       },
@@ -179,6 +179,17 @@
       ],
       "settings": {}
     },
+    "picks": {
+      "type": "ezy-shade-picks",
+      "settings": {
+        "collection": "top-picks",
+        "heading": "Car shades for the cars we fit most",
+        "sub": "Click-into-place shades, cut to your exact vehicle. Same day dispatch before 2pm AWST.",
+        "limit": 4,
+        "link": "shopify://collections/car-window-shades",
+        "link_label": "See all car shades"
+      }
+    },
     "shades": {
       "type": "ezy-car-shades",
       "settings": {
@@ -235,7 +246,7 @@
         "r3": {
           "type": "row",
           "settings": {
-            "label": "Free swap within 30 days",
+            "label": "30-day returns",
             "us": "Yes",
             "v2": "Varies",
             "v3": "Varies"
@@ -296,6 +307,52 @@
       "type": "ezy-guarantee",
       "settings": {}
     },
+    "trust": {
+      "type": "ezy-trust",
+      "settings": {
+        "label": "Why shoppers trust Click Shades"
+      },
+      "blocks": {
+        "b1": {
+          "type": "badge",
+          "settings": {
+            "title": "Perfect Fit",
+            "desc": "Custom designed for your exact vehicle",
+            "icon": "fit"
+          }
+        },
+        "b2": {
+          "type": "badge",
+          "settings": {
+            "title": "87% UV Block",
+            "desc": "Advanced mesh technology",
+            "icon": "sun"
+          }
+        },
+        "b3": {
+          "type": "badge",
+          "settings": {
+            "title": "Easy Install",
+            "desc": "Snap-on in under 2 minutes",
+            "icon": "tool"
+          }
+        },
+        "b4": {
+          "type": "badge",
+          "settings": {
+            "title": "30-Day Returns",
+            "desc": "Hassle-free Returns",
+            "icon": "return"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
     "faq": {
       "type": "ezy-faq",
       "blocks": {
@@ -317,21 +374,21 @@
           "type": "question",
           "settings": {
             "q": "How fast is shipping?",
-            "a": "Order before 2pm AWST and it ships the same day. Shipping is free."
+            "a": "Free standard shipping on all orders. Express shipping is available at checkout for an extra $10. Orders placed before 2pm AWST ship the same day, Monday to Friday. Orders placed after 2pm AWST or on weekends ship the following business day."
           }
         },
         "q3": {
           "type": "question",
           "settings": {
             "q": "How do I fit them?",
-            "a": "Lift the arm, press the tab and slide the old blade off, then click the new one on. About 2 minutes, no tools. Your car's video shows each step."
+            "a": "Installation takes under 2 minutes - no tools required. Lift the arm, press the tab and slide the old blade off, then click the new one on. Your car's video shows each step."
           }
         },
         "q4": {
           "type": "question",
           "settings": {
             "q": "What if they don't fit?",
-            "a": "Tell us within 30 days and we send the right ones free."
+            "a": "We offer a 30-day return policy. If they don't fit, start a return within 30 days for a refund. If the return is due to our error, defective, damaged or the wrong item, there are no costs to the customer. For a wrong fit or a change of mind, the customer pays the actual cost of return shipping."
           }
         }
       },
@@ -347,6 +404,13 @@
     "final": {
       "type": "ezy-final-cta",
       "settings": {}
+    },
+    "why": {
+      "type": "why-clickshades",
+      "settings": {
+        "heading": "Why Click Shades?",
+        "image_alt": "ClickShades Car Window Shades"
+      }
     }
   },
   "order": [
@@ -354,12 +418,15 @@
     "popular",
     "lead",
     "types",
+    "picks",
     "shades",
+    "why",
     "reviews",
     "photos",
     "compare",
     "fit",
     "guarantee",
+    "trust",
     "faq",
     "final"
   ]

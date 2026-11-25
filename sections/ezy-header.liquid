@@ -1,18 +1,46 @@
-{{ 'ezy.css' | asset_url | stylesheet_tag }}
 {%- assign brand = section.settings.brand_name | default: shop.name -%}
+{%- comment -%}
+  Click Shades logo loaded from the shop CDN, the same file the live ClickShades header uses.
+  Wiper products and Click Blades pages keep the Click Blades logo.
+{%- endcomment -%}
+{%- liquid
+  assign shades_logo = 'https://clickshades.com.au/cdn/shop/files/Horizontal_logo_black-blue.png?v=1768701859&width=600'
+  assign is_blades = false
+  if template.suffix contains 'clickblades' or product.title contains 'Wiper'
+    assign is_blades = true
+  endif
+  if is_blades
+    assign logo_brand = 'Click Blades'
+  else
+    assign logo_brand = brand
+  endif
+  comment
+    MACL-37 P13 and P14. The store's main-menu linklist sends "Shop by Make" to /collections
+    and "Shop Blades" to the wiper collection. Live sends both to their landing pages, so
+    those two titles are remapped here. The linklist itself is store data and is left alone.
+  endcomment
+  assign nav_pages = 'Shop by Make:/pages/shop-by-make|Shop Blades:/pages/click-blades' | split: '|'
+-%}
 <header class="ezy ezy-head" data-ezy-head>
   <div class="ezy-wrap ezy-head__in">
     <button class="ezy-head__menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="ezy-drawer" data-ezy-menu><span></span><span></span><span></span></button>
-    <a class="ezy-head__logo" href="{{ routes.root_url }}" aria-label="{{ brand }} home">
+    <a class="ezy-head__logo" href="{{ routes.root_url }}" aria-label="{{ logo_brand }} home">
       {%- if section.settings.logo != blank -%}
-        {{ section.settings.logo | image_url: width: 480 | image_tag: alt: brand, height: 38, width: 120 }}
+        {{ section.settings.logo | image_url: width: 480 | image_tag: alt: logo_brand, height: 38, width: 120 }}
+      {%- elsif is_blades -%}
+        <img src="{{ 'clickblades-logo.png' | asset_url }}" alt="{{ logo_brand }}" width="123" height="38">
       {%- else -%}
-        <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="123" height="38">
+        <img src="{{ shades_logo }}" alt="{{ logo_brand }}" width="114" height="38">
       {%- endif -%}
     </a>
     <nav class="ezy-head__nav" aria-label="Main">
       {%- for link in linklists[section.settings.menu].links -%}
-        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+        {%- assign nav_url = link.url -%}
+        {%- for pair in nav_pages -%}
+          {%- assign bits = pair | split: ':' -%}
+          {%- if bits[0] == link.title -%}{%- assign nav_url = bits[1] -%}{%- endif -%}
+        {%- endfor -%}
+        <a href="{{ nav_url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
       {%- endfor -%}
     </nav>
     <div class="ezy-head__tools">
@@ -38,12 +66,16 @@
   </form>
 </header>
 
-<div class="ezy ezy-drawer" id="ezy-drawer" data-ezy-drawer hidden>
+<dialog class="ezy ezy-drawer" id="ezy-drawer" data-ezy-drawer aria-label="Menu" hidden>
   <div class="ezy-drawer__overlay" data-ezy-close></div>
-  <div class="ezy-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="ezy-drawer__panel">
     <div class="ezy-drawer__top">
-      <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="123" height="38">
-      <button class="ezy-drawer__close" type="button" aria-label="Close menu" data-ezy-close>&times;</button>
+      {%- if is_blades -%}
+        <img src="{{ 'clickblades-logo.png' | asset_url }}" alt="{{ logo_brand }}" width="110" height="34">
+      {%- else -%}
+        <img src="{{ shades_logo }}" alt="{{ logo_brand }}" width="102" height="34">
+      {%- endif -%}
+      <button class="ezy-drawer__close" type="button" aria-label="Close menu" data-ezy-close autofocus>&times;</button>
     </div>
     <form class="ezy-drawer__search" action="{{ routes.search_url }}" method="get" role="search">
       <input type="search" name="q" placeholder="{{ section.settings.search_placeholder }}" aria-label="Search" autocomplete="off">
@@ -51,13 +83,18 @@
     </form>
     <nav class="ezy-drawer__nav" aria-label="Menu">
       {%- for link in linklists[section.settings.menu].links -%}
-        <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- assign nav_url = link.url -%}
+        {%- for pair in nav_pages -%}
+          {%- assign bits = pair | split: ':' -%}
+          {%- if bits[0] == link.title -%}{%- assign nav_url = bits[1] -%}{%- endif -%}
+        {%- endfor -%}
+        <a href="{{ nav_url }}">{{ link.title }}</a>
         {%- for child in link.links -%}<a class="ezy-drawer__sub" href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
       {%- endfor -%}
       <a href="{{ routes.account_url }}">Account</a>
     </nav>
   </div>
-</div>
+</dialog>
 
 <script>
   (function () {
@@ -65,18 +102,30 @@
     if (!head || head.dataset.ready) return;
     head.dataset.ready = '1';
 
-    // Phone menu.
+    // Phone menu. The theme owns the open and closed state: aria-expanded and focus on the
+    // opener move in the same tick as the close, not in the async close event. Relying on
+    // that event left aria-expanded reading "true" for a task after the menu was already
+    // gone, and left focus on the browser's native restore instead of the opener.
     var drawer = document.querySelector('[data-ezy-drawer]');
     var menuBtn = head.querySelector('[data-ezy-menu]');
-    function setMenu(open) {
-      drawer.hidden = !open;
+    function setMenuOpen(open) {
       menuBtn.setAttribute('aria-expanded', String(open));
-      document.documentElement.style.overflow = open ? 'hidden' : '';
-      if (open) drawer.querySelector('.ezy-drawer__close').focus(); else menuBtn.focus();
+      if (open) {
+        drawer.hidden = false;
+        drawer.showModal();
+        return;
+      }
+      if (drawer.open) drawer.close();
+      drawer.hidden = true;
+      menuBtn.focus();
     }
-    menuBtn.addEventListener('click', function () { setMenu(true); });
-    drawer.querySelectorAll('[data-ezy-close]').forEach(function (el) { el.addEventListener('click', function () { setMenu(false); }); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !drawer.hidden) setMenu(false); });
+    menuBtn.addEventListener('click', function () { setMenuOpen(!drawer.open); });
+    drawer.querySelectorAll('[data-ezy-close]').forEach(function (el) { el.addEventListener('click', function () { setMenuOpen(false); }); });
+    // Escape: take it from the native cancel so the state above is set right away, and
+    // catch the key inside the drawer's search box, where Chrome clears the field first.
+    drawer.addEventListener('cancel', function (event) { event.preventDefault(); setMenuOpen(false); });
+    drawer.addEventListener('keydown', function (event) { if (event.key === 'Escape') { event.preventDefault(); setMenuOpen(false); } });
+    drawer.addEventListener('close', function () { setMenuOpen(false); });
 
     // Search bar under the header.
     var searchBtn = head.querySelector('[data-ezy-search]');
@@ -129,7 +178,7 @@
   "name": "EZY header",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "text", "id": "brand_name", "label": "Brand name (logo alt text)", "default": "1300 EZYFIT" },
+    { "type": "text", "id": "brand_name", "label": "Brand name (logo alt text)", "default": "Click Shades" },
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
     { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search your car or a product" }
   ]

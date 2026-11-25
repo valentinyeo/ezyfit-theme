@@ -1,6 +1,8 @@
 # ClickShades shade page parity
 
-Files: `sections/main-product-v2.liquid` (old shade product page, skips itself on wiper products), `video-carousel.liquid`, `reviews.liquid`, `faq.liquid`, `collection-product-grid-v7.liquid`, `assets/ezy-shade.css`.
+Files: `sections/main-product-v2.liquid` (old shade product page, skips itself on wiper products), `video-carousel.liquid`, `reviews.liquid`, `faq.liquid`, `collection-product-grid-v7.liquid`.
+
+MACL-36 deleted `assets/ezy-shade.css`, the reskin layer that painted the shade page in the old EZYFIT palette (#0135af blue, yellow buttons, 800 italic titles). The page now renders its own Click Shades design (#2463af blue, Poppins 700 upright), so `S4` and `S5` assert that instead of the old palette.
 
 ## Sub-features
 

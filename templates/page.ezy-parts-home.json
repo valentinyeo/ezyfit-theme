@@ -9,7 +9,7 @@
         "video_label": "Watch a real fit",
         "search_placeholder": "Your make or model",
         "heading": "Parts made for your exact car",
-        "lead": "Wipers from $59 a front pair, 25% off already in the price. Search your car to see the blades made for it. Click-in sun shades are further down.",
+        "lead": "Guaranteed fit for your specific vehicle. Wipers from $59 a front pair, 25% off already in the price. Search your car to see the blades made for it. Click-in sun shades are further down.",
         "finder_heading": "Find your car",
         "button": "Find my wipers",
         "next_text": "Your car's blades and fitment video come next.",
@@ -37,25 +37,25 @@
         "p3": {
           "type": "pack_item",
           "settings": {
-            "text": "Free shipping, ships today if you order by 2pm"
+            "text": "Free shipping, ships today if you order by 2pm AWST"
           }
         },
         "p4": {
           "type": "pack_item",
           "settings": {
-            "text": "Exact fit, or we swap it free within 30 days"
+            "text": "Exact fit, or return it within 30 days"
           }
         },
         "t0": {
           "type": "tick",
           "settings": {
-            "text": "Exact fit or free swap"
+            "text": "Perfect fit for your exact vehicle"
           }
         },
         "t1": {
           "type": "tick",
           "settings": {
-            "text": "2 minute fit, no tools"
+            "text": "Snap-on in under 2 minutes"
           }
         },
         "t2": {
@@ -67,7 +67,7 @@
         "t3": {
           "type": "tick",
           "settings": {
-            "text": "Free shipping"
+            "text": "Free standard shipping"
           }
         }
       },
@@ -95,7 +95,7 @@
             "button": "Shop wipers",
             "link": "/collections/wiper-blades",
             "fallback_asset": "ezy-blade-standard.png",
-            "alt": "An EZYFIT wiper blade"
+            "alt": "A Click Shades wiper blade"
           }
         },
         "shades": {
@@ -179,8 +179,8 @@
       "type": "ezy-guarantee",
       "settings": {
         "kicker": "Perfect fit promise",
-        "heading": "Wipers fit your car, or we swap them free",
-        "text": "Pick your car and we send blades made for it. If they don't fit, tell us within 30 days and we send the right ones free.",
+        "heading": "Wipers fit your car, or return them within 30 days",
+        "text": "Pick your car and we send blades made for it. If they don't fit, start a return within 30 days for a refund: you pay the actual cost of return shipping unless the error was ours.",
         "button": "Find my wipers",
         "link": "#find"
       }
@@ -307,7 +307,7 @@
         "r3": {
           "type": "row",
           "settings": {
-            "label": "Free swap within 30 days",
+            "label": "30-day returns",
             "us": "Yes",
             "v2": "Varies",
             "v3": "Varies"
@@ -355,14 +355,14 @@
           "type": "question",
           "settings": {
             "q": "How fast is wiper shipping?",
-            "a": "Order before 2pm AWST and it ships the same day. Shipping is free."
+            "a": "Free standard shipping on all orders. Express shipping is available at checkout for an extra $10. Orders placed before 2pm AWST ship the same day, Monday to Friday. Orders placed after 2pm AWST or on weekends ship the following business day."
           }
         },
         "q2": {
           "type": "question",
           "settings": {
             "q": "What if my wipers do not fit?",
-            "a": "Tell us within 30 days and we send the right ones free."
+            "a": "We offer a 30-day return policy. If they don't fit, start a return within 30 days for a refund. If the return is due to our error, defective, damaged or the wrong item, there are no costs to the customer. For a wrong fit or a change of mind, the customer pays the actual cost of return shipping."
           }
         },
         "q3": {
@@ -376,7 +376,7 @@
           "type": "question",
           "settings": {
             "q": "How do I fit wipers?",
-            "a": "Lift the arm, press the tab and slide the old blade off, then click the new one on. About 2 minutes, no tools. Your car's video shows each step."
+            "a": "Installation takes under 2 minutes - no tools required. Lift the arm, press the tab and slide the old blade off, then click the new one on. Your car's video shows each step."
           }
         }
       },

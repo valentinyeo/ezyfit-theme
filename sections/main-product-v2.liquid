@@ -7,7 +7,21 @@
   endif
 -%}
 {%- unless ezy_skip -%}
-{{ 'ezy-shade.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign box_contents = product.metafields.custom.box_contents
+  assign description_contents = ''
+  assign description_lists = product.description | split: '</ul>'
+  for description_list in description_lists
+    assign list_text = description_list | strip_html | downcase
+    if list_text contains 'what you get' or list_text contains "what's included" or list_text contains 'box contents'
+      if description_list contains '<ul'
+        assign description_contents = description_list | split: '<ul' | last
+        break
+      endif
+    endif
+  endfor
+  assign shade_title = product.title | downcase
+-%}
 <style>
   /* ========== PRODUCT PAGE V2 STYLES ========== */
 
@@ -132,6 +146,8 @@
 
   /* Title */
   .product-title {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-style: normal;
     font-size: 22px;
     font-weight: 700;
     color: var(--dark, #1a1a1a);
@@ -313,8 +329,8 @@
   .add-to-cart-btn {
     width: 100%;
     padding: 16px 24px;
-    background: linear-gradient(180deg, #ffd814 0%, #f7ca00 100%);
-    color: var(--dark, #1a1a1a);
+    background: #2463af;
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     font-size: 17px;
@@ -547,8 +563,8 @@
     font-weight: 700;
     padding: 4px 8px;
     border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-transform: none;
+    letter-spacing: 0;
     z-index: 1;
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
@@ -1146,7 +1162,7 @@
         <span class="price-current">{{ product.price | money }}</span>
         {% if product.compare_at_price > product.price %}
           <span class="price-compare">{{ product.compare_at_price | money }}</span>
-          <span class="price-badge">SAVE {{ product.compare_at_price | minus: product.price | money }}</span>
+          <span class="price-badge">Save {{ product.compare_at_price | minus: product.price | money }}</span>
         {% endif %}
       </div>
 
@@ -1944,8 +1960,8 @@
           </svg>
           {% endif %}
         </div>
-        <h3>{% if product.title contains 'Wiper' %}Streak-Free Wipe{% else %}87% UV Block{% endif %}</h3>
-        <p>{% if product.title contains 'Wiper' %}Premium rubber wipes clean in a single pass{% else %}Advanced mesh technology blocks harmful rays{% endif %}</p>
+        <h3>{% if product.title contains 'Wiper' %}Streak-Free Wipe{% else %}UV protection{% endif %}</h3>
+        <p>{% if product.title contains 'Wiper' %}Premium rubber wipes clean in a single pass{% else %}See product details for this shade's UV protection information{% endif %}</p>
       </div>
       <div class="benefit-card">
         <div class="benefit-icon">
@@ -2007,29 +2023,27 @@
         <span>30-day satisfaction guarantee</span>
       </div>
       {% else %}
-      <div class="included-item">
-        <svg viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-        </svg>
-        <span>{% if product.title contains 'Rear Side Windows' %}1x Custom-fit rear side window shades (pair){% elsif product.title contains 'Full Set' %}1x Complete shade set (front + rear){% else %}1x Custom-fit front windscreen shade{% endif %}</span>
-      </div>
-      <div class="included-item">
-        <svg viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-        </svg>
-        <span>1x Premium storage bag</span>
-      </div>
-      <div class="included-item">
-        <svg viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-        </svg>
-        <span>Installation guide</span>
-      </div>
-      <div class="included-item">
-        <svg viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-        </svg>
-        <span>30-day satisfaction guarantee</span>
+      <div class="shade-box-contents" data-shade-box-contents>
+        {%- if box_contents != blank -%}
+          {{ box_contents | metafield_tag }}
+        {%- elsif description_contents != blank -%}
+          <ul{{ description_contents }}</ul>
+        {%- else -%}
+          <p>
+            {%- if shade_title contains 'full set' -%}
+              Custom-fit shade set
+            {%- elsif shade_title contains 'side' -%}
+              {%- if shade_title contains 'rear' -%}Custom-fit rear side window shades{%- else -%}Custom-fit side window shades{%- endif -%}
+            {%- elsif shade_title contains 'rear' -%}
+              Custom-fit rear window shade
+            {%- elsif shade_title contains 'windscreen' or shade_title contains 'windshield' -%}
+              Custom-fit front windscreen shade
+            {%- else -%}
+              Custom-fit window shades
+            {%- endif -%}
+          </p>
+          <p>See product details for the included pieces.</p>
+        {%- endif -%}
       </div>
       {% endif %}
     </div>

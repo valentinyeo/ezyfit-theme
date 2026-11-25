@@ -1,10 +1,9 @@
-{{ 'ezy.css' | asset_url | stylesheet_tag }}
 {%- assign brand = section.settings.brand_name | default: shop.name -%}
 <footer class="ezy ezy-foot">
   <div class="ezy-wrap">
     <div class="ezy-foot__top">
       <div class="ezy-foot__brand">
-        <img src="{{ 'ezy-logo.png' | asset_url }}" alt="{{ brand }}" width="123" height="38" loading="lazy">
+        <img src="https://clickshades.com.au/cdn/shop/files/Horizontal_logo_black-blue.png?v=1768701859&width=600" alt="{{ brand }}" width="140" height="47" loading="lazy">
         <p>{{ section.settings.tagline }}</p>
         <a class="ezy-foot__contact" href="/pages/contact">Contact us</a>
         {%- if section.settings.phone != blank -%}<a class="ezy-foot__contact" href="tel:{{ section.settings.phone | remove: ' ' }}">{{ section.settings.phone }}</a>{%- endif -%}
@@ -22,38 +21,44 @@
       </div>
       <nav class="ezy-foot__col" aria-label="Shop">
         <h2 class="ezy-foot__h">Shop</h2>
-        <a href="/collections/wiper-blades">Wiper blades</a>
+        <a href="/collections/wiper-blades">Wiper Blades</a>
+        <a href="/collections/windscreen-sun-shade">Windscreen Sun Shade</a>
         <a href="/#find">Find my car</a>
-        <a href="/pages/request-your-car">Request your car</a>
-        <a href="/collections/car-window-shades">Car shades</a>
+        <a href="/pages/request-your-car">Request Your Car</a>
+        <a href="/collections/car-window-shades">Car Window Shades</a>
         <a href="/pages/happy-customers">Reviews</a>
-        <a href="/pages/about-us">About us</a>
-        <a href="/pages/become-a-stockist">Become a stockist</a>
+        <a href="/pages/about-us">About Us</a>
+        <a href="/pages/become-a-stockist">Become a Stockist</a>
       </nav>
-      <nav class="ezy-foot__col" aria-label="Help and policies">
-        <h2 class="ezy-foot__h">Help and policies</h2>
+      <nav class="ezy-foot__col" aria-label="Policies">
+        <h2 class="ezy-foot__h">Policies</h2>
         <a href="/#ezy-faq">FAQs</a>
-        <a href="/policies/shipping-policy">Shipping</a>
-        <a href="/policies/refund-policy">Returns and refunds</a>
-        <a href="/policies/privacy-policy">Privacy</a>
-        <a href="/policies/terms-of-service">Terms of service</a>
-        <a href="/pages/payment-policy">Payments</a>
-        <a href="/pages/order-cancellation-policy">Order cancellation</a>
-        <a href="/pages/accessibility-statement">Accessibility</a>
-        <a href="/pages/cookie-policy">Cookie policy</a>
-        <a href="/pages/legal-disclaimer">Legal disclaimer</a>
+        <a href="/policies/shipping-policy">Shipping Policy</a>
+        <a href="/policies/refund-policy">Refund Policy</a>
+        <a href="/policies/privacy-policy">Privacy Policy</a>
+        <a href="/policies/terms-of-service">Terms of Service</a>
+        <a href="/pages/payment-policy">Payment Policy</a>
+        <a href="/pages/order-cancellation-policy">Order Cancellation Policy</a>
+        <a href="/pages/accessibility-statement">Accessibility Statement</a>
+        <a href="/pages/cookie-policy">Cookie Policy</a>
+        <a href="/pages/legal-disclaimer">Legal Disclaimer</a>
       </nav>
       <div class="ezy-foot__col">
-        <h2 class="ezy-foot__h">Business details</h2>
-        <p><strong>{{ brand }}</strong></p>
-        <p>ABN {{ section.settings.abn }}</p>
-        <p>{{ section.settings.address }}</p>
-        <p>{{ section.settings.hours }}</p>
+        <h2 class="ezy-foot__h">Business Information</h2>
+        <p><strong>Business Name:</strong> {{ brand }}</p>
+        <p><strong>ABN:</strong> {{ section.settings.abn }}</p>
+        <p><strong>Business Address:</strong> {{ section.settings.address }}</p>
+        <p><strong>Business Hours:</strong> {{ section.settings.hours }}</p>
       </div>
     </div>
     <div class="ezy-foot__pay" aria-label="Payment options">
       {%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag: class: 'ezy-foot__payicon' }}{%- endfor -%}
     </div>
+    {%- comment -%} MACL-37 P22: the live footer Afterpay block, same wording. {%- endcomment -%}
+    <p class="ezy-foot__afterpay">
+      <span>Buy now, pay later with</span> <b>Afterpay</b> <span>- 4 interest-free payments</span>
+      <a href="https://www.afterpay.com/en-AU/how-it-works" target="_blank" rel="noopener">Learn more</a>
+    </p>
     <p class="ezy-foot__copy">&copy; {{ 'now' | date: '%Y' }} {{ brand }}. All rights reserved.</p>
   </div>
 </footer>
@@ -62,15 +67,15 @@
 {
   "name": "EZY footer",
   "settings": [
-    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "1300 EZYFIT" },
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "Click Shades" },
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "Wiper blades made for your exact car. Fits in 2 minutes." },
-    { "type": "text", "id": "phone", "label": "Phone (hidden when empty)" },
-    { "type": "text", "id": "email", "label": "Email (hidden when empty)" },
+    { "type": "text", "id": "phone", "label": "Phone (hidden when empty)", "default": "1300 399 348" },
+    { "type": "text", "id": "email", "label": "Email (hidden when empty)", "default": "sales@clickshades.com.au" },
     { "type": "text", "id": "facebook_url", "label": "Facebook page (hidden when empty)", "default": "https://www.facebook.com/profile.php?id=61580829655005" },
     { "type": "text", "id": "instagram_url", "label": "Instagram profile (hidden when empty)", "default": "https://www.instagram.com/clickshades" },
     { "type": "text", "id": "abn", "label": "ABN", "default": "24 127 742 441" },
     { "type": "text", "id": "address", "label": "Address", "default": "21 Discovery Drive, Bibra Lake WA 6163, Australia" },
-    { "type": "text", "id": "hours", "label": "Hours", "default": "Monday to Friday, 9am to 5pm AWST" }
+    { "type": "text", "id": "hours", "label": "Hours", "default": "Monday-Friday, 9:00 AM - 5:00 PM AWST (excluding public holidays)." }
   ]
 }
 {% endschema %}

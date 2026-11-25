@@ -162,7 +162,8 @@ try {
     };
   });
   const dateRe = /by (Mon|Tue|Wed|Thu|Fri|Sat|Sun) \d{1,2} [A-Z][a-z]{2}/;
-  gate('W5a', 'delivery: free and express estimate with date and note', /Free delivery/i.test(info.ship) && /Express delivery/.test(info.ship) && dateRe.test(info.ship) && /\$10/.test(info.ship) && /estimates/.test(info.ship), info.ship);
+  const policyLink = await p.locator('[data-ezy-ship] a').getAttribute('href');
+  gate('W5a', 'delivery uses the published shipping window, not invented dates or express service', /Free delivery/i.test(info.ship) && /1–4 business days total/i.test(info.ship) && !/Express delivery|\$10/.test(info.ship) && !dateRe.test(info.ship) && /estimates/i.test(info.ship) && policyLink === '/policies/shipping-policy', JSON.stringify({ ship: info.ship, policyLink }));
   gate('W5b', 'stock line says in stock', /in stock/i.test(info.stock), info.stock);
   gate('W5c', 'pickup block states the Discovery Drive address', /21 Discovery Drive/.test(info.pickup) && /Bibra Lake/.test(info.pickup), info.pickup);
   gate('W5d', 'warranty tick present', info.ticks.some((x) => /12-month warranty/i.test(x)), JSON.stringify(info.ticks));
@@ -197,12 +198,13 @@ try {
     const faq = document.querySelector('#ezy-faq');
     const shown = ids.filter((id) => { const el = document.getElementById(id); return el && el.offsetHeight > 0 && (!faq || (el.compareDocumentPosition(faq) & Node.DOCUMENT_POSITION_FOLLOWING)); });
     const g = document.querySelector('#ezy-pdp-guarantee');
-    return { shown, photos: document.querySelectorAll('#ezy-pdp-photos img').length, rows: document.querySelectorAll('#ezy-pdp-compare tbody tr').length, carInGuarantee: g ? /Hilux/.test(g.textContent) : false, clip: !!document.querySelector('[data-ezy-pdp-clip]') };
+    return { shown, photos: document.querySelectorAll('#ezy-pdp-photos img').length, rows: document.querySelectorAll('#ezy-pdp-compare tbody tr').length, rowLabels: [...document.querySelectorAll('#ezy-pdp-compare tbody th')].map((t) => t.textContent.trim()).join('|'), carInGuarantee: g ? /Hilux/.test(g.textContent) : false, clip: !!document.querySelector('[data-ezy-pdp-clip]') };
   });
   await p.evaluate(() => document.querySelector('#ezy-pdp-compare')?.scrollIntoView());
   await p.waitForTimeout(800);
   await snap(p, 'W9-desktop-long');
-  gate('W9', 'long wiper page: photos, comparison, guarantee naming the car and shade cross-sell show before the FAQ', more.shown.length === 4 && more.photos >= 4 && more.rows === 4 && more.carInGuarantee, JSON.stringify(more));
+  // PR 7 narrowed the compare table to product facts, so W9 checks the row it must keep, not the old four-row count.
+  gate('W9', 'long wiper page: photos, comparison, guarantee naming the car and shade cross-sell show before the FAQ', more.shown.length === 4 && more.photos >= 4 && more.rows >= 2 && /Vehicle-specific connector/.test(more.rowLabels) && more.carInGuarantee, JSON.stringify(more));
   await ctx.close(); await sleep(1200);
 
   // W6. Footer links.

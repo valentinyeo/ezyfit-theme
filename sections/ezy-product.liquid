@@ -5,7 +5,6 @@
   Fitment video: custom.fit_video (URL) on the product, else the section default.
 {%- endcomment -%}
 {%- if product.title contains 'Wiper' -%}
-{{ 'ezy.css' | asset_url | stylesheet_tag }}
 {%- liquid
   assign variant = product.selected_or_first_available_variant
   assign spray = product.metafields.custom.spray_product.value
@@ -22,9 +21,6 @@
   endif
   assign quarter = variant.price | divided_by: 4
   assign wipers = section.settings.collection | default: collections['wiper-blades']
-  assign now_s = 'now' | date: '%s'
-  assign free_eta = now_s | plus: 518400
-  assign express_eta = now_s | plus: 172800
 
   assign upsells = '' | split: ','
   assign up_src = 'none'
@@ -125,7 +121,7 @@
         <select id="ezy-year" class="ezy-pdp__select" data-ezy-year>
           <option value="{{ product.url }}" selected>{{ car | split: ' ->' | first }}</option>
         </select>
-        <a class="ezy-pdp__other" href="/#ezy-finder">Different car? Find your blades</a>
+        <a class="ezy-pdp__other" href="/#find">Different car? Find your blades</a>
       </div>
 
       <fieldset class="ezy-pdp__opt" data-ezy-type>
@@ -180,15 +176,35 @@
       <p class="ezy-pdp__msg" role="status" aria-live="polite" data-ezy-msg></p>
 
       <div class="ezy-pdp__ship" data-ezy-ship>
-        <p><strong>Free delivery</strong> by {{ free_eta | date: '%a %-d %b' }}</p>
-        <p><strong>Express delivery</strong> by {{ express_eta | date: '%a %-d %b' }}, $10 at checkout</p>
-        <small>Delivery times are estimates and may vary.</small>
+        <p><strong>Free delivery</strong>, 1–4 business days total.</p>
+        <small>Delivery times are estimates and may vary. See our <a href="{{ shop.shipping_policy.url }}">shipping policy</a> for handling times and delivery conditions.</small>
       </div>
 
       <ul class="ezy-ticks ezy-pdp__ticks">
         {%- assign ticks = section.settings.ticks | newline_to_br | split: '<br />' -%}
         {%- for t in ticks -%}{%- assign tt = t | strip -%}{%- if tt != blank -%}<li>{{ tt }}</li>{%- endif -%}{%- endfor -%}
       </ul>
+
+      {%- comment -%}
+        MACL-37 P66: the trust badges and "Secure checkout with" payment row live shows in
+        the wiper buy box, back in the new markup.
+      {%- endcomment -%}
+      {%- assign trust_lines = section.settings.trust_badges | newline_to_br | split: '<br />' -%}
+      <div class="ezy-pdp__trust">
+        {%- for line in trust_lines -%}
+          {%- assign tl = line | strip -%}
+          {%- if tl != blank -%}
+            <span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.4-3 8.3-7 9-4-.7-7-4.6-7-9V6l7-3z"/><path d="m9 12 2 2 4-4"/></svg>
+              {{ tl }}
+            </span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="ezy-pdp__secure">
+        <span>{{ section.settings.secure_text }}</span>
+        {%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag: class: 'ezy-foot__payicon' }}{%- endfor -%}
+      </div>
 
       {%- if section.settings.pickup_address != blank -%}
         <details class="ezy-pdp__pickup" data-ezy-pickup>
@@ -239,7 +255,7 @@
           {%- if len_rear != blank -%}<div><dt>Rear</dt><dd>{{ len_rear }}</dd></div>{%- endif -%}
         </dl>
       {%- endif -%}
-      <a class="ezy-pdp__other" href="/#ezy-finder">Not your car? Find your blades</a>
+      <a class="ezy-pdp__other" href="/#find">Not your car? Find your blades</a>
     </div>
   </div>
 </section>
@@ -290,7 +306,7 @@
 
 <section class="ezy ezy-sec" id="ezy-pdp-reviews">
   <div class="ezy-wrap">
-    <h2 class="ezy-h2">What buyers say</h2>
+    <h2 class="ezy-h2">Trusted by 5,000+ customers Australia-wide</h2>
     <p class="ezy-sub">Real reviews from verified buyers.</p>
     <div class="ezy-loox"><div id="looxReviews" data-product-id="{{ product.id }}" class="loox-reviews-default">{{ product.metafields.loox.reviews }}</div></div>
   </div>
@@ -301,7 +317,7 @@
 {%- if section.blocks.size > 0 -%}
 <section class="ezy ezy-sec ezy-sec--rule" id="ezy-faq">
   <div class="ezy-wrap">
-    <h2 class="ezy-h2" style="margin-bottom: 20px !important">Questions drivers ask</h2>
+    <h2 class="ezy-h2" style="margin-bottom: 20px !important">Frequently Asked Questions</h2>
     <div class="ezy-faq">
       {%- for block in section.blocks -%}
         <details {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
@@ -551,9 +567,11 @@
     { "type": "collection", "id": "collection", "label": "Wiper collection (for the year list)" },
     { "type": "text", "id": "store_rating", "label": "Store rating text (used when product has no reviews)", "default": "4.8 from 49 store reviews" },
     { "type": "url", "id": "fit_video", "label": "Default fitment video (mp4 or YouTube)" },
-    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Made for your exact car\n2 minute fit, no tools\nWrong fit? We swap it free within 30 days\nOrder before 2pm AWST, ships the same day\nFree shipping\n12-month warranty included" },
+    { "type": "textarea", "id": "ticks", "label": "Ticks (one per line)", "default": "Perfect fit for your exact vehicle\nSnap-on in under 2 minutes\nWrong fit? 30-day returns\nOrder before 2pm AWST, ships the same day\nFree standard shipping\n12-month warranty included" },
     { "type": "textarea", "id": "features", "label": "What you get, numbered (one per line)", "default": "Front blade pair for your car\nPremium rubber, streak-free in all conditions\nVehicle-specific connector, fitted\n12-month warranty" },
     { "type": "text", "id": "pickup_title", "label": "Pickup title", "default": "Pickup available at 21 Discovery Drive" },
+    { "type": "textarea", "id": "trust_badges", "label": "Trust badges in the buy box (one per line)", "default": "Free Shipping\n30-Day Returns\nAussie Quality" },
+    { "type": "text", "id": "secure_text", "label": "Secure checkout line", "default": "Secure checkout with" },
     { "type": "text", "id": "pickup_note", "label": "Pickup note", "default": "Usually ready in 24 hours" },
     { "type": "textarea", "id": "pickup_address", "label": "Pickup address (empty hides pickup)", "default": "21 Discovery Drive, Bibra Lake WA 6163, Australia" }
   ],

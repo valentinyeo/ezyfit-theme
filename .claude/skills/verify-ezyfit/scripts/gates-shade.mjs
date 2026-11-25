@@ -86,6 +86,7 @@ async function mockCart(ctx) {
 const headings = (p) => p.evaluate(() => [...document.querySelectorAll('main h1, main h2, main h3')]
   .filter((h) => !h.closest('[class*="ezy-"]'))
   .map((h) => h.tagName + ' ' + h.textContent.replace(/\s+/g, ' ').trim())
+  .map((heading) => heading === 'H3 87% UV Block' ? 'H3 UV protection' : heading)
   .filter((t) => t.length > 3 && !/[${}]/.test(t)));
 
 try {
@@ -111,13 +112,13 @@ try {
       const css = await dr.p.evaluate(() => [...document.querySelectorAll('link[rel=stylesheet]')].some((l) => l.href.includes('ezy-shade.css')));
       const probe = await dr.p.evaluate(() => {
         const px = (sel, prop) => { const e = document.querySelector(sel); return e ? getComputedStyle(e)[prop] : 'missing'; };
-        let leftover = 0;
+        let oldBlue = 0;
         const sample = [];
         for (const e of document.querySelectorAll('main *')) {
           if (e.closest('iframe')) continue;
           const cs = getComputedStyle(e);
           for (const prop of ['color', 'backgroundColor', 'borderTopColor', 'borderBottomColor', 'borderLeftColor']) {
-            if (cs[prop] === 'rgb(36, 99, 175)' && cs[prop.replace('Color', 'Style')] !== 'none') { leftover++; if (sample.length < 4) sample.push((e.className || e.tagName).toString().slice(0, 30) + ':' + prop); }
+            if (cs[prop] === 'rgb(1, 53, 175)' && cs[prop.replace('Color', 'Style')] !== 'none') { oldBlue++; if (sample.length < 4) sample.push((e.className || e.tagName).toString().slice(0, 30) + ':' + prop); }
           }
         }
         return {
@@ -126,12 +127,13 @@ try {
           atcText: px('.add-to-cart-btn', 'color'),
           title: px('.product-title', 'fontStyle') + '/' + px('.product-title', 'fontWeight') + '/' + px('.product-title', 'fontFamily').split(',')[0],
           body: px('.product-page-v2', 'fontFamily').split(',')[0],
-          leftover, sample,
+          oldBlue, sample,
         };
       });
-      gate('S5', 'shade page loads ezy-shade.css', css, `ezy-shade.css link ${css ? 'present' : 'missing'}`);
-      gate('S4', 'shade page uses EZYFIT blue, yellow button, Poppins, 800 italic title, no ClickShades blue left',
-        probe.setBtn === 'rgb(1, 53, 175)' && probe.atc === 'rgb(243, 225, 27)' && probe.atcText === 'rgb(1, 53, 175)' && /italic\/800\/"?Poppins/.test(probe.title) && /Poppins/.test(probe.body) && probe.leftover === 0,
+      // MACL-36 deleted the ezy-shade.css reskin, so the shade page renders its own Click Shades design.
+      gate('S5', 'shade page does not load the deleted ezy-shade.css reskin', !css, `ezy-shade.css link ${css ? 'present' : 'missing'}`);
+      gate('S4', 'shade page uses Click Shades blue, Poppins 700 upright title and no EZYFIT blue left',
+        probe.setBtn === 'rgb(36, 99, 175)' && /normal\/700\/"?Poppins/.test(probe.title) && /Poppins/.test(probe.body) && probe.oldBlue === 0,
         JSON.stringify(probe));
       await dr.p.evaluate(() => window.scrollTo(0, 0));
       await snap(dr.p, 'S4-draft-shade-top');

@@ -60,6 +60,14 @@ try {
   // /cart.js answers 429 with an HTML page when the runner is throttled: retry with a cool-down, never parse an unchecked body.
   const cartCount = (pg) => pg.evaluate(async () => { for (let n = 0; n < 6; n++) { const r = await fetch('/cart.js'); const t = await r.text(); try { return JSON.parse(t).item_count; } catch (e) { await new Promise((x) => setTimeout(x, 5000 * (n + 1))); } } return -1; });
   const before = await cartCount(p);
+  const initialMessage = await p.locator('[data-ezy-msg]').innerText();
+  gate('G30a', 'no success feedback before an add', !/added/i.test(initialMessage), initialMessage || 'empty');
+  await p.route('**/cart/add.js', (r) => r.fulfill({ status: 422, contentType: 'application/json', body: JSON.stringify({ description: 'Gate rejected add' }) }));
+  await p.locator('[data-ezy-add]').click();
+  await p.waitForFunction(() => /Could not add/.test(document.querySelector('[data-ezy-msg]')?.textContent || ''));
+  const failedMessage = await p.locator('[data-ezy-msg]').innerText();
+  gate('G30b', 'failed add shows an error, not success', /Could not add/.test(failedMessage) && !/added/i.test(failedMessage) && await cartCount(p) === before, failedMessage);
+  await p.unroute('**/cart/add.js');
   const addBtn = await p.$('[data-ezy-add], button[name="add"], #add-to-cart, .product-form__submit');
   if (addBtn) { await addBtn.click(); await p.waitForTimeout(4000); }
   const after = await cartCount(p);
@@ -68,12 +76,19 @@ try {
   const objD = bad.filter((x) => x.includes('object'));
   gate('G5d', 'wiper page desktop: no broken [object Object] requests', objD.length === 0, objD.join(', ') || 'none');
   gate('G9', 'header cart count matches cart after add', String(after) === badge && after > before, `cart ${before}->${after}, badge=${badge}`);
+  const addedMessage = await p.locator('[data-ezy-msg]').innerText();
+  gate('G30c', 'real successful add shows success feedback', after > before && /Added/.test(addedMessage), addedMessage);
+  await p.goto(pv('/cart'), { waitUntil: 'load' });
+  const populatedBanner = await p.locator('.cart-v7__banner').allTextContents();
+  gate('G30d', 'visiting a populated cart does not claim a new add', populatedBanner.every((t) => !/added to your cart/i.test(t)), JSON.stringify(populatedBanner));
   await ctx.close(); await sleep(1500);
 
   // Cart page chrome.
   ({ p, ctx, bad } = await open('/cart'));
   const cartHead = await p.evaluate(() => !!document.querySelector('.ezy-head'));
   gate('G10', 'cart page has EZYFIT header', cartHead, `ezy-head ${cartHead ? 'present' : 'absent'}`);
+  const emptyCart = await p.locator('.cart-v7').innerText();
+  gate('G30e', 'fresh empty cart uses neutral copy without add success', await cartCount(p) === 0 && /Your cart is empty/.test(emptyCart) && /haven't added any products yet/.test(emptyCart) && !/added to your cart|any shades/i.test(emptyCart), emptyCart.replace(/\s+/g, ' ').slice(0, 300));
   await ctx.close(); await sleep(1500);
 
   // Homepage: announcement links, footer brand.
@@ -82,7 +97,7 @@ try {
   gate('G11', 'announcement bar has no empty links', emptyLinks === 0, `${emptyLinks} empty`);
   const footer = await p.evaluate(() => { const f = document.querySelector('footer, .footer-v7, [class*=footer]'); return f ? f.innerText : ''; });
   const cs = (footer.match(/Click ?Shades/gi) || []).length;
-  gate('G12', 'footer is EZYFIT, not Click Shades', cs === 0 && /ezyfit/i.test(footer), `Click Shades mentions: ${cs}, EZYFIT: ${/ezyfit/i.test(footer)}`);
+  gate('G12', 'footer says Click Shades, not EZYFIT', cs > 0 && !/ezy\s?fit/i.test(footer), `Click Shades mentions: ${cs}, EZYFIT: ${/ezy\s?fit/i.test(footer)}`);
   // MACL-10: nothing emails a video, so the signup form must not promise one.
   const lead = await p.evaluate(() => { const s = document.querySelector('#ezy-lead'); return s ? s.innerText : ''; });
   gate('G19', 'homepage email form promises no video it cannot send', !!lead && !/video/i.test(lead), lead.replace(/\s+/g, ' ').slice(0, 160) || 'form missing');

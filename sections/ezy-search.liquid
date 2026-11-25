@@ -1,4 +1,3 @@
-{{ 'ezy.css' | asset_url | stylesheet_tag }}
 <section class="ezy ezy-sec ezy-coll">
   <div class="ezy-wrap">
     <h1 class="ezy-h2">{% if search.performed %}Results for "{{ search.terms | escape }}"{% else %}Search{% endif %}</h1>
@@ -7,6 +6,56 @@
       <input id="ezy-search-page-q" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Type your car, for example Hilux" autocomplete="off">
       <input type="hidden" name="type" value="product">
     </form>
+    {%- if search.performed -%}
+    {%- comment -%}
+      MACL-37 P54: the live search car picker plus sort and In Stock, the same toolbar live's
+      /search carries. The picker is the live snippet unchanged; it reads the make from the
+      query and fills model and year the same way it does on live.
+    {%- endcomment -%}
+    <div class="ezy-coll__tools search-controls">
+      <button type="button" class="ezy-coll__toggle" id="toolbar-picker-toggle" aria-expanded="false" aria-controls="srch-car-picker">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 12h1l2-5h12l2 5h1a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 11-4 0H8a2 2 0 11-4 0H3a1 1 0 01-1-1v-3a1 1 0 011-1z"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="17" r="1.5"/></svg>
+        <span id="toolbar-picker-text">Find your car</span>
+        <svg class="ezy-coll__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="ezy-coll__right">
+        <label class="ezy-coll__stock">
+          <input type="checkbox" id="filter-in-stock-desktop" data-ezy-instock>
+          <span>In Stock Only</span>
+        </label>
+        <div class="ezy-coll__sort">
+          <label class="visually-hidden" for="SortBy">Sort by</label>
+          <select name="sort_by" id="SortBy" data-ezy-ssort>
+            {%- assign sort_by = search.sort_by | default: search.default_sort_by -%}
+            {%- for option in search.sort_options -%}
+              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+        </div>
+        <button type="button" class="ezy-coll__fs" data-ezy-fs aria-controls="ezy-fs">Filter &amp; Sort</button>
+      </div>
+    </div>
+    {%- render 'search-car-picker' -%}
+    <dialog class="ezy ezy-fs" id="ezy-fs" aria-label="Filter & Sort" hidden>
+      <div class="ezy-fs__panel">
+        <div class="ezy-fs__top">
+          <h3>Filter &amp; Sort</h3>
+          <button type="button" class="ezy-fs__close" aria-label="Close" data-ezy-fs-close>&times;</button>
+        </div>
+        <label class="ezy-coll__stock">
+          <input type="checkbox" id="filter-in-stock-mobile" data-ezy-instock>
+          <span>In Stock Only</span>
+        </label>
+        <label class="ezy-fs__label" for="SortByMobile">Sort by</label>
+        <select name="sort_by_mobile" id="SortByMobile" data-ezy-ssort>
+          {%- assign sort_by = search.sort_by | default: search.default_sort_by -%}
+          {%- for option in search.sort_options -%}
+            <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </dialog>
+    {%- endif -%}
     {%- if search.performed -%}
       {%- paginate search.results by 96 -%}
         {%- comment -%}
@@ -62,6 +111,45 @@
     {%- endif -%}
   </div>
 </section>
+
+<script>
+  // In Stock and sort on /search, the same two shopper controls live's toolbar carries (P54).
+  // Both build the URL from what is already in the address bar, so the query and type stay.
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var inStock = params.get('filter.v.availability') === '1';
+    document.querySelectorAll('[data-ezy-instock]').forEach(function (box) {
+      box.checked = inStock;
+      box.addEventListener('change', function () {
+        var url = new URL(location.href);
+        if (box.checked) url.searchParams.set('filter.v.availability', '1');
+        else url.searchParams.delete('filter.v.availability');
+        location.href = url.toString();
+      });
+    });
+    document.querySelectorAll('[data-ezy-ssort]').forEach(function (sel) {
+      sel.addEventListener('change', function () {
+        var url = new URL(location.href);
+        if (sel.value) url.searchParams.set('sort_by', sel.value);
+        else url.searchParams.delete('sort_by');
+        location.href = url.toString();
+      });
+    });
+    var picker = document.getElementById('srch-car-picker');
+    var toggleBtn = document.getElementById('toolbar-picker-toggle');
+    function syncToggle() { if (picker && toggleBtn) toggleBtn.setAttribute('aria-expanded', String(picker.classList.contains('expanded'))); }
+    if (toggleBtn) toggleBtn.addEventListener('click', function () { setTimeout(syncToggle, 150); });
+    document.addEventListener('DOMContentLoaded', function () { syncToggle(); setTimeout(syncToggle, 200); });
+    var fs = document.getElementById('ezy-fs');
+    if (!fs) return;
+    document.querySelectorAll('[data-ezy-fs]').forEach(function (btn) {
+      btn.addEventListener('click', function () { fs.hidden = false; fs.showModal(); });
+    });
+    function closeFs() { if (fs.open) fs.close(); fs.hidden = true; }
+    fs.querySelectorAll('[data-ezy-fs-close]').forEach(function (el) { el.addEventListener('click', function () { closeFs(); }); });
+    fs.addEventListener('cancel', function (event) { event.preventDefault(); closeFs(); });
+  })();
+</script>
 
 {% schema %}
 { "name": "EZY search results", "settings": [] }

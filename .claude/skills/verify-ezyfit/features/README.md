@@ -5,13 +5,21 @@ One file per shopper-facing feature. Gate ids refer to the `scripts/gates*.mjs` 
 | Feature | File | Gates |
 |---|---|---|
 | Homepage finder (Make, Model, Year) | in [collection-and-search.md](collection-and-search.md) | G18 |
+| Keyboard finder, return links and modal menu | [keyboard-and-finder.md](keyboard-and-finder.md) | K0 to K8 in `gates-keyboard.mjs` |
 | Header, phone menu, search, cart count | [header-and-cart.md](header-and-cart.md) | G0, G7, G8, G9, G10, G11 |
 | Wiper product page | [wiper-product.md](wiper-product.md) | G1 to G6, G9 |
 | Wiper collection and search results | [collection-and-search.md](collection-and-search.md) | G13, G13b, G17 |
 | Footer and shade pages | [footer-and-shades.md](footer-and-shades.md) | G12, G16 |
+| Click Shades brand, logo and no leftover EZYFIT | [footer-and-shades.md](footer-and-shades.md) | B0 to B5, `gates-brand.mjs` |
+| Shade box contents, UV figure and discount copy | [shade-product-data.md](shade-product-data.md) | SC0 to SC4 in `gates-shade-content.mjs` |
 | ClickShades shade page parity with live | [shade-page-parity.md](shade-page-parity.md) | G16, G16b, `gates-shade.mjs` |
 | Design quality (impeccable detector) | [design-quality.md](design-quality.md) | not wired into GitHub yet |
+| Parity with the live Click Shades theme, every live page, template, link, product feature, pixel and app embed | [parity.md](parity.md) | `parity.mjs`, plain HTTP, runs on this server |
 
 Covered since the last map: homepage finder routing (G18). CRO checks live in `gates-cro.mjs`.
 
 Not yet covered by a gate: lead capture form submit, design-quality detector on GitHub, Spray and rear options switching on (needs products that do not exist yet).
+
+[parity.md](parity.md) is the switch gate, not a browser gate: 97 rows, each one a live
+item, checked against the draft with marker strings. Its 20 MISSING rows are the open work
+before the live switch, two of them blocking.
