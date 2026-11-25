@@ -309,6 +309,32 @@
 
 /* Wiper collection */
 .ezy-coll__find input { width: 100%; max-width: 520px; height: 52px; border: 2px solid var(--ezy-blue); border-radius: 12px; padding: 0 16px; font: 16px Poppins, sans-serif; }
+/* Wiper collection and /search toolbar: the live car picker, sort and In Stock controls (P52 to P54). */
+.ezy-coll__tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0 12px; }
+.ezy-coll__toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 14px; border: 2px solid var(--ezy-line); border-radius: 12px; background: #fff; color: var(--ezy-dark); font: 700 15px Poppins, sans-serif; cursor: pointer; }
+.ezy-coll__toggle[aria-expanded=true] { border-color: var(--ezy-blue); color: var(--ezy-blue); }
+.ezy-coll__toggle svg { width: 20px; height: 20px; flex: 0 0 auto; }
+.ezy-coll__chev { width: 16px !important; height: 16px !important; }
+.ezy-coll__right { display: flex; align-items: center; gap: 10px; }
+.ezy-coll__stock { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.ezy-coll__stock input { width: 18px; height: 18px; margin: 0; accent-color: var(--ezy-blue); }
+.ezy-coll__sort select { min-height: 44px; padding: 0 12px; border: 2px solid var(--ezy-line); border-radius: 12px; background: #fff; color: var(--ezy-dark); font: 600 14px Poppins, sans-serif; }
+.ezy-coll__fs { display: none; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid var(--ezy-blue); border-radius: 12px; background: #fff; color: var(--ezy-blue); font: 700 14px Poppins, sans-serif; cursor: pointer; }
+@media (max-width: 767px) {
+  .ezy-coll__stock, .ezy-coll__sort { display: none; }
+  .ezy-coll__fs { display: inline-flex; }
+}
+/* Filter & Sort sheet behind the phone toolbar button. */
+.ezy-fs { position: fixed; inset: 0; z-index: 1000; margin: 0; padding: 0; border: 0; width: 100%; height: 100%; max-width: none; max-height: none; background: transparent; }
+.ezy-fs[hidden] { display: none; }
+.ezy-fs:modal { overscroll-behavior: contain; }
+.ezy-fs::backdrop { background: rgba(26, 26, 26, .5); }
+.ezy-fs__panel { position: absolute; left: 0; right: 0; bottom: 0; display: grid; gap: 12px; padding: 18px 16px 24px; background: #fff; border-radius: 16px 16px 0 0; }
+.ezy-fs__top { display: flex; align-items: center; justify-content: space-between; }
+.ezy-fs__close { width: 44px; height: 44px; border: 0; background: none; color: var(--ezy-blue); font-size: 30px; line-height: 1; cursor: pointer; }
+.ezy-fs__label { font-size: 14px; font-weight: 600; color: var(--ezy-grey); }
+.ezy-fs select { min-height: 48px; padding: 0 12px; border: 2px solid var(--ezy-line); border-radius: 12px; background: #fff; font: 600 15px Poppins, sans-serif; }
+
 .ezy-coll__count { margin: 14px 0 16px !important; font-size: 14px; color: var(--ezy-grey); }
 .ezy-coll__grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .ezy-coll__item[hidden] { display: none; }
