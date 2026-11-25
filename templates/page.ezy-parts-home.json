@@ -37,7 +37,7 @@
         "p3": {
           "type": "pack_item",
           "settings": {
-            "text": "Free shipping, ships today if you order by 2pm"
+            "text": "Free shipping, ships today if you order by 2pm AWST"
           }
         },
         "p4": {
@@ -355,7 +355,7 @@
           "type": "question",
           "settings": {
             "q": "How fast is wiper shipping?",
-            "a": "Free standard shipping on all orders. Express shipping is available at checkout for an extra $10. Orders placed before 2pm ship the same day, Monday to Friday. Orders placed after 2pm or on weekends ship the following business day."
+            "a": "Free standard shipping on all orders. Express shipping is available at checkout for an extra $10. Orders placed before 2pm AWST ship the same day, Monday to Friday. Orders placed after 2pm AWST or on weekends ship the following business day."
           }
         },
         "q2": {
