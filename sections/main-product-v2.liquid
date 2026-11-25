@@ -858,6 +858,53 @@
     color: var(--dark, #1a1a1a);
   }
 
+  /* Car shades: the kit contents come from a metafield, so style whatever markup it
+     holds as the same check rows a wiper's kit list uses instead of browser bullets. */
+  .shade-box-contents ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .shade-box-contents li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--dark, #1a1a1a);
+  }
+
+  .shade-box-contents li:last-child {
+    border-bottom: none;
+  }
+
+  .shade-box-contents li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23059669'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg>") center / 20px 20px no-repeat;
+  }
+
+  .shade-box-contents ul ul {
+    margin-top: 8px;
+  }
+
+  .shade-box-contents p {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--dark, #1a1a1a);
+  }
+
+  .shade-box-contents p:last-child {
+    margin-bottom: 0;
+  }
+
   /* ========== PRODUCT DESCRIPTION ========== */
   .product-description {
     padding: 24px 16px;
