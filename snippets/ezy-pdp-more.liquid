@@ -56,8 +56,17 @@
   <section class="ezy ezy-sec ezy-sec--yellow ezy-sec--rule" id="ezy-pdp-guarantee" style="border-bottom: 3px solid var(--ezy-blue)">
     <div class="ezy-wrap">
       <div class="ezy-guarantee">
+        <p class="ezy-guarantee__kicker">Perfect Fit Guarantee</p>
         <h2>Fits your car, or return it within 30 days</h2>
         <p>These blades are made for your {{ car_name }}. If they don't fit, start a return within 30 days for a refund: you pay the actual cost of return shipping unless the error was ours.</p>
+        {%- comment -%}
+          MACL-37 P69: the three points live's Perfect Fit Guarantee section makes, in live wording.
+        {%- endcomment -%}
+        <ul class="ezy-ticks ezy-guarantee__points">
+          <li>30-day money-back guarantee</li>
+          <li>Free replacement if wrong fit</li>
+          <li>12-month warranty included</li>
+        </ul>
         <a class="ezy-btn" href="#ezy-pdp-top">Add to cart</a>
       </div>
     </div>

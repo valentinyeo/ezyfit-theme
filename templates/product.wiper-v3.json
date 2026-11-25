@@ -51,9 +51,36 @@
         "store_rating": "4.8 from 49 reviews",
         "fit_video": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4"
       }
+    },
+    "video-carousel": {
+      "type": "video-carousel",
+      "blocks": {
+        "cb-vid-1": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/99b54df20fd4401eac093847ed32b01d.mp4" } },
+        "cb-vid-2": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/10d501d9fdd8462e94e96d31a8416eec.mp4" } },
+        "cb-vid-3": { "type": "video", "settings": { "video_url": "https://cdn.shopify.com/videos/c/o/v/30bc3aa912464145a5c46d9595f146ea.mp4" } }
+      },
+      "block_order": ["cb-vid-1", "cb-vid-2", "cb-vid-3"],
+      "settings": {}
+    },
+    "cb-benefits": {
+      "type": "cb-benefits",
+      "settings": {
+        "heading": "What Makes Click Blades Superior",
+        "subheading": "Engineered for Australian conditions, fitted in minutes",
+        "benefit_1_title": "Instantly eliminate streaks and smears",
+        "benefit_1_desc": "No more annoying streaky lines across your windscreen. Click Blades wipe clean every single time, giving you a crystal clear view.",
+        "benefit_2_title": "See the road clearly, even in heavy rain",
+        "benefit_2_desc": "Engineered for Australian conditions, from summer storms to winter downpours. Premium rubber maintains contact across the full blade length.",
+        "benefit_3_title": "No more chattering or squeaking",
+        "benefit_3_desc": "Say goodbye to that annoying juddering noise. Our precision-fit blades glide smoothly across your windscreen, quietly, every time.",
+        "benefit_4_title": "Factory-grade quality at your doorstep",
+        "benefit_4_desc": "Same OEM-quality blades the dealership charges $80+ for, delivered to you for a fraction of the price with free shipping."
+      }
     }
   },
   "order": [
-    "ezy-product"
+    "ezy-product",
+    "video-carousel",
+    "cb-benefits"
   ]
 }
